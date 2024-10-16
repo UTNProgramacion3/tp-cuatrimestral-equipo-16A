@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain
+namespace Domain.Entities
 {
-    public class Class1
+    public class Especilidad
     {
+        public int Id { get; set; }
+        public string Nombre { get; set; }
+
     }
 }

@@ -82,16 +82,16 @@ namespace Business.Managers
         }
         public Turno ObtenerPorId(int id)
         {
-            string query = @"SELECT 
+            string query = @"Select 
                                 T.Id,
                                 T.IdMedico,
                                 T.IdPaciente,
                                 T.Fecha,
                                 T.Activo,
-                            FROM Turnos T
-                            LEFT JOIN Medicos M ON T.IdMedico = T.Id
-                            LEFT JOIN Pacientes P ON T.IdPaciente = P.Id
-                            WHERE T.Id = @Id;";
+                            From Turnos T
+                            Inner JOIN Medicos M ON T.IdMedico = T.Id
+                            Inner JOIN Pacientes P ON T.IdPaciente = P.Id
+                            Where T.Id = @Id";
 
             SqlParameter[] parametros = new SqlParameter[]
                 {

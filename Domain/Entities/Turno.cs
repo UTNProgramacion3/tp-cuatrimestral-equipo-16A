@@ -14,10 +14,10 @@ namespace Domain.Entities
         public DateTime Fecha { get; set; }
         public bool Activo { get; set; }
 
-        Turno()
+        /*Turno()
         {
             Fecha = DateTime.Now;
             Activo = true;
-        }
+        }*/
     }
 }

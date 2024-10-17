@@ -149,7 +149,7 @@ namespace Business.Managers
 
         public bool Update(Turno turno)
         {
-            string query = @"Update ARTICULOS 
+            string query = @"Update Turnos 
                             Set IdMedico = @IdMedico,
                                 IdPaciente = @IdPaciente,
                                 Fecha = @Fecha,

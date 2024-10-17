@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using Utils;
-using Utils.Interfaces;
 
 namespace Business.Managers
 {
@@ -19,16 +18,16 @@ namespace Business.Managers
             _dbManager = new DBManager();
         }
 
-        public Turno Crear(Turno entity)
+        public Turno Crear(Turno turno)
         {
             string query = @"Insert into Turnos values (@IdMedico, @IdPaciente, @Fecha, @Activo)";
 
 
             SqlParameter[] parametros = new SqlParameter[]
                 {
-                    new SqlParameter("@IdMedico", entity.IdMedico),
-                    new SqlParameter("@IdPaciente", entity.IdPaciente),
-                    new SqlParameter("@Fecha", entity.Fecha),
+                    new SqlParameter("@IdMedico", turno.IdMedico),
+                    new SqlParameter("@IdPaciente", turno.IdPaciente),
+                    new SqlParameter("@Fecha", turno.Fecha),
                     new SqlParameter("@Activo", true)
                    
                 };
@@ -43,7 +42,7 @@ namespace Business.Managers
                 }
                 else
                 {
-                    return entity;
+                    return turno;
                 }
 
             }
@@ -123,7 +122,10 @@ namespace Business.Managers
 
         public List <Turno> ObtenerTodos()
         {
-            string query = @"SELECT * FROM Turnos";
+            string query = @"SELECT *
+                            FROM Turnos T
+                            Inner Join Medicos M ON T.IdMedico = M.Id
+                            Inner Join Pacientes P ON T.IdPaciente = P.Id";
                     
             try
             {

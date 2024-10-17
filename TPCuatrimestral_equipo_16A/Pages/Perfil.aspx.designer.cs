@@ -30,7 +30,7 @@ namespace TPCuatrimestral_equipo_16A.Views
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputPassword pass;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText pass;
 
         /// <summary>
         /// Control passCheck.
@@ -39,7 +39,7 @@ namespace TPCuatrimestral_equipo_16A.Views
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputCheckBox passCheck;
+        protected global::System.Web.UI.WebControls.CheckBox passCheck;
 
         /// <summary>
         /// Control nombre.
@@ -51,13 +51,13 @@ namespace TPCuatrimestral_equipo_16A.Views
         protected global::System.Web.UI.HtmlControls.HtmlInputText nombre;
 
         /// <summary>
-        /// Control validationDefault03.
+        /// Control apellido.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText validationDefault03;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText apellido;
 
         /// <summary>
         /// Control dni.

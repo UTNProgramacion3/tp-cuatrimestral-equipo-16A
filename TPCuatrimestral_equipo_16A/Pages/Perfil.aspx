@@ -5,7 +5,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
     <div class="row g-4 d-flex justify-content-center">
-        <div class="col-md-2">
+        <div class="col-md-4">
             <div class="mb-3">
                 <label class="form-label">Usuario</label>
                 <input type="text" class="form-control" id="user" value="" required runat="server">
@@ -37,6 +37,14 @@
             <div class="mb-3">
                 <button class="btn btn-primary" type="button" id="bntGuardar" runat="server">Guardar Cambios</button>
                 <button class="btn btn-primary" type="button" id="btnModificar" runat="server">Modificar</button>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="mb-3">
+                <img src="https://media.istockphoto.com/id/1222357475/es/vector/icono-de-vista-previa-de-imagen-marcador-de-posici%C3%B3n-de-imagen-para-el-sitio-web-o-el-dise%C3%B1o.jpg?s=612x612&w=0&k=20&c=vQOno8TpmbwnHeM6ylVkfSiwbVa6viw5_AvH6PSp-DM=" class="rounded" alt="empty" width="200" height="200" />
+                <div class="mt-3">
+                    <button class="btn btn-primary" type="button" id="btnCargarImagen" runat="server">Cargar...</button>
+                </div>
             </div>
         </div>
     </div>

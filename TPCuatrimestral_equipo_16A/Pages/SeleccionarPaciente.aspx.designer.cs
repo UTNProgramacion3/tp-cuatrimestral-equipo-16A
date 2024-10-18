@@ -15,12 +15,12 @@ namespace TPCuatrimestral_equipo_16A.Views
     {
 
         /// <summary>
-        /// Control tblTurnos.
+        /// Control dgvPacientes.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTable tblTurnos;
+        protected global::System.Web.UI.WebControls.GridView dgvPacientes;
     }
 }

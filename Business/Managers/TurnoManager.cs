@@ -11,11 +11,12 @@ namespace Business.Managers
     public class TurnoManager
     {
         private DBManager _dbManager;
-        private Mapper <Turno> _mapper;
+        public Mapper <Turno> _mapper;
 
         public TurnoManager()
         {
             _dbManager = new DBManager();
+            _mapper = new Mapper<Turno>();
         }
 
         public Turno Crear(Turno turno)
@@ -87,10 +88,13 @@ namespace Business.Managers
                                 T.IdMedico,
                                 T.IdPaciente,
                                 T.Fecha,
-                                T.Activo,
+                                T.Hora,
+                                T.IdEstadoTurno,
+                                T.EstadoTurno,
                             From Turnos T
                             Inner JOIN Medicos M ON T.IdMedico = T.Id
                             Inner JOIN Pacientes P ON T.IdPaciente = P.Id
+                            Inner JOIN EstadoTurno ET ON T.IdEstadoTurno = ET.Id
                             Where T.Id = @Id";
 
             SqlParameter[] parametros = new SqlParameter[]
@@ -122,11 +126,20 @@ namespace Business.Managers
 
         public List <Turno> ObtenerTodos()
         {
-            string query = @"SELECT *
+            string query = @"SELECT 
+                            T.Fecha AS ""Fecha de Turno"",
+                            T.Hora AS ""Horario"",
+                            M.Nombre AS ""Nombre Medico"",
+                            M.Apellido AS ""Apellido Medico"",
+                            P.Nombre AS ""Nombre Paciente"",
+                            P.Apellido AS ""Apellido Paciente"",
+                            ET.Nombre AS ""Estado""
                             FROM Turnos T
                             Inner Join Medicos M ON T.IdMedico = M.Id
-                            Inner Join Pacientes P ON T.IdPaciente = P.Id";
-                    
+                            Inner Join Pacientes P ON T.IdPAciente = P.Id
+                            Inner Join EstadoTurno ET ON T.IdEstadoTurno = ET.Id";
+                            
+
             try
             {
 

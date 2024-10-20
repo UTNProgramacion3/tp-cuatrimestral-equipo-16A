@@ -106,10 +106,6 @@ body {
     display: block;
 }
 
-.ig {
-    width: 100px;
-    height: auto;
-}
 
 .footer-links img:hover {
     transform: scale(1.1);

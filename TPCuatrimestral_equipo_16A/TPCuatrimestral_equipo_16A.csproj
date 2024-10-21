@@ -68,11 +68,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <Content Include="ImagesFolder\github.png" />
+    <Content Include="ImagesFolder\logo.png" />
     <Content Include="Pages\Default.aspx" />
     <Content Include="Pages\SeleccionarTurno.aspx" />
     <Content Include="Pages\SeleccionarPaciente.aspx" />
     <Content Include="Pages\ListadoTurnos.aspx" />
     <Content Include="Pages\Perfil.aspx" />
+    <Content Include="Stylesheets\Master.css" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Utils
+namespace Domain.Entities
 {
-    public class Class1
+    public class EstadoTurno
     {
+        public int Id { get; set; }
+        public string Nombre { get; set; }
     }
 }

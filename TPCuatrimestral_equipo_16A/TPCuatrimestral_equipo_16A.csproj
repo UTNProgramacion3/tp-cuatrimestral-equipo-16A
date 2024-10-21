@@ -68,6 +68,9 @@
     <Content Include="Images\github.png" />
     <Content Include="Pages\Home.aspx" />
     <Content Include="Pages\Turnos.aspx" />
+    <Content Include="Pages\Default.aspx" />
+    <Content Include="Pages\SeleccionarTurno.aspx" />
+    <Content Include="Pages\SeleccionarPaciente.aspx" />
     <Content Include="Pages\ListadoTurnos.aspx" />
     <Content Include="Pages\Perfil.aspx" />
     <Content Include="Stylesheets\Master.css" />
@@ -79,6 +82,17 @@
     </Compile>
     <Compile Include="Pages\Home.aspx.cs">
       <DependentUpon>Home.aspx</DependentUpon>
+    <Compile Include="Pages\SeleccionarTurno.aspx.cs">
+      <DependentUpon>SeleccionarTurno.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\SeleccionarTurno.aspx.designer.cs">
+      <DependentUpon>SeleccionarTurno.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Pages\Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Pages\Home.aspx.designer.cs">
@@ -92,12 +106,12 @@
     <Compile Include="Pages\Main.Master.designer.cs">
       <DependentUpon>Main.Master</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Turnos.aspx.cs">
-      <DependentUpon>Turnos.aspx</DependentUpon>
+    <Compile Include="Pages\SeleccionarPaciente.aspx.cs">
+      <DependentUpon>SeleccionarPaciente.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Pages\Turnos.aspx.designer.cs">
-      <DependentUpon>Turnos.aspx</DependentUpon>
+    <Compile Include="Pages\SeleccionarPaciente.aspx.designer.cs">
+      <DependentUpon>SeleccionarPaciente.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\ListadoTurnos.aspx.cs">
       <DependentUpon>ListadoTurnos.aspx</DependentUpon>
@@ -127,6 +141,24 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Business\Business.csproj">
+      <Project>{5730dde6-08b4-4a9a-a927-2d9049538b9e}</Project>
+      <Name>Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DataAccess\DataAccess.csproj">
+      <Project>{47e69c0d-59bd-4c41-8ae9-fb8a22374e01}</Project>
+      <Name>DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Domain\Domain.csproj">
+      <Project>{06479eb3-8709-4ef1-b691-0e8d1b401e7d}</Project>
+      <Name>Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utils\Utils.csproj">
+      <Project>{2144a9b1-4994-4875-bcd8-05d743a0c6ba}</Project>
+      <Name>Utils</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

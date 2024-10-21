@@ -41,7 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\EstadoTurno.cs" />
     <Compile Include="Entities\Especilidad.cs" />
+    <Compile Include="Entities\HorarioTrabajo.cs" />
     <Compile Include="Entities\Turno.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

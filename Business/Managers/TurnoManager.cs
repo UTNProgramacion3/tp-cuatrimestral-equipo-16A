@@ -4,27 +4,32 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using Utils;
 
-/*namespace Business.Managers
+namespace Business.Managers
 {
-    public class ArticuloManager : ICrudRepository<Turno>
+    public class TurnoManager
     {
         private DBManager _dbManager;
+        public Mapper <Turno> _mapper;
 
-        public ArticuloManager()
+        public TurnoManager()
         {
             _dbManager = new DBManager();
+            _mapper = new Mapper<Turno>();
         }
 
-        public Turno Crear(Turno entity)
+        public Turno Crear(Turno turno)
         {
-            string query = @"Insert into Turnos values (@IdMedico, @IdPaciente, @Fecha)";
+            string query = @"Insert into Turnos values (@IdMedico, @IdPaciente, @Fecha, @Activo)";
+
 
             SqlParameter[] parametros = new SqlParameter[]
                 {
-                    new SqlParameter("@IdMedico", entity.IdMedico),
-                    new SqlParameter("@IdPaciente", entity.IdPaciente),
-                    new SqlParameter("@Fecha", entity.Fecha)
+                    new SqlParameter("@IdMedico", turno.IdMedico),
+                    new SqlParameter("@IdPaciente", turno.IdPaciente),
+                    new SqlParameter("@Fecha", turno.Fecha),
+                    new SqlParameter("@Activo", true)
                    
                 };
 
@@ -38,7 +43,7 @@ using System.Data.SqlClient;
                 }
                 else
                 {
-                    return entity;
+                    return turno;
                 }
 
             }
@@ -48,7 +53,7 @@ using System.Data.SqlClient;
             }
         }
 
-        public bool Eliminar(int id)
+        public bool BajaTurno(int id)
         {
             string query = @"Update Turnos
                             Set Activo = 0
@@ -73,25 +78,24 @@ using System.Data.SqlClient;
             }
             catch (Exception ex)
             {
-                throw new Exception("Problemas al : " + ex.Message.ToString());
+                throw ex;
             }
         }
         public Turno ObtenerPorId(int id)
         {
-            string query = @"SELECT 
-                                A.Id,
-                                A.Codigo,
-                                A.Nombre,
-                                A.Descripcion,
-                                A.Precio,
-                                M.Id AS MarcaId,
-                                M.Descripcion AS MarcaDescripcion,
-                                C.Id AS CategoriaId,
-                                C.Descripcion AS CategoriaDescripcion
-                            FROM ARTICULOS A
-                            LEFT JOIN MARCAS M ON A.IdMarca = M.Id
-                            LEFT JOIN CATEGORIAS C ON A.IdCategoria = C.Id
-                            WHERE A.Id = @Id;";
+            string query = @"Select 
+                                T.Id,
+                                T.IdMedico,
+                                T.IdPaciente,
+                                T.Fecha,
+                                T.Hora,
+                                T.IdEstadoTurno,
+                                T.EstadoTurno,
+                            From Turnos T
+                            Inner JOIN Medicos M ON T.IdMedico = T.Id
+                            Inner JOIN Pacientes P ON T.IdPaciente = P.Id
+                            Inner JOIN EstadoTurno ET ON T.IdEstadoTurno = ET.Id
+                            Where T.Id = @Id";
 
             SqlParameter[] parametros = new SqlParameter[]
                 {
@@ -110,31 +114,31 @@ using System.Data.SqlClient;
 
                 Turno turno = _mapper.MapFromRow(res.Rows[0]);
 
-                return articulo;
+                return turno;
             }
             catch (Exception ex)
             {
-                throw new Exception("Problemas al obtener articulo por id: " + ex.Message.ToString());
+                throw ex;
             }
 
 
         }
 
-        public List<ArticuloDTO> ObtenerTodos()
+        public List <Turno> ObtenerTodos()
         {
             string query = @"SELECT 
-                    A.Id AS Articulo_Id,
-                    A.Codigo AS Articulo_Codigo,
-                    A.Nombre AS Articulo_Nombre,
-                    A.Descripcion AS Articulo_Descripcion,
-                    A.Precio AS Articulo_Precio,
-                    M.Id AS Marca_Id,
-                    M.Descripcion AS Marca_Descripcion,
-                    C.Id AS Categoria_Id,
-                    C.Descripcion AS Categoria_Descripcion
-                FROM ARTICULOS A
-                LEFT JOIN MARCAS M ON A.IdMarca = M.Id
-                LEFT JOIN CATEGORIAS C ON A.IdCategoria = C.Id;";
+                            T.Fecha AS ""Fecha de Turno"",
+                            T.Hora AS ""Horario"",
+                            M.Nombre AS ""Nombre Medico"",
+                            M.Apellido AS ""Apellido Medico"",
+                            P.Nombre AS ""Nombre Paciente"",
+                            P.Apellido AS ""Apellido Paciente"",
+                            ET.Nombre AS ""Estado""
+                            FROM Turnos T
+                            Inner Join Medicos M ON T.IdMedico = M.Id
+                            Inner Join Pacientes P ON T.IdPAciente = P.Id
+                            Inner Join EstadoTurno ET ON T.IdEstadoTurno = ET.Id";
+                            
 
             try
             {
@@ -143,39 +147,32 @@ using System.Data.SqlClient;
 
                 if (res.Rows.Count == 0)
                 {
-                    return new List<ArticuloDTO>();
+                    return new List <Turno>();
                 }
 
-                var articulosList = _mapper.ListMapFromRow(res);
+                var listaTurnos = _mapper.ListMapFromRow(res);
 
-                return articulosList;
+                return listaTurnos;
             }
             catch (Exception ex)
             {
-                throw new Exception("Problemas al obtener todos los articulos: " + ex.ToString());
+                throw ex;
             }
         }
 
-        public bool Update(ArticuloDTO entity)
+        public bool Update(Turno turno)
         {
-            string query = @"Update ARTICULOS 
-                            Set Codigo = @Codigo,
-                                Nombre = @Nombre,
-                                Descripcion = @Descripcion,
-                                IdMarca = @IdMarca,
-                                IdCategoria = @IdCategoria,
-                                Precio = @Precio
+            string query = @"Update Turnos 
+                            Set IdMedico = @IdMedico,
+                                IdPaciente = @IdPaciente,
+                                Fecha = @Fecha,
                             Where Id = @Id";
 
             SqlParameter[] parametros = new SqlParameter[]
                 {
-                    new SqlParameter("@Codigo", entity.Articulo.Codigo),
-                    new SqlParameter("@Nombre", entity.Articulo.Nombre),
-                    new SqlParameter("@Descripcion", entity.Articulo.Descripcion),
-                    new SqlParameter("@IdMarca", entity.Articulo.IdMarca),
-                    new SqlParameter("@IdCategoria", entity.Articulo.IdCategoria),
-                    new SqlParameter("@Precio", entity.Articulo.Precio),
-                    new SqlParameter("@Id", entity.Articulo.Id)
+                    new SqlParameter("@IdMedico", turno.IdMedico),
+                    new SqlParameter("@IdPaciente", turno.IdPaciente),
+                    new SqlParameter("@Fecha", turno.Fecha)
                 };
 
             try
@@ -192,108 +189,11 @@ using System.Data.SqlClient;
             }
             catch (Exception ex)
             {
-                throw new Exception("Error al hacer update: " + ex.ToString());
+                throw ex;
             }
 
         }
-
-        private string FilterQueryBuilder(string campo, string condicion, string filtro, bool eliminados)
-        {
-            string query = @"SELECT 
-                    A.Id AS Articulo_Id,
-                    A.Codigo AS Articulo_Codigo,
-                    A.Nombre AS Articulo_Nombre,
-                    A.Descripcion AS Articulo_Descripcion,
-                    A.Precio AS Articulo_Precio,
-                    M.Id AS Marca_Id,
-                    M.Descripcion AS Marca_Descripcion,
-                    C.Id AS Categoria_Id,
-                    C.Descripcion AS Categoria_Descripcion
-                FROM ARTICULOS A
-                LEFT JOIN MARCAS M ON A.IdMarca = M.Id
-                LEFT JOIN CATEGORIAS C ON A.IdCategoria = C.Id 
-                Where ";
-
-            if (eliminados == false)
-            {
-                query += "A.Codigo != '0000' And ";
-            }
-
-            if (campo == "Precio")
-            {
-                switch (condicion)
-                {
-                    case "Mayor a":
-                        query += "A.Precio > " + filtro;
-                        break;
-                    case "Menor a":
-                        query += "A.Precio < " + filtro;
-                        break;
-                    case "Igual a":
-                        query += "A.Precio = " + filtro;
-                        break;
-                }
-            }
-            else
-            {
-                switch (campo)
-                {
-                    case "Codigo":
-                        query += "A.Codigo ";
-                        break;
-                    case "Nombre":
-                        query += "A.Nombre ";
-                        break;
-                    case "Marca":
-                        query += "M.Descripcion ";
-                        break;
-                    case "Categoria":
-                        query += "C.Descripcion ";
-                        break;
-                }
-
-                switch (condicion)
-                {
-                    case "Empieza con":
-                        query += "like  '" + filtro + "%' ";
-                        break;
-                    case "Termina por":
-                        query += "like '%" + filtro + "' ";
-                        break;
-                    case "Igual a":
-                        query += "like '%" + filtro + "%' ";
-                        break;
-                }
-
-            }
-
-            return query;
-        }
-
-        public List<ArticuloDTO> Filtrar(string campo, string condicion, string filtro, bool eliminados)
-        {
-            List<ArticuloDTO> listaFiltrada;
-
-            string query = FilterQueryBuilder(campo, condicion, filtro, eliminados);
-
-            try
-            {
-                DataTable res = _dbManager.ExecuteQuery(query);
-
-                if (res.Rows.Count == 0)
-                {
-                    return new List<ArticuloDTO>();
-                }
-
-                listaFiltrada = _mapper.ListMapFromRow(res);
-
-                return listaFiltrada;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error al filtrar " + ex.ToString());
-            }
-        }
+  
     }
-}*/
+}
 

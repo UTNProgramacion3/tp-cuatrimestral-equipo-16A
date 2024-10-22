@@ -7,11 +7,11 @@
     <div class="row g-4 m-5 d-flex justify-content-center">
         <div class="col-md-4">
             <div class="mb-3">
-                <label class="form-label">Usuario</label>
+                <label class="form-label fw-bold">Usuario</label>
                 <input type="text" class="form-control" id="user" value="" required runat="server">
             </div>
             <div class="mb-3">
-                <label class="form-label">Contraseña</label>
+                <label class="form-label fw-bold">Contraseña</label>
                 <input type="text" class="form-control" id="pass" required runat="server">
                 <div class="form-check">
                     <asp:CheckBox class="form-check-input d-flex align-items-center" type="checkbox" ID="passCheck" runat="server" AutoPostBack="True" OnCheckedChanged="ChkBoxChecked"/>
@@ -19,19 +19,19 @@
                 </div>
             </div>
             <div class="mb-3">
-                <label class="form-label">Nombre</label>
+                <label class="form-label fw-bold">Nombre</label>
                 <input type="text" class="form-control" id="nombre" required runat="server">
             </div>
             <div class="mb-3">
-                <label class="form-label">Apellido</label>
+                <label class="form-label fw-bold">Apellido</label>
                 <input type="text" class="form-control" id="apellido" required runat="server">
             </div>
             <div class="mb-3">
-                <label class="form-label">Dni</label>
+                <label class="form-label fw-bold">Dni</label>
                 <input type="text" class="form-control" id="dni" required runat="server">
             </div>
             <div class="mb-3">
-                <label class="form-label">Correo Electronico</label>
+                <label class="form-label fw-bold">Correo Electronico</label>
                 <input type="text" class="form-control" id="mail" required runat="server">
             </div>
             <div class="mb-3">

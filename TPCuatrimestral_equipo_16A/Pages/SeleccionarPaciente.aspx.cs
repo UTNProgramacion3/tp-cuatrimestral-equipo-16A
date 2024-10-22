@@ -52,7 +52,8 @@ namespace TPCuatrimestral_equipo_16A.Views
             string apellido = dgvPacientes.SelectedRow.Cells[1].Text;
             string dni = dgvPacientes.SelectedRow.Cells[2].Text;
 
-            Response.Write($"Paciente seleccionado: {nombre} - {apellido} - {dni}");
+            inputNombrePaciente.Value = nombre;
+            inputApellidoPaciente.Value = apellido;
         }
     }
 }

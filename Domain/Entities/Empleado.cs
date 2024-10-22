@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Especilidad
+    public class Empleado : Persona
     {
         public int Id { get; set; }
-        public string Nombre { get; set; }
-
+        public int Legajo { get; set; }
+        public Rol Rol { get; set; }
+        public HorarioTrabajo HorarioTrabajo { get; set; }
     }
 }

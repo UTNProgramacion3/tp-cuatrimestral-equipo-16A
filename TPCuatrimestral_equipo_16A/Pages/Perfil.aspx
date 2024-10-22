@@ -8,11 +8,11 @@
         <div class="col-md-4">
             <div class="mb-3">
                 <label class="form-label fw-bold">Usuario</label>
-                <input type="text" class="form-control" id="user" value="" required runat="server" disabled>
+                <input type="text" class="form-control" id="user" value="" required runat="server" disabled="disabled">
             </div>
             <div class="mb-3">
                 <label class="form-label fw-bold">Contraseña</label>
-                <input type="text" class="form-control" id="pass" required runat="server" disabled>
+                <input type="text" class="form-control" id="pass" required runat="server" disabled="disabled">
                 <div class="form-check">
                     <asp:CheckBox class="form-check-input d-flex align-items-center" type="checkbox" ID="passCheck" runat="server" AutoPostBack="True" OnCheckedChanged="ChkBoxChecked"/>
                     <label class="form-check-label">Mostrar Contraseña</label>
@@ -20,23 +20,23 @@
             </div>
             <div class="mb-3">
                 <label class="form-label fw-bold">Nombre</label>
-                <input type="text" class="form-control" id="nombre" required runat="server" disabled>
+                <input type="text" class="form-control" id="nombre" required runat="server" disabled="disabled">
             </div>
             <div class="mb-3">
                 <label class="form-label fw-bold">Apellido</label>
-                <input type="text" class="form-control" id="apellido" required runat="server" disabled>
+                <input type="text" class="form-control" id="apellido" required runat="server" disabled="disabled">
             </div>
             <div class="mb-3">
                 <label class="form-label fw-bold">Dni</label>
-                <input type="text" class="form-control" id="dni" required runat="server" disabled>
+                <input type="text" class="form-control" id="dni" required runat="server" disabled="disabled">
             </div>
             <div class="mb-3">
                 <label class="form-label fw-bold">Correo Electronico</label>
-                <input type="text" class="form-control" id="mail" required runat="server" disabled>
+                <input type="text" class="form-control" id="mail" required runat="server" disabled="disabled">
             </div>
             <div class="mb-3">
-                <button class="btn btn-light" type="button" id="bntGuardar" runat="server" disabled >Guardar Cambios</button>
-                <button class="btn btn-light" type="button" id="btnModificar" runat="server">Modificar</button>
+                <asp:Button  class="btn btn-light" type="button" id="btnGuardar" runat="server" disabled="disabled" Text="Guardar Cambios" runat="server" OnClick="BtnGuardar_OnClick" />
+                <asp:Button class="btn btn-light" text="Modificar" type="button" id="btnModificar" runat="server" OnClick="BtnModificar_OnClick"/>
             </div>
         </div>
         <div class="col-md-2">

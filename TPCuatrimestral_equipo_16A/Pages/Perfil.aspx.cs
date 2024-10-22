@@ -19,6 +19,7 @@ namespace TPCuatrimestral_equipo_16A.Views
 
                 //Aca deberia leer la contraseña de la base de datos
                 pass.Attributes["value"] = "";
+
             }
 
         }
@@ -50,6 +51,30 @@ namespace TPCuatrimestral_equipo_16A.Views
         protected void RestorePass()
         {
             pass.Attributes["value"] = Session["tempPass"].ToString();
+        }
+
+        protected void BtnModificar_OnClick(object sender, EventArgs e)
+        {
+            user.Attributes.Remove("disabled");
+            pass.Attributes.Remove("disabled");
+            nombre.Attributes.Remove("disabled");
+            apellido.Attributes.Remove("disabled");
+            dni.Attributes.Remove("disabled");
+            mail.Attributes.Remove("disabled");
+            btnGuardar.Attributes.Remove("disabled");
+            btnCargarImagen.Attributes.Remove("disabled");
+        }
+
+        protected void BtnGuardar_OnClick(object sender, EventArgs e)
+        {
+            user.Attributes.Add("disabled", "disabled");
+            pass.Attributes.Add("disabled", "disabled");
+            nombre.Attributes.Add("disabled", "disabled");
+            apellido.Attributes.Add("disabled", "disabled");
+            dni.Attributes.Add("disabled", "disabled");
+            mail.Attributes.Add("disabled", "disabled");
+            btnGuardar.Attributes.Add("disabled", "disabled");
+            btnCargarImagen.Attributes.Add("disabled", "disabled");
         }
 
     }

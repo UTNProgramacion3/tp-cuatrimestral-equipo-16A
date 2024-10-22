@@ -33,15 +33,15 @@ namespace TPCuatrimestral_equipo_16A.Views
             {
 
                 pass.Attributes["type"] = "text";
-                RestorePass();
             }
             else
             {
 
                 pass.Attributes["type"] = "password";
-                RestorePass();
 
             }
+            
+            RestorePass();
 
 
 

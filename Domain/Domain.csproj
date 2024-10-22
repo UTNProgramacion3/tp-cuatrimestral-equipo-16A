@@ -41,11 +41,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\DiasEnum.cs" />
+    <Compile Include="Entities\Direccion.cs" />
+    <Compile Include="Entities\Empleado.cs" />
     <Compile Include="Entities\EstadoTurno.cs" />
-    <Compile Include="Entities\Especilidad.cs" />
+    <Compile Include="Entities\Especialidad.cs" />
+    <Compile Include="Entities\HistoriaClinica.cs" />
     <Compile Include="Entities\HorarioTrabajo.cs" />
+    <Compile Include="Entities\Medico.cs" />
+    <Compile Include="Entities\Paciente.cs" />
+    <Compile Include="Entities\Permiso.cs" />
+    <Compile Include="Entities\Persona.cs" />
+    <Compile Include="Entities\Rol.cs" />
     <Compile Include="Entities\Turno.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Response\Response.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

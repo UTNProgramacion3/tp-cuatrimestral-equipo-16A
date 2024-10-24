@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    internal class UsuarioLog
+    public class UsuarioLog
     {
+        public int Id { get; set; } 
+        public Usuario Usuario { get; set; }
+        public string Accion { get; set; }
+        public DateTime Fecha { get; set; }
+        public string Detalles { get; set; }
     }
 }

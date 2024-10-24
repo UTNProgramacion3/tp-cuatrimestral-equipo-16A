@@ -78,13 +78,13 @@ namespace TPCuatrimestral_equipo_16A.Views
         protected global::System.Web.UI.HtmlControls.HtmlInputText mail;
 
         /// <summary>
-        /// Control bntGuardar.
+        /// Control btnGuardar.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlButton bntGuardar;
+        protected global::System.Web.UI.WebControls.Button btnGuardar;
 
         /// <summary>
         /// Control btnModificar.
@@ -93,7 +93,7 @@ namespace TPCuatrimestral_equipo_16A.Views
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlButton btnModificar;
+        protected global::System.Web.UI.WebControls.Button btnModificar;
 
         /// <summary>
         /// Control btnCargarImagen.

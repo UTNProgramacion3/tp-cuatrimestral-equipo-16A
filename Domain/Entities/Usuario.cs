@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Rol
+    public class Usuario
     {
         public int Id { get; set; }
-        public string Nombre { get; set; }
-        public List<Operacion> Operaciones { get; set; }    
+        public string Email { get; set; }
+        public string Passwordhash { get; set; }
+        public DateTime FechaCreacion { get; set; }
+        public Rol Rol { get; set; }
         public bool Activo { get; set; }
     }
 }

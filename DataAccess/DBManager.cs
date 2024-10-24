@@ -15,7 +15,7 @@ namespace DataAccess
         /// </summary>
         public DBManager()
         {
-            _connectionString = ConfigurationManager.ConnectionStrings["DBConnection"].ConnectionString; ;
+            _connectionString = ConfigurationManager.ConnectionStrings["DBConnection"].ConnectionString; 
             _connection = new SqlConnection(_connectionString);
         }
 

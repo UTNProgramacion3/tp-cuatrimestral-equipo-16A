@@ -41,6 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Modulo.cs" />
+    <Compile Include="Entities\Operacion.cs" />
+    <Compile Include="Entities\Usuario.cs" />
+    <Compile Include="Entities\UsuarioLog.cs" />
     <Compile Include="Enums\DiasEnum.cs" />
     <Compile Include="Entities\Direccion.cs" />
     <Compile Include="Entities\Empleado.cs" />

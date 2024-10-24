@@ -19,7 +19,7 @@
                 CssClass="table table-hover table-striped table-bordered" OnSelectedIndexChanged="dgvPacientes_SelectedIndexChanged">
                 <Columns>
                     <asp:BoundField DataField="Nombre" HeaderText="Nombre" />
-                    <asp:BoundField DataField="Apellido" HeaderText="Edad" />
+                    <asp:BoundField DataField="Apellido" HeaderText="Apellido" />
                     <asp:BoundField DataField="Dni" HeaderText="Dni" />
                     <asp:CommandField ShowSelectButton="True" SelectText="Seleccionar" />
                 </Columns>

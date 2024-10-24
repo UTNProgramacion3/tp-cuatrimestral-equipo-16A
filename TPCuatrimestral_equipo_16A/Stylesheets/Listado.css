@@ -1,0 +1,10 @@
+﻿.calendar-table {
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #ddd;
+    border-collapse: separate;
+}
+
+    .calendar-table th, .calendar-table td {
+        border: 1px solid #ddd;
+    }

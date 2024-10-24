@@ -76,6 +76,7 @@
     <Content Include="Pages\ListadoTurnos.aspx" />
     <Content Include="Pages\Perfil.aspx" />
     <Content Include="Stylesheets\Master.css" />
+    <Content Include="Stylesheets\Listado.css" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

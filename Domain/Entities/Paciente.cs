@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Rol
+    public class Paciente : Persona
     {
         public int Id { get; set; }
-        public string Nombre { get; set; }
-        public List<Operacion> Operaciones { get; set; }    
-        public bool Activo { get; set; }
+        public List<Turno> Turnos { get; set; }
+        public HistoriaClinica HistoriaClinica { get; set; }
+
     }
 }

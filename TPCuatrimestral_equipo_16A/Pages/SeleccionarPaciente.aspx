@@ -34,7 +34,7 @@
             </div>
             <div class="mb-3">
                 <input class="btn btn-light" type="button" value="Atrás" id="btnAtras" />
-                <input class="btn btn-light" type="button" value="Siguiente" id="btnSiguiente" />
+                <asp:Button class="btn btn-light" type="button" text="Siguiente" id="btnSiguiente" runat="server" OnClick="BtnSiguiente_OnClick"/>
             </div>
         </div>
     </div>

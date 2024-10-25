@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dtos\TurnoDTO.cs" />
     <Compile Include="Images\ICrudRepository.cs" />
     <Compile Include="Interfaces\IEmpleadoManager.cs" />
     <Compile Include="Managers\EmpleadoManager.cs" />

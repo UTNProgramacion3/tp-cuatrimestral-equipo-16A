@@ -13,17 +13,15 @@
                     <asp:TextBox CssClass="form-control" TextMode="Date" runat="server" ID="txtBoxFecha" />
                 </div>
                 <div>
-                    <asp:GridView ID="dgvTurnos" runat="server" AutoGenerateColumns="False"
-                        CssClass="table table-hover table-striped table-bordered">
+                    <asp:GridView ID="dgvTurnos" runat="server" CssClass="table table-hover table-striped table-bordered" AutoGenerateColumns="false">
                         <Columns>
-                            <asp:BoundField DataField="NombrePaciente" HeaderText="Nombre Paciente" />
-                            <asp:BoundField DataField="ApellidoPaciente" HeaderText="Apellido Paciente" />
-                            <asp:BoundField DataField="DniPaciente" HeaderText="Dni" />
-                            <asp:BoundField DataField="NombreMedico" HeaderText="Nombre Doctor" />
-                            <asp:BoundField DataField="ApellidoMedico" HeaderText="Apellido Doctor" />
-                            <asp:BoundField DataField="Especialidad" HeaderText="Especialidad" />
-                            <asp:BoundField DataField="Fecha" HeaderText="Fecha"/>
-                            <asp:BoundField DataField="Horario" HeaderText="Horario"/>
+                            <asp:BoundField HeaderText="Fecha" DataField="Turno.Fecha" />
+                            <asp:BoundField HeaderText="Hora" DataField="Turno.Hora" />
+                            <asp:BoundField HeaderText="Nombre Medico" DataField="Medico.Nombre" />
+                            <asp:BoundField HeaderText="Apellido Medico" DataField="Medico.Apellido" />
+                            <asp:BoundField HeaderText="Nombre Paciente" DataField="Paciente.Nombre" />
+                            <asp:BoundField HeaderText="Apellido Paciente" DataField="Paciente.Apellido" />
+                            <asp:BoundField HeaderText="Estado de Turno" DataField="Turno.EstadoTurno" />
                         </Columns>
                     </asp:GridView>
                 </div>

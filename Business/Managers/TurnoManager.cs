@@ -4,31 +4,34 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using Utils.Interfaces;
 using Utils;
+using Business;
+using Business.Dtos;
 
 namespace Business.Managers
 {
     public class TurnoManager
     {
         private DBManager _dbManager;
-        public Mapper <Turno> _mapper;
+        public IMapper <TurnoDTO> _mapper;
 
         public TurnoManager()
         {
             _dbManager = new DBManager();
-            _mapper = new Mapper<Turno>();
+            _mapper = new Mapper<TurnoDTO>();
         }
 
-        public Turno Crear(Turno turno)
+        public TurnoDTO Crear(TurnoDTO dtoTurno)
         {
             string query = @"Insert into Turnos values (@IdMedico, @IdPaciente, @Fecha, @Activo)";
 
 
             SqlParameter[] parametros = new SqlParameter[]
                 {
-                    new SqlParameter("@IdMedico", turno.IdMedico),
-                    new SqlParameter("@IdPaciente", turno.IdPaciente),
-                    new SqlParameter("@Fecha", turno.Fecha),
+                    new SqlParameter("@IdMedico", dtoTurno.Medico.Id),
+                    new SqlParameter("@IdPaciente", dtoTurno.Paciente.Id),
+                    new SqlParameter("@Fecha", dtoTurno.Turno.Fecha),
                     new SqlParameter("@Activo", true)
                    
                 };
@@ -39,11 +42,11 @@ namespace Business.Managers
 
                 if (res == 0)
                 {
-                    return new Turno();
+                    return new TurnoDTO();
                 }
                 else
                 {
-                    return turno;
+                    return dtoTurno;
                 }
 
             }
@@ -81,7 +84,7 @@ namespace Business.Managers
                 throw ex;
             }
         }
-        public Turno ObtenerPorId(int id)
+        /*public TurnoDTO ObtenerPorId(int id)
         {
             string query = @"Select 
                                 T.Id,
@@ -109,12 +112,12 @@ namespace Business.Managers
 
                 if (res.Rows.Count == 0)
                 {
-                    return new Turno();
+                    return new TurnoDTO();
                 }
 
-                Turno turno = _mapper.MapFromRow(res.Rows[0]);
+                TurnoDTO dtoTurno = _mapper.MapFromRow(res.Rows[0]);
 
-                return turno;
+                return dtoTurno;
             }
             catch (Exception ex)
             {
@@ -122,18 +125,18 @@ namespace Business.Managers
             }
 
 
-        }
+        }*/
 
-        public List <Turno> ObtenerTodos()
+        public List <TurnoDTO> ObtenerTodos()
         {
             string query = @"SELECT 
-                            T.Fecha AS ""Fecha de Turno"",
-                            T.Hora AS ""Horario"",
-                            M.Nombre AS ""Nombre Medico"",
-                            M.Apellido AS ""Apellido Medico"",
-                            P.Nombre AS ""Nombre Paciente"",
-                            P.Apellido AS ""Apellido Paciente"",
-                            ET.Nombre AS ""Estado""
+                            T.Fecha AS Turno_Fecha,
+                            T.Hora AS Turno_Hora,
+                            M.Nombre AS Medico_Nombre,
+                            M.Apellido AS Medico_Apellido,
+                            P.Nombre AS Paciente_Nombre,
+                            P.Apellido AS Paciente_Apellido,
+                            ET.Nombre AS Turno_EstadoTurno
                             FROM Turnos T
                             Inner Join Medicos M ON T.IdMedico = M.Id
                             Inner Join Pacientes P ON T.IdPAciente = P.Id
@@ -147,7 +150,7 @@ namespace Business.Managers
 
                 if (res.Rows.Count == 0)
                 {
-                    return new List <Turno>();
+                    return new List <TurnoDTO>();
                 }
 
                 var listaTurnos = _mapper.ListMapFromRow(res);
@@ -160,7 +163,7 @@ namespace Business.Managers
             }
         }
 
-        public bool Update(Turno turno)
+        /*public bool Update(Turno turno)
         {
             string query = @"Update Turnos 
                             Set IdMedico = @IdMedico,
@@ -192,7 +195,7 @@ namespace Business.Managers
                 throw ex;
             }
 
-        }
+        }*/
   
     }
 }

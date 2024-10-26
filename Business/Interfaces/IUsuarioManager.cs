@@ -9,5 +9,7 @@ namespace Business.Interfaces
         Usuario ObtenerPorEmail(string email);   
         bool VerificarPassword(string password);
         Usuario LogIn(Usuario usuario);
+        
+
     }
 }

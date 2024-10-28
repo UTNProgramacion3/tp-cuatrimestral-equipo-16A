@@ -1,5 +1,6 @@
 ﻿using Business.Interfaces;
 using DataAccess;
+using DataAccess.Extensions;
 using Domain.Entities;
 using Domain.Response;
 using System;
@@ -12,38 +13,55 @@ namespace Business.Managers
 {
     public class EmpleadoManager : IEmpleadoManager
     {
+        #region Private properties
         private readonly DBManager _DBManager;
         private readonly Response<Empleado> _response;
-        public EmpleadoManager(DBManager manager, Response<Empleado> response) 
+        private readonly IUsuarioManager _usuarioManager;
+        #endregion
+
+        #region Builder
+        public EmpleadoManager(DBManager manager, Response<Empleado> response, IUsuarioManager usuarioManager) 
         { 
             _DBManager = manager;
             _response = response;
+            _usuarioManager = usuarioManager;
         }
+        #endregion
 
-        public Empleado Crear(Empleado entity)
+        #region Public methods
+        public Response<Empleado> Crear(Empleado entity)
         {
-            throw new NotImplementedException();
+            Usuario usuario = new Usuario
+            {
+                Email = entity.CrearEmailCorporativo(),
 
+            };
+            var usuario = _usuarioManager.Crear(entity);
         }
 
-        public bool Eliminar(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Empleado ObtenerPorId(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<Empleado> ObtenerTodos()
+        public Response<bool> Eliminar(int id)
         {
             throw new NotImplementedException();
         }
 
-        public bool Update(Empleado entity)
+        public Response<Empleado> ObtenerPorId(int id)
         {
             throw new NotImplementedException();
         }
+
+        public Response<List<Empleado>> ObtenerTodos()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Response<bool> Update(Empleado entity)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        #region Private methods
+       
+        #endregion
     }
 }

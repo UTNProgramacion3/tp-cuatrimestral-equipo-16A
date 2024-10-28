@@ -108,12 +108,47 @@ namespace Business.Managers
 
         public Response<bool> LogIn(Usuario usuario)
         {
-            throw new NotImplementedException();
+            Response<Usuario> responseUser = new Response<Usuario>();
+            Response<bool> response = new Response<bool>();
+
+            try
+            {
+
+                responseUser = ObtenerPorEmail(usuario.Email);
+
+                if(responseUser.Success)
+                {
+                    response = VerificarPassword(usuario.Passwordhash, responseUser.Data.Passwordhash);
+                    if(response.Success)
+                    {
+                        _sessionManager.SetSessionValue("UserLogueado", responseUser.Data);
+                        response.Data = true;
+                        response.Data = true;
+                        response.Message = "Logeado Correctamente.";
+                    }else
+                    {
+                        response.Data = false;
+                        response.Success = false;
+                        response.Message = "Contraseña incorrecta";
+                    }
+                }else
+                {
+                    response.Data = false;
+                    response.Success = false;
+                    response.Message = responseUser.Message;
+                }
+            }catch (Exception ex)
+            {
+                response.Data= false;
+                response.Success = false;
+                response.Message = $"Error al querer loguear usuario: {ex.Message}";
+            }
+            return response;
         }
 
-        public Response<bool> LogOut(Usuario usuario)
+        public void LogOut(Usuario usuario)
         {
-            throw new NotImplementedException();
+            _sessionManager.RemoveSessionValue("UserLogueado");
         }
 
         public Response<Usuario> ObtenerPorEmail(string email)
@@ -330,6 +365,18 @@ namespace Business.Managers
         {
             Response<bool> response = new Response<bool>();
 
+            response.Success = PasswordHasher.VerifyPassword(password, hashedpassword);
+            if (response.Success == false)
+            {
+                response.Data = false;
+                response.Success = false;
+                response.Message = "La contraseña es incorrecta.";
+            }else
+            {
+                response.Data = true;
+                response.Success = true;
+                response.Message = "La contraseña es correcta";
+            }
             return response;
         }
     }

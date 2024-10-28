@@ -10,6 +10,6 @@ namespace Business.Interfaces
         Response<Usuario> ObtenerPorEmail(string email);   
         Response<bool> VerificarPassword(string password, string hashedpassword);
         Response<bool> LogIn(Usuario usuario);
-        Response<bool> LogOut(Usuario usuario);
+        void LogOut(Usuario usuario);
     }
 }

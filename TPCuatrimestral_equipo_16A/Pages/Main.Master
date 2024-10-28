@@ -19,10 +19,10 @@
             </div>
             <nav>
                 <ul class="nav-links">
-                    <li><a href="">Home</a></li>
+                    <li><a href="Pages/Home.aspx">Home</a></li>
                     <li><a href="#">Medicos</a></li>
                     <li><a href="#">Pacientes</a></li>
-                    <li><a href="Pages/Turnos.aspx">Turnos</a></li>
+                    <li><a href="Pages/SeleccionarPaciente.aspx">Turnos</a></li>
                 </ul>
             </nav>
             <a href="#" class="btn">

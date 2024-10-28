@@ -55,5 +55,10 @@ namespace TPCuatrimestral_equipo_16A.Views
             inputNombrePaciente.Value = nombre;
             inputApellidoPaciente.Value = apellido;
         }
+
+        protected void BtnSiguiente_OnClick(object sender, EventArgs e)
+        {
+            Response.Redirect("~/Pages/SeleccionarTurno.aspx", false);
+        }
     }
 }

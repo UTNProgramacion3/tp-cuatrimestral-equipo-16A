@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Images\ICrudRepository.cs" />
     <Compile Include="Interfaces\IEmpleadoManager.cs" />
+    <Compile Include="Interfaces\IUsuarioManager.cs" />
     <Compile Include="Managers\EmpleadoManager.cs" />
     <Compile Include="Managers\TurnoManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

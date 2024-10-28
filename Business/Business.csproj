@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -45,7 +46,9 @@
     <Compile Include="Interfaces\IEmpleadoManager.cs" />
     <Compile Include="Interfaces\IUsuarioManager.cs" />
     <Compile Include="Managers\EmpleadoManager.cs" />
+    <Compile Include="Managers\SessionManager.cs" />
     <Compile Include="Managers\TurnoManager.cs" />
+    <Compile Include="Managers\UsuarioManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

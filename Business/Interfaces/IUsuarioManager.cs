@@ -1,13 +1,15 @@
 ﻿using Business.Managers;
 using System;
 using Domain.Entities;
+using Domain.Response;
 
 namespace Business.Interfaces
 {
     public interface IUsuarioManager : ICrudRepository<Usuario>
     {
-        Usuario ObtenerPorEmail(string email);   
-        bool VerificarPassword(string password);
-        Usuario LogIn(Usuario usuario);
+        Response<Usuario> ObtenerPorEmail(string email);   
+        Response<bool> VerificarPassword(string password, string hashedpassword);
+        Response<bool> LogIn(Usuario usuario);
+        void LogOut(Usuario usuario);
     }
 }

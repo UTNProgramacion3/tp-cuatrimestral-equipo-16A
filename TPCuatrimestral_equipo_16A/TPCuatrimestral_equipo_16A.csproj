@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <Content Include="ImagesFolder\default-profile.jpg" />
     <Content Include="ImagesFolder\github.png" />
     <Content Include="ImagesFolder\logo.png" />
     <Content Include="Pages\CreacionUsuario.aspx" />

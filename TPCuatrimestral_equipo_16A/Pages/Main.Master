@@ -12,7 +12,7 @@
         .header .btn {
             font-weight: 700;
             color: black;
-            padding: 9px 25px;
+            padding: 9px 20px;
             background: #EEE9DA;
             border: none;
             border-radius: 50px;
@@ -27,6 +27,16 @@
                 color: #EEF7FF;
                 transform: scale(1.1);
             }
+
+        .profile-img {
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.profile-img:hover {
+    transform: scale(1.1);
+}
     </style>
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
@@ -45,10 +55,18 @@
                     <li><a href="<%= ResolveUrl("~/Pages/ListadoTurnos.aspx") %>">Turnos</a></li>
                 </ul>
             </nav>
-            <a href="<%= ResolveUrl("~/Pages/Login.aspx") %>" class="btn">Login
-            </a>
-            <a href="<%= ResolveUrl("~/Pages/UserRegister.aspx") %>" class="btn">Registrarse
-            </a>
+            <asp:Panel ID="pnlLoginRegister" runat="server">
+                <a href="<%= ResolveUrl("~/Pages/Login.aspx") %>" class="btn">Login</a>
+                <a href="<%= ResolveUrl("~/Pages/UserRegister.aspx") %>" class="btn">Registrarse</a>
+            </asp:Panel>
+
+            <asp:Panel ID="pnlUserLogged" runat="server" Visible="false">
+                <a href="<%= ResolveUrl("~/Pages/Perfil.aspx") %>">
+                    <asp:Image ID="imgProfile" runat="server" CssClass="profile-img" Width="40px" Height="40px" />
+                </a>
+                <asp:Button ID="btnLogout" runat="server" Text="Salir" CssClass="btn" Onclick="btnLogout_Click" />
+            </asp:Panel>
+
         </header>
         <div>
             <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">

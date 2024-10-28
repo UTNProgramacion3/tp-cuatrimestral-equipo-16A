@@ -11,6 +11,6 @@ namespace Domain.Entities
         public int Id { get; set; }
         public int Legajo { get; set; }
         public Rol Rol { get; set; }
-        public HorarioTrabajo HorarioTrabajo { get; set; }
+        public JornadaTrabajo HorarioTrabajo { get; set; }
     }
 }

@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class HorarioTrabajo
+    public class DiaLaboral
     {
-        public int Id { get; set; } 
+        public int Id { get; set; }
+        public DiasEnum Dia { get; set; }
         public DateTime Inicio { get; set; }
         public DateTime Fin { get; set; }
-        public List<DiasEnum> DiasLaborales { get; set; }
     }
 }

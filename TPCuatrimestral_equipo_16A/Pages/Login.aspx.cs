@@ -1,5 +1,9 @@
-﻿using System;
+﻿using Business.Managers;
+using Domain.Entities;
+using Domain.Response;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -11,7 +15,34 @@ namespace TPCuatrimestral_equipo_16A.Pages
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (!IsPostBack)
+            {
+                if (Session["UserLogueado"] != null)
+                {
+                    Response.Redirect("Home.aspx");
+                }
+            }
+        }
 
+        protected void btnLogin_Click(object sender, EventArgs e)
+        {
+            Usuario usuario = new Usuario();
+            UsuarioManager usuarioManager = new UsuarioManager();
+            usuario.Email = txtEmail.Text;
+            usuario.Passwordhash = txtPassword.Text;
+
+
+                var response = usuarioManager.LogIn(usuario);
+
+                if (response.Success)
+                {
+                    Response.Redirect("Home.aspx", false);
+
+                }
+                else
+                {
+                    lblMessage.Text = response.Message;
+                }
         }
     }
 }

@@ -12,5 +12,7 @@ namespace Domain.Entities
         public string Nombre { get; set; }
         public List<Operacion> Operaciones { get; set; }    
         public bool Activo { get; set; }
+
+        public Rol() { Operaciones = new List<Operacion>(); }    
     }
 }

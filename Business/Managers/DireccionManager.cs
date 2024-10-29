@@ -10,12 +10,14 @@ using System.Threading.Tasks;
 
 namespace Business.Managers
 {
-    public class DireccionManager : ICrudRepository<Direccion>
+    public class DireccionManager
     {
         private readonly DBManager _DBManager;
-        public DireccionManager()
+        private Response<Direccion> _response;
+        public DireccionManager(DBManager dbManager, Response<Direccion> response)
         {
-            _DBManager = new DBManager();
+            _DBManager = dbManager;
+            _response = response;
         }
 
         public Response<Direccion> Crear(Direccion entity)
@@ -33,8 +35,11 @@ namespace Business.Managers
                 new SqlParameter("@CodigoPostal", entity.CodigoPostal)
             };
 
+            var res = _DBManager.ExecuteQuery(queryDireccion, parameters);
 
-            return _DBManager.ExecuteQuery(queryDireccion, parameters);
+            _response.Ok(entity);
+
+            return _response;
         }
 
         public Response<bool> Eliminar(int id)

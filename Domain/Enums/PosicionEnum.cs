@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Enums
 {
-    public enum EmpleadoEnum
+    public enum PosicionEnum
     {
         [Description("Medico")]
         Medico = 1,

@@ -9,7 +9,7 @@ namespace Domain.Entities
     public class DiaLaboral
     {
         public int Id { get; set; }
-        public DiasEnum Dia { get; set; }
+        public int Dia { get; set; }
         public DateTime Inicio { get; set; }
         public DateTime Fin { get; set; }
     }

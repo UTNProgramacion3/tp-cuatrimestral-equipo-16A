@@ -2,6 +2,7 @@
 using DataAccess;
 using DataAccess.Extensions;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.Response;
 using System;
 using System.Collections.Generic;
@@ -31,12 +32,17 @@ namespace Business.Managers
         #region Public methods
         public Response<Empleado> Crear(Empleado entity)
         {
+            var emailCorporativo = entity.CrearEmailCorporativo(); //Añadir validación de email existente.
             Usuario usuario = new Usuario
             {
-                Email = entity.CrearEmailCorporativo(),
+                Email = emailCorporativo,
+                Passwordhash = "123456", // Generar una pass por defecto, y enviar por mail a casilla personal
+                FechaCreacion = DateTime.Now,
+                RolId =(int)RolesEnum.Empleado,
+                    
 
             };
-            var usuario = _usuarioManager.Crear(entity);
+            var usuarioCreado = _usuarioManager.Crear(usuario);
         }
 
         public Response<bool> Eliminar(int id)

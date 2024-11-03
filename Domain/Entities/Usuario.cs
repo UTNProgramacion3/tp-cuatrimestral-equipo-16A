@@ -19,6 +19,7 @@ namespace Domain.Entities
         public Usuario()
         {
             Rol = new Rol();
+            Rol.Id = 0;
         }
     }
 }

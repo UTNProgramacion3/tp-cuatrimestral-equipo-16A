@@ -58,6 +58,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
                 if(response.Success == true)
                 {
                     Session.Add("RegisterSuccess", response.Message);
+                    Session.Add("UserLogueado", response.Data);
                     Response.Redirect(ResolveUrl("~/Pages/RegisterSuccess.aspx"), false);
                 }else
                 {

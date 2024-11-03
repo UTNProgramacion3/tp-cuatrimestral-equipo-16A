@@ -51,8 +51,9 @@ namespace Business.Managers
 
                 if (response.Success)
                 {
-                    response.Data = entity;
-                    response.Message = "Usuario creado con exito.";
+                    response = ObtenerPorEmail(entity.Email);
+                    response.Message = $"Enviamos un mail de activacion a {response.Data.Email}.\n Gracias por Crear tu cuenta!";
+                    
                 }
                 else
                 {

@@ -14,5 +14,6 @@ namespace Domain.Entities
         public string EmailCorporativo { get; set; }
         public int Posicion { get; set; }
         public JornadaTrabajo HorarioTrabajo { get; set; }
+        public int JornadaTrabajoId { get; set; }
     }
 }

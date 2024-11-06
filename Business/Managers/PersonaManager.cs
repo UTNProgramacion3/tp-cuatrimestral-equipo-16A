@@ -1,9 +1,12 @@
-﻿using Business.Interfaces;
+﻿using Business.Dtos;
+using Business.Interfaces;
 using DataAccess;
+using DataAccess.Extensions;
 using Domain.Entities;
 using Domain.Response;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -33,11 +36,18 @@ namespace Business.Managers
                 new SqlParameter("@FechaNacimiento", entity.FechaNacimiento),
                 new SqlParameter("@EmailPersonal", entity.EmailPersonal),
                 new SqlParameter("@Telefono", entity.Telefono),
-                new SqlParameter("@DireccionId", entity.Direccion.Id),
+                new SqlParameter("@DireccionId", entity.DireccionId),
+                new SqlParameter("@UsuarioId", entity.UsuarioId),
             };
 
             var res = _DBManager.ExecuteQuery(query, parameters);
-            
+
+            entity.Id = res.GetId();
+
+            if (res == null)
+            {
+                throw new Exception("Hubo un error al crear empleado");
+            }
             _response.Ok(entity);
             return _response;
         }

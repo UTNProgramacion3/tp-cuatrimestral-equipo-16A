@@ -1,6 +1,8 @@
 ﻿using Business.Interfaces;
 using DataAccess;
+using DataAccess.Extensions;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.Response;
 using System;
 using System.Collections.Generic;
@@ -27,18 +29,37 @@ namespace Business.Managers
 
             SqlParameter[] parameters = new SqlParameter[]
             {
-                new SqlParameter("@HoraInicio", entity.HoraInicio),
-                new SqlParameter("@HoraFin", entity.HoraFin),
-                new SqlParameter("@Fecha", entity.Fecha),
-                new SqlParameter("@EmpleadoId", entity.Empleado.Id),
-                new SqlParameter("@TipoJornadaId", entity.TipoJornada.Id),
-                new SqlParameter("@Observaciones", entity.Observaciones),
+               new SqlParameter("@SedeId", entity.Sede.Id)
             };
 
+
             var res = _DBManager.ExecuteQuery(query, parameters);
+            entity.Id = res.GetId();
+
+            RegistrarJornadaSemanal(entity.Jornada, entity.Id);
 
             _jornadaTrabajo.Ok(entity);
+
             return _jornadaTrabajo;
+        }
+
+        public DateTime DisponibilidadCambioJornada(int empleadoId)
+        {
+
+            string query = "Select * from Empleados where Id = @Id";
+            var res = _DBManager.ExecuteQuery(query, new SqlParameter[] { new SqlParameter("@Id", empleadoId) });
+
+            Empleado empleado = res.GetEntity<Empleado>();
+
+            if(empleado.Posicion == (int)PosicionEnum.Medico)
+            {
+                // Necesitamos traernos la última fecha donde el empleado tiene un turno, para poder cambiar la jornada a partir de esa fecha (Y no afectar los turnos ya asignados).
+            }
+
+            //Implementar cambio de disponibilidad.
+            return DateTime.Now;
+
+            throw new NotImplementedException();
         }
 
         public Response<bool> Eliminar(int id)
@@ -74,6 +95,20 @@ namespace Business.Managers
                     new SqlParameter("@JornadaTrabajoId", jornadaId)
                 });
             }
+        }
+
+        public JornadaTrabajo ObtenerJornadaEmpleado(int empleadoId)
+        {
+            string query = "Select * from Empleados where Id = @Id";
+            var res = _DBManager.ExecuteQuery(query, new SqlParameter[] { new SqlParameter("@Id", empleadoId) });
+
+            Empleado empleado = res.GetEntity<Empleado>();
+
+            query = "Select * from JornadaTrabajo where Id = @JornadaTrabajoId";
+
+            res = _DBManager.ExecuteQuery(query, new SqlParameter[] { new SqlParameter("@JornadaTrabajoId", empleado.JornadaTrabajoId) });
+
+            return res.GetEntity<JornadaTrabajo>();
         }
     }
 }

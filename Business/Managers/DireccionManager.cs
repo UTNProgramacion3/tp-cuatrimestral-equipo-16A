@@ -1,4 +1,5 @@
 ﻿using DataAccess;
+using DataAccess.Extensions;
 using Domain.Entities;
 using Domain.Response;
 using System;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Business.Managers
 {
-    public class DireccionManager
+    public class DireccionManager : ICrudRepository<Direccion>
     {
         private readonly DBManager _DBManager;
         private Response<Direccion> _response;
@@ -37,6 +38,7 @@ namespace Business.Managers
 
             var res = _DBManager.ExecuteQuery(queryDireccion, parameters);
 
+            entity.Id = res.GetId();
             _response.Ok(entity);
 
             return _response;
@@ -49,7 +51,12 @@ namespace Business.Managers
 
         public Response<Direccion> ObtenerPorId(int id)
         {
-            throw new NotImplementedException();
+            string query = "Select * from Direcciones where Id = @Id";
+
+            var res = _DBManager.ExecuteQuery(query, new SqlParameter[] { new SqlParameter("@Id", id) });
+
+            _response.Ok(res.GetEntity<Direccion>());
+            return _response;
         }
 
         public Response<List<Direccion>> ObtenerTodos()

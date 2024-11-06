@@ -11,5 +11,6 @@ namespace Business.Interfaces
         Response<bool> VerificarPassword(string password, string hashedpassword);
         Response<bool> LogIn(Usuario usuario);
         void LogOut(Usuario usuario);
+        Usuario GenerarUsuario(Persona persona, int tipoUsuario);
     }
 }

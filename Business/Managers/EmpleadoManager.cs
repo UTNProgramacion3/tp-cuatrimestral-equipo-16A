@@ -6,9 +6,11 @@ using Domain.Enums;
 using Domain.Response;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Utils.Interfaces;
 
 namespace Business.Managers
 {
@@ -20,6 +22,7 @@ namespace Business.Managers
         private readonly IUsuarioManager _usuarioManager;
         private readonly IDireccionManager _direccionManager;
         private readonly IPersonaManager _personaManager;
+        private readonly IMapper<Empleado> _mapper;
         #endregion
 
         #region Builder
@@ -28,13 +31,15 @@ namespace Business.Managers
             Response<Empleado> response, 
             IUsuarioManager usuarioManager, 
             IDireccionManager direccionManager, 
-            IPersonaManager personaManager) 
+            IPersonaManager personaManager, 
+            IMapper<Empleado> mapper) 
         { 
             _DBManager = manager;
             _response = response;
             _usuarioManager = usuarioManager;
             _direccionManager = direccionManager;
             _personaManager = personaManager;
+            _mapper = mapper;
         }
         #endregion
 
@@ -43,17 +48,8 @@ namespace Business.Managers
         {
             try
             {
-                var emailCorporativo = entity.CrearEmailCorporativo(); //Añadir validación de email existente.
-                Usuario usuario = new Usuario
-                {
-                    Email = emailCorporativo,
-                    Passwordhash = "123456", // Generar una pass por defecto, y enviar por mail a casilla personal
-                    FechaCreacion = DateTime.Now,
-                    //Rol =(int)RolesEnum.Empleado,
-                    
-
-                };
-                var usuarioCreado = _usuarioManager.Crear(usuario);
+                var user = _usuarioManager.GenerarUsuario((Persona)entity, (int)RolesEnum.Empleado);
+                var usuarioCreado = _usuarioManager.Crear(user);
 
                 if (!usuarioCreado.Success)
                 {
@@ -70,7 +66,8 @@ namespace Business.Managers
                     EmailPersonal = entity.EmailPersonal,
                     FechaNacimiento = entity.FechaNacimiento,
                     Telefono = entity.Telefono,
-                    Direccion = direccionCreada.Data
+                    Direccion = direccionCreada.Data,
+                    UsuarioId = usuarioCreado.Data.Id,
                 };
 
                 var personaCreada = _personaManager.Crear(persona);
@@ -80,12 +77,29 @@ namespace Business.Managers
                     throw new Exception("Error al crear la persona");
                 }
 
+                var query = "Insert into Empleados values(@PersonaId, @UsuarioId, @Legajo, @EmailCorporativo, @Posicion, @JornadaTrabajoId)";
 
+                var parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@PersonaId", personaCreada.Data.Id),
+                    new SqlParameter("@UsuarioId", usuarioCreado.Data.Id),
+                    new SqlParameter("@Legajo", entity.Legajo),
+                    new SqlParameter("@EmailCorporativo", entity.EmailCorporativo),
+                    new SqlParameter("@Posicion", entity.Posicion),
+                    new SqlParameter("@JornadaTrabajoId", entity.JornadaTrabajoId),
+                };
 
+                var res = _DBManager.ExecuteQuery(query, parameters);
+
+                entity.Id = res.GetId();
+
+                _response.Ok(entity);
+
+                return _response;
             }
             catch(Exception ex)
             {
-
+                throw ex;
             }
         }
 
@@ -94,9 +108,30 @@ namespace Business.Managers
             throw new NotImplementedException();
         }
 
-        public Response<Empleado> ObtenerPorId(int id)
+        public Response<Empleado> ObtenerPorId(int empleadoId)
         {
-            throw new NotImplementedException();
+           string query = "SELECT * FROM Empleados WHERE Id = @Id";
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@Id", empleadoId)
+            };
+
+            var res = _DBManager.ExecuteQuery(query, parameters);
+
+            if (res.Rows.Count == 0)
+            {
+                _response.NotOk("Error al encontrar empleado");
+                return _response;
+            }
+
+            
+
+            var empleado = _mapper.MapFromRow(res.Rows[0]);
+            empleado.Direccion = _direccionManager.ObtenerPorId(empleado.DireccionId).Data;
+
+            _response.Ok(empleado);
+
+            return _response;
         }
 
         public Response<List<Empleado>> ObtenerTodos()
@@ -111,7 +146,6 @@ namespace Business.Managers
         #endregion
 
         #region Private methods
-       
         #endregion
     }
 }

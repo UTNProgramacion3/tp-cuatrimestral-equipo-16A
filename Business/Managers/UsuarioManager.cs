@@ -1,6 +1,8 @@
 ﻿using Business.Interfaces;
 using DataAccess;
+using DataAccess.Extensions;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.Response;
 using System;
 using System.Collections.Generic;
@@ -30,7 +32,6 @@ namespace Business.Managers
             string query = @"INSERT INTO USUARIOS (email, passwordhash, idrol, activo)
                              VALUES (@email, @passwordhash, @idrol, @activo)";
 
-            //Hasheamos la password antes de guardarla
             entity.Passwordhash = PasswordHasher.HashPassword(entity.Passwordhash);
 
             SqlParameter[] parameters = new SqlParameter[]
@@ -379,5 +380,29 @@ namespace Business.Managers
             }
             return response;
         }
+        public Usuario GenerarUsuario(Persona persona, int tipoUsuario)
+        {
+            var email = tipoUsuario == (int)RolesEnum.Empleado ? persona.CrearEmailCorporativo() : persona.EmailPersonal; //Añadir validación mail existente.
+
+            Usuario usuario = new Usuario
+            {
+                Email = email,
+                Passwordhash = "123456", // Generar una pass por defecto, y enviar por mail a casilla personal
+                FechaCreacion = DateTime.Now,
+                Rol = GenerarRol(persona, tipoUsuario),
+                ImagenPerfil = "",
+                Activo = true,
+            };
+
+            return usuario;
+        }
+
+        #region Private methods
+        private Rol GenerarRol(Persona persona, int tipoUsuario)
+        {
+            Rol rolAsignado = new Rol();
+            return rolAsignado;
+        }
+        #endregion
     }
 }

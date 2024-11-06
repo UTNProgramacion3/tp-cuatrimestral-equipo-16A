@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Extensions
 {
-    public static class EmpleadoExtension
+    public static class EmailExtension
     {
-        public static string CrearEmailCorporativo(this Empleado empleado)
+        public static string CrearEmailCorporativo(this Persona empleado)
         {
             return empleado.Nombre + "." + empleado.Apellido + "@clinica.com";
         }

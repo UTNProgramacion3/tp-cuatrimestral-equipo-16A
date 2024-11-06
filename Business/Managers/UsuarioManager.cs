@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Web.UI;
 using Utils;
 
@@ -51,8 +52,9 @@ namespace Business.Managers
 
                 if (response.Success)
                 {
-                    response.Data = entity;
-                    response.Message = "Usuario creado con exito.";
+                    response = ObtenerPorEmail(entity.Email);
+                    response.Message = $"Enviamos un mail de activacion a {response.Data.Email}.\n Gracias por Crear tu cuenta!";
+                    
                 }
                 else
                 {
@@ -379,6 +381,29 @@ namespace Business.Managers
                 response.Message = "La contraseña es correcta";
             }
             return response;
+        }
+
+        public bool ExisteMail(string email)
+        {
+            bool result = false;
+            string query = @"select count(*) from usuarios 
+                            where email = @email;";
+            SqlParameter[] parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@email", email)
+                };
+
+            try
+            {
+                result = Convert.ToBoolean(_dbManager.ExecuteScalar(query, parameters));
+
+            }
+            catch (Exception ex)
+            {
+                result = true;  
+            }
+
+            return result;
         }
         public Usuario GenerarUsuario(Persona persona, int tipoUsuario)
         {

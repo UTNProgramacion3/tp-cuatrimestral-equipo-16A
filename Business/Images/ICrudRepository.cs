@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Business.Managers
 {
-    public interface ICrudRepository<T>
+    public interface ICrudRepository<T> where T : class, new()
     {
         Response<T> ObtenerPorId(int id);
         Response<List<T>> ObtenerTodos();

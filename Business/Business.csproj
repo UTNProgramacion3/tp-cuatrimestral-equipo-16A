@@ -42,10 +42,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dtos\PersonaDto.cs" />
     <Compile Include="Images\ICrudRepository.cs" />
+    <Compile Include="Interfaces\IDireccionManager.cs" />
     <Compile Include="Interfaces\IEmpleadoManager.cs" />
+    <Compile Include="Interfaces\IJornadaManager.cs" />
+    <Compile Include="Interfaces\IPersonaManager.cs" />
+    <Compile Include="Interfaces\ISedeManager.cs" />
     <Compile Include="Interfaces\IUsuarioManager.cs" />
+    <Compile Include="Managers\DireccionManager.cs" />
     <Compile Include="Managers\EmpleadoManager.cs" />
+    <Compile Include="Managers\JornadaManager.cs" />
+    <Compile Include="Managers\PersonaManager.cs" />
+    <Compile Include="Managers\SedeManager.cs" />
     <Compile Include="Managers\SessionManager.cs" />
     <Compile Include="Managers\TurnoManager.cs" />
     <Compile Include="Managers\UsuarioManager.cs" />
@@ -65,5 +74,6 @@
       <Name>Utils</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

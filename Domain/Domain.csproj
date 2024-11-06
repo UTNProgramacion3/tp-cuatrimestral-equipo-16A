@@ -41,23 +41,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\DiaLaboral.cs" />
     <Compile Include="Entities\Modulo.cs" />
-    <Compile Include="Entities\Operacion.cs" />
+    <Compile Include="Entities\Permiso.cs" />
+    <Compile Include="Entities\Sede.cs" />
     <Compile Include="Entities\Usuario.cs" />
-    <Compile Include="Entities\UsuarioLog.cs" />
+    <Compile Include="Entities\Log.cs" />
     <Compile Include="Enums\DiasEnum.cs" />
     <Compile Include="Entities\Direccion.cs" />
     <Compile Include="Entities\Empleado.cs" />
     <Compile Include="Entities\EstadoTurno.cs" />
     <Compile Include="Entities\Especialidad.cs" />
     <Compile Include="Entities\HistoriaClinica.cs" />
-    <Compile Include="Entities\HorarioTrabajo.cs" />
+    <Compile Include="Entities\JornadaTrabajo.cs" />
     <Compile Include="Entities\Medico.cs" />
     <Compile Include="Entities\Paciente.cs" />
-    <Compile Include="Entities\Permiso.cs" />
     <Compile Include="Entities\Persona.cs" />
     <Compile Include="Entities\Rol.cs" />
     <Compile Include="Entities\Turno.cs" />
+    <Compile Include="Enums\EstadosEnum.cs" />
+    <Compile Include="Enums\PosicionEnum.cs" />
+    <Compile Include="Enums\RolesEnum.cs" />
+    <Compile Include="Enums\SedeEnum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Response\Response.cs" />
   </ItemGroup>

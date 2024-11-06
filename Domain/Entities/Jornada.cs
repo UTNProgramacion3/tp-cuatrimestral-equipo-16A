@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Operacion
+    public class Jornada
     {
         public int Id { get; set; }
-        public string Nombre{ get; set; }
-        public Modulo Modulo { get; set; }
-
-        public Operacion() { Modulo = new Modulo(); }
+        public DiasEnum Dia { get; set; }
+        public DateTime Inicio { get; set; }
+        public DateTime Fin { get; set; }
     }
 }

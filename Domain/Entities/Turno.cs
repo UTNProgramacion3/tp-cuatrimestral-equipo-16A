@@ -14,12 +14,6 @@ namespace Domain.Entities
         public DateTime Fecha { get; set; }
         public TimeSpan Hora { get; set; }
         public string EstadoTurno { get; set; }
-
-
-        /*Turno()
-        {
-            Fecha = DateTime.Now;
-            Activo = true;
-        }*/
+        public string Observaciones { get; set; }
     }
 }

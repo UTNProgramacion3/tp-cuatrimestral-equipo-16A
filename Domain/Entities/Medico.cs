@@ -11,5 +11,6 @@ namespace Domain.Entities
         public int Id { get; set; }
         public int Matricula { get; set; }
         public Especialidad Especialidad { get; set; }
+        public int EspecialidadId { get; set; }
     }
 }

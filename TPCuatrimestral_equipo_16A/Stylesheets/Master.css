@@ -60,23 +60,6 @@ body {
     color: #EEE9DA;
 }
 
-.header .btn button{
-    font-weight: 700;
-    color: black;
-    padding: 9px 25px;
-    background: #EEE9DA;
-    border:none;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: all 0.3s ease 0s;
-}
-
-.header .btn button:hover{
-    background: #6096B4;
-    color: #EEF7FF;
-    transform: scale(1.1);
-}
-
 .footer {
     background-color: #EEE9DA;
     text-align: center;

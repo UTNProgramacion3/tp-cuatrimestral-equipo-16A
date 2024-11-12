@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using Domain.Response;
 
 namespace DataAccess
 {
@@ -153,6 +154,43 @@ namespace DataAccess
             catch (SqlException ex)
             {
                 LogError("Error al ejecutar la consulta de valor escalar.", ex);
+                throw;
+            }
+            finally
+            {
+                CloseConnection();
+            }
+        }
+        /// <summary>
+        /// Ejecuta un stored procedure y devuelve la tabla de datos obtenida.
+        /// </summary>
+        /// <returns>DataTable con los resultados del stored procedure.</returns>
+        public DataTable ExecuteStoredProcedure(string storedProcedureName, SqlParameter[] parameters = null)
+        {
+            try
+            {
+                OpenConnection();
+
+                using (SqlCommand command = new SqlCommand(storedProcedureName, _connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure; 
+
+                    if (parameters != null)
+                    {
+                        command.Parameters.AddRange(parameters);
+                    }
+
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                    {
+                        DataTable resultTable = new DataTable();
+                        adapter.Fill(resultTable);
+                        return resultTable;
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                LogError("Error al ejecutar el stored procedure.", ex);
                 throw;
             }
             finally

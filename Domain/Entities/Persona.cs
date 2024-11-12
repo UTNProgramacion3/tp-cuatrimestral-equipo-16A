@@ -12,6 +12,11 @@ namespace Domain.Entities
         public string Nombre { get; set; }
         public string Apellido { get; set; }
         public int Documento { get; set; }
+        public string Telefono { get; set; }
+        public DateTime FechaNacimiento { get; set; }
+        public string EmailPersonal { get; set; }
         public Direccion Direccion { get; set; }
+        public int DireccionId { get; set; }
+        public int UsuarioId { get; set; }
     }
 }

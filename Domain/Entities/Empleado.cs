@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,9 @@ namespace Domain.Entities
     {
         public int Id { get; set; }
         public int Legajo { get; set; }
-        public Rol Rol { get; set; }
-        public HorarioTrabajo HorarioTrabajo { get; set; }
+        public string EmailCorporativo { get; set; }
+        public int Posicion { get; set; }
+        public JornadaTrabajo HorarioTrabajo { get; set; }
+        public int JornadaTrabajoId { get; set; }
     }
 }

@@ -13,5 +13,6 @@ namespace Business.Dtos
         public Turno Turno { get; set; }
         public Medico Medico { get; set; }
         public Paciente Paciente { get; set; }
+        public Sede Sede { get; set; }
     }
 }

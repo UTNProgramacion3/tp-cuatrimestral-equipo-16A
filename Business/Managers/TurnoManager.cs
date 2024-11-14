@@ -129,18 +129,19 @@ namespace Business.Managers
 
         public List <TurnoDTO> ObtenerTodos()
         {
-            string query = @"SELECT 
-                            T.Fecha AS Turno_Fecha,
-                            T.Hora AS Turno_Hora,
-                            M.Nombre AS Medico_Nombre,
-                            M.Apellido AS Medico_Apellido,
-                            P.Nombre AS Paciente_Nombre,
-                            P.Apellido AS Paciente_Apellido,
-                            ET.Nombre AS Turno_EstadoTurno
-                            FROM Turnos T
-                            Inner Join Medicos M ON T.IdMedico = M.Id
-                            Inner Join Pacientes P ON T.IdPAciente = P.Id
-                            Inner Join EstadoTurno ET ON T.IdEstadoTurno = ET.Id";
+            string query = @"Select	T.Fecha AS Turno_Fecha,
+		                    T.Hora AS Turno_Hora,
+		                    dbo.fn_buscar_nombre(EM.PersonaId) AS Medico_Nombre,
+		                    dbo.fn_buscar_apellido(EM.PersonaId) AS Medico_Apellido,
+		                    dbo.fn_buscar_nombre(PA.PersonaId) AS Paciente_Nombre,
+		                    dbo.fn_buscar_apellido(PA.PersonaId) AS Paciente_Apellido,
+		                    SE.Nombre AS Sede_Nombre,
+		                    ET.Estado AS Turno_EstadoTurno
+                            From Turnos T
+                            Left Join Empleados EM ON T.IdMedico = EM.Id
+                            Left Join Pacientes PA ON T.IdPaciente = PA.Id
+                            Left Join EstadoTurnos ET ON T.IdEstadoTurno = ET.Id
+                            Left Join Sedes SE ON T.IdSede = SE.Id";
                             
 
             try

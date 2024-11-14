@@ -177,6 +177,10 @@
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Business\Business.csproj">
+      <Project>{5730dde6-08b4-4a9a-a927-2d9049538b9e}</Project>
+      <Name>Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DataAccess\DataAccess.csproj">
       <Project>{47e69c0d-59bd-4c41-8ae9-fb8a22374e01}</Project>
       <Name>DataAccess</Name>

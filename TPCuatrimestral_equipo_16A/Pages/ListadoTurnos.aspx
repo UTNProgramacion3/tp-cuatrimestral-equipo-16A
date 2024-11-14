@@ -21,6 +21,7 @@
                             <asp:BoundField HeaderText="Apellido Medico" DataField="Medico.Apellido" />
                             <asp:BoundField HeaderText="Nombre Paciente" DataField="Paciente.Nombre" />
                             <asp:BoundField HeaderText="Apellido Paciente" DataField="Paciente.Apellido" />
+                            <asp:Boundfield HeaderText="Sede" DataField="Sede.Nombre" />
                             <asp:BoundField HeaderText="Estado de Turno" DataField="Turno.EstadoTurno" />
                         </Columns>
                     </asp:GridView>

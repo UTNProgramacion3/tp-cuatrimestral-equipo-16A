@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Business.Managers;
+using DataAccess;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -13,5 +15,12 @@ namespace TPCuatrimestral_equipo_16A.Pages
 		{
 
 		}
-	}
+
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+			var email = new EmailManager(new DBManager());
+
+			email.EnviarEmail("escuderopablo.m@gmail.com", Title, "Hola, este es un mensaje de prueba");
+        }
+    }
 }

@@ -30,8 +30,7 @@
 	<appSettings>
 		<add key="SMTP_SERVER" value="smtp.gmail.com" />
 		<add key="SMTP_PORT" value="587" />
-		<add key="SMTP_USER" value="notificaciones.escu@gmail.com" />
-		<add key="SMTP_PASSWORD" value="qvew caqu quke jkil" />
-		<add key="APP_NAME" value="Clinica Privada" />
+		<add key="SMTP_USER" value="INSERTEMAIL@GMAIL.COM" />
+		<add key="SMTP_PASSWORD" value="INSERTE CONTRASEÑA O APP PASSWORD GENERADA DESDE SEGURIDAD" />
 	</appSettings>
 </configuration>

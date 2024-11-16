@@ -64,14 +64,12 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
         private void CargarMedicos()
         {
-            // Asignamos la tabla de datos al GridView
             dvgMedicos.DataSource = ObtenerDatos();
             dvgMedicos.DataBind();
         }
 
         protected DataTable ObtenerDatos()
         {
-            // Creamos una tabla de ejemplo con datos
             DataTable table = new DataTable();
             table.Columns.Add("Nombre");
             table.Columns.Add("Apellido");

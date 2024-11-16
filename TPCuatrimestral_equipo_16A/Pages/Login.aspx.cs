@@ -1,4 +1,5 @@
 ﻿using Business.Managers;
+using DataAccess;
 using Domain.Entities;
 using Domain.Response;
 using System;
@@ -31,8 +32,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
             usuario.Email = txtEmail.Text;
             usuario.Passwordhash = txtPassword.Text;
 
-
-                var response = usuarioManager.LogIn(usuario);
+            var response = usuarioManager.LogIn(usuario);
 
                 if (response.Success)
                 {

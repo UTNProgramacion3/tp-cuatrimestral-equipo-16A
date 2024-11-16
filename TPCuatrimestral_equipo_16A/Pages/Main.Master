@@ -50,7 +50,7 @@
             <nav>
                 <ul class="nav-links">
                     <li><a href="<%= ResolveUrl("~/Pages/Home.aspx") %>">Home</a></li>
-                    <%if (Usuario.Rol.Id == 1)
+                    <%if (true)
                         { %>
                     <li><a href="#">Adm Cuentas</a></li>
                     <li><a href="#">Adm Turnos</a></li>

@@ -47,12 +47,14 @@
     <Compile Include="Images\ICrudRepository.cs" />
     <Compile Include="Interfaces\IDireccionManager.cs" />
     <Compile Include="Interfaces\IEmpleadoManager.cs" />
+    <Compile Include="Interfaces\IEspecialidadManager.cs" />
     <Compile Include="Interfaces\IJornadaManager.cs" />
     <Compile Include="Interfaces\IPersonaManager.cs" />
     <Compile Include="Interfaces\ISedeManager.cs" />
     <Compile Include="Interfaces\IUsuarioManager.cs" />
     <Compile Include="Managers\DireccionManager.cs" />
     <Compile Include="Managers\EmpleadoManager.cs" />
+    <Compile Include="Managers\EspecialidadManager.cs" />
     <Compile Include="Managers\JornadaManager.cs" />
     <Compile Include="Managers\PersonaManager.cs" />
     <Compile Include="Managers\SedeManager.cs" />

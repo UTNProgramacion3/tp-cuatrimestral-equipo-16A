@@ -13,6 +13,8 @@ namespace Domain.Entities
         public List<Permiso> Operaciones { get; set; }    
         public bool Activo { get; set; }
 
-        public Rol() { Operaciones = new List<Permiso>(); }    
+        public Rol() {
+            Id = 0;
+            Operaciones = new List<Permiso>(); }    
     }
 }

@@ -23,9 +23,11 @@
                     <asp:TextBox ID="txtPassword" runat="server" CssClass="textbox" TextMode="Password" Enabled="false" oninput="toggleFields()"></asp:TextBox>
 
                     <asp:Button ID="btnLogin" CssClass="login-btn" Text="Ingresar!" runat="server" Enabled="false" OnClick="btnLogin_Click"/>
+                    <br />
                     <asp:Label Text="" runat="server" ID="lblMessage" />
+                    <br />
                     <asp:Label ID="lblRegistrarse" runat="server" Text="No tienes una cuenta?" CssClass="label"></asp:Label>
-                    <a href="#" class="reg-link">Registrate</a>
+                    <a href="<%= ResolveUrl("~/Pages/UserRegister.aspx") %>" class="reg-link">Registrate</a>
                 </div>
             </ContentTemplate>
         </asp:UpdatePanel>

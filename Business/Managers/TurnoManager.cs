@@ -8,10 +8,11 @@ using Utils.Interfaces;
 using Utils;
 using Business;
 using Business.Dtos;
+using Business.Interfaces;
 
 namespace Business.Managers
 {
-    public class TurnoManager
+    public class TurnoManager : ITurnoManager
     {
         private DBManager _dbManager;
         public IMapper <TurnoDTO> _mapper;

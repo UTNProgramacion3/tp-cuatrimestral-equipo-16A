@@ -6,11 +6,13 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Business;
+using Business.Dtos;
 using Business.Interfaces;
 using Business.Managers;
 using DataAccess;
 using Domain.Entities;
 using Domain.Response;
+using Utils;
 
 namespace TPCuatrimestral_equipo_16A.Pages
 {
@@ -18,6 +20,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
     {
         private DBManager dbManager;
         private EspecialidadManager especialidadManager;
+        private MedicoManager medicoManager;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -25,6 +28,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
             dbManager = new DBManager();
             Response<Especialidad> responseEspecialidad = new Response<Especialidad>();
             especialidadManager = new EspecialidadManager(dbManager, responseEspecialidad);
+            medicoManager = new MedicoManager(dbManager, new Response<Medico>(), new Mapper<MedicoDto>());
 
             try
             {
@@ -64,22 +68,20 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
         private void CargarMedicos()
         {
-            dvgMedicos.DataSource = ObtenerDatos();
-            dvgMedicos.DataBind();
-        }
+            Response <List<MedicoDto>> listaMedicos = medicoManager.ObetenerTodos();
 
-        protected DataTable ObtenerDatos()
-        {
-            DataTable table = new DataTable();
-            table.Columns.Add("Nombre");
-            table.Columns.Add("Apellido");
-            table.Columns.Add("Horario");
 
-            table.Rows.Add("Pablo", "Perez", "14:00");
-            table.Rows.Add("Pablo", "Perez", "14:30");
-            table.Rows.Add("Pablo", "Perez", "15:00");
+            try
+            {
+                dvgMedicos.DataSource = listaMedicos.Data;
+                dvgMedicos.DataBind();
+            }
+            catch (Exception ex)
+            {
 
-            return table;
+                throw ex;
+            }
+            
         }
 
         protected void txtBuscarEspecialidad_TextChanged(object sender, EventArgs eventArgs)

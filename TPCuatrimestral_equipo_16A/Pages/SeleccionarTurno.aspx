@@ -32,9 +32,9 @@
                     <asp:GridView ID="dvgMedicos" runat="server" AutoGenerateColumns="false"
                         CssClass="table table-hover table-striped table-bordered">
                         <Columns>
-                            <asp:BoundField DataField="Nombre" HeaderText="Nombre" />
-                            <asp:BoundField DataField="Apellido" HeaderText="Apellido" />
-                            <asp:BoundField DataField="Horario" HeaderText="Horario" />
+                            <asp:BoundField DataField="Persona.Nombre" HeaderText="Nombre Medico" />
+                            <asp:BoundField DataField="Persona.Apellido" HeaderText="Apellido Medico" />
+                            <asp:BoundField DataField="Especialidad.Nombre" HeaderText="Especialidad" />
                             <asp:CommandField ShowSelectButton="True" SelectText="Seleccionar" />
                         </Columns>
                     </asp:GridView>

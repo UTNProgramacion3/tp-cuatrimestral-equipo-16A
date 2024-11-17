@@ -14,6 +14,6 @@ namespace Business.Interfaces
     {
         Response<Medico> CrearMedico(MedicoDto entity);
         Response<Medico> ObtenerMedicoById(int id);
-
+        Response<List<MedicoDto>> ObetenerTodos();
     }
 }

@@ -40,6 +40,7 @@ namespace TPCuatrimestral_equipo_16A
             Container.RegisterType<IUsuarioManager, UsuarioManager>();
             Container.RegisterType<IJornadaManager, JornadaManager>();
             Container.RegisterType<ISedeManager, SedeManager>();
+            Container.RegisterType<IEspecialidadManager, EspecialidadManager>();
         }
     }
 }

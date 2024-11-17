@@ -6,35 +6,98 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Business;
+using Business.Dtos;
+using Business.Interfaces;
 using Business.Managers;
-using Domain;
+using DataAccess;
+using Domain.Entities;
+using Domain.Response;
+using Utils;
 
 namespace TPCuatrimestral_equipo_16A.Pages
 {
     public partial class SeleccionarMedico : System.Web.UI.Page
     {
+        private DBManager dbManager;
+        private EspecialidadManager especialidadManager;
+        private MedicoManager medicoManager;
+
         protected void Page_Load(object sender, EventArgs e)
         {
-            if(!IsPostBack)
+            
+            dbManager = new DBManager();
+            Response<Especialidad> responseEspecialidad = new Response<Especialidad>();
+            especialidadManager = new EspecialidadManager(dbManager, responseEspecialidad);
+            medicoManager = new MedicoManager(dbManager, new Response<Medico>(), new Mapper<MedicoDto>());
+
+            try
             {
-                dvgMedicos.DataSource = ObtenerDatos();
-                dvgMedicos.DataBind();
+                
+                if (!IsPostBack)
+                {
+                    CargarEspecialidades();
+                    CargarMedicos();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 
-        protected DataTable ObtenerDatos()
+        private void CargarEspecialidades()
         {
-            DataTable table = new DataTable();
+            
+            Response<List<Especialidad>> listaEspecialidad = especialidadManager.ObtenerTodos();
 
-            table.Columns.Add("Nombre");
-            table.Columns.Add("Apellido");
-            table.Columns.Add("Horario");
+           
+            if (listaEspecialidad != null && listaEspecialidad.Data != null)
+            {
+                ddlEspecialidades.DataSource = listaEspecialidad.Data;
+                ddlEspecialidades.DataTextField = "Nombre";
+                ddlEspecialidades.DataValueField = "Id";
+                ddlEspecialidades.DataBind();
+            }
+            else
+            {
+                
+                ddlEspecialidades.Items.Clear();
+                ddlEspecialidades.Items.Add(new ListItem("No hay especialidades disponibles", "-1"));
+            }
+        }
 
-            table.Rows.Add("Pablo", "Perez", "14:00");
-            table.Rows.Add("Pablo", "Perez", "14:30");
-            table.Rows.Add("Pablo", "Perez", "15:00");
+        private void CargarMedicos()
+        {
+            Response <List<MedicoDto>> listaMedicos = medicoManager.ObetenerTodos();
 
-            return table;
+
+            try
+            {
+                dvgMedicos.DataSource = listaMedicos.Data;
+                dvgMedicos.DataBind();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            
+        }
+
+        protected void txtBuscarEspecialidad_TextChanged(object sender, EventArgs eventArgs)
+        {
+            string searchText = txtBuscarEspecialidad.Text.ToLower();
+
+            // Filtramos la lista de especialidades según el texto buscado
+            List<Especialidad> filteredList = especialidadManager.ObtenerTodos()
+                .Data // Usamos el Data de la respuesta
+                .Where(especialidad => especialidad.Nombre.ToLower().Contains(searchText))
+                .ToList();
+
+            ddlEspecialidades.DataSource = filteredList;
+            ddlEspecialidades.DataTextField = "Nombre";
+            ddlEspecialidades.DataValueField = "Id";
+            ddlEspecialidades.DataBind();
         }
     }
 }

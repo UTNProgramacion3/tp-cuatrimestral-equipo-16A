@@ -10,6 +10,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Utils;
 using Utils.Interfaces;
 
 namespace Business.Managers
@@ -31,15 +32,14 @@ namespace Business.Managers
             Response<Empleado> response, 
             IUsuarioManager usuarioManager, 
             IDireccionManager direccionManager, 
-            IPersonaManager personaManager, 
-            IMapper<Empleado> mapper) 
+            IPersonaManager personaManager) 
         { 
             _DBManager = manager;
             _response = response;
             _usuarioManager = usuarioManager;
             _direccionManager = direccionManager;
             _personaManager = personaManager;
-            _mapper = mapper;
+            _mapper = new Mapper<Empleado>(); ;
         }
         #endregion
 

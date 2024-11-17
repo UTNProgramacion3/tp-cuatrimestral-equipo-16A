@@ -74,10 +74,10 @@ namespace Business.Managers
         /// <param name="usuarioId"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public Task EnviarMailValidacionNuevaCuenta(string destinatario, int usuarioId)
+        public void EnviarMailValidacionNuevaCuenta(string destinatario, int usuarioId)
         {
             var now = DateTime.Now;
-            string tokenExistenteQuery = "SELECT * FROM EmailValidation WHERE UsuarioId = @id AND TiempoExpiracion <= @ahora ";
+            string tokenExistenteQuery = "SELECT * FROM EmailValidaciones WHERE UsuarioId = @id AND TiempoExpiracion <= @ahora ";
 
             SqlParameter[] param = new SqlParameter[]
             {
@@ -87,7 +87,7 @@ namespace Business.Managers
 
             var tokenExistente = _DBManager.ExecuteQuery(tokenExistenteQuery, param);
 
-            if (tokenExistente != null)
+            if (tokenExistente.GetEntity<EmailValidationDto>() != null)
             {
                 throw new Exception("Ya se ha enviado un mail de validacion para este usuario");
             }
@@ -95,7 +95,7 @@ namespace Business.Managers
             var token = new Guid().ToString();
             var expirationDate = DateTime.Now.AddMinutes(30);
 
-            string query = "INSERT INTO EmailValidation (Token, ExpirationDate, Email) VALUES (@Token, @ExpirationDate, @UsuarioId)";
+            string query = "INSERT INTO EmailValidaciones (Token, TiempoExpiracion, UsuarioId) VALUES (@Token, @TiempoExpiracion, @UsuarioId)";
             SqlParameter[] parameters = new SqlParameter[]
             {
                 new SqlParameter("@Token", token),

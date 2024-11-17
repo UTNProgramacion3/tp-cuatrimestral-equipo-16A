@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dtos\EmailValidationDto.cs" />
     <Compile Include="Dtos\MedicoDto.cs" />
     <Compile Include="Dtos\PersonaDto.cs" />
     <Compile Include="Images\ICrudRepository.cs" />

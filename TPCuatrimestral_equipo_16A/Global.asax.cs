@@ -25,6 +25,7 @@ namespace TPCuatrimestral_equipo_16A
             Environment.SetEnvironmentVariable("SMTP_PORT", ConfigurationManager.AppSettings["SMTP_PORT"]);
             Environment.SetEnvironmentVariable("SMTP_USER", ConfigurationManager.AppSettings["SMTP_USER"]);
             Environment.SetEnvironmentVariable("SMTP_PASSWORD", ConfigurationManager.AppSettings["SMTP_PASSWORD"]);
+            Environment.SetEnvironmentVariable("BASE_URL", ConfigurationManager.AppSettings["BASE_URL"]);
             if (Environment.GetEnvironmentVariable("SMTP_USER")== null ||
                 Environment.GetEnvironmentVariable("SMTP_PASSWORD") == null)
             {
@@ -40,6 +41,7 @@ namespace TPCuatrimestral_equipo_16A
             Container.RegisterType<IUsuarioManager, UsuarioManager>();
             Container.RegisterType<IJornadaManager, JornadaManager>();
             Container.RegisterType<ISedeManager, SedeManager>();
+            Container.RegisterType<IEmailManager, EmailManager>();
         }
     }
 }

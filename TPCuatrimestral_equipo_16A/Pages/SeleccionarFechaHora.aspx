@@ -14,7 +14,7 @@
                <asp:GridView ID="dgvFechaHorario" runat="server" AutoGenerateColumns="false"
                     CssClass="table table-hover table-striped table-bordered">
                     <Columns>
-                        <asp:BoundField DataField="FechaHora" HeaderText="FechaHora" />
+                        <asp:BoundField DataField="Hora" HeaderText="Hora" />
                         <asp:CommandField ShowSelectButton="True" SelectText="Seleccionar" />
                     </Columns>
                 </asp:GridView>

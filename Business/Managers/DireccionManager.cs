@@ -1,4 +1,5 @@
-﻿using DataAccess;
+﻿using Business.Interfaces;
+using DataAccess;
 using DataAccess.Extensions;
 using Domain.Entities;
 using Domain.Response;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Business.Managers
 {
-    public class DireccionManager : ICrudRepository<Direccion>
+    public class DireccionManager : IDireccionManager
     {
         private readonly DBManager _DBManager;
         private Response<Direccion> _response;

@@ -68,13 +68,13 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
         private void CargarMedicos()
         {
-            Response <List<MedicoDto>> listaMedicos = medicoManager.ObetenerTodos();
+            Response <List<MedicoDto>> listaMedicos = medicoManager.ObtenerTodos();
 
 
             try
             {
-                dvgMedicos.DataSource = listaMedicos.Data;
-                dvgMedicos.DataBind();
+                dgvMedicos.DataSource = listaMedicos.Data;
+                dgvMedicos.DataBind();
             }
             catch (Exception ex)
             {

@@ -23,6 +23,7 @@ namespace Business.Managers
         private readonly IUsuarioManager _usuarioManager;
         private readonly IDireccionManager _direccionManager;
         private readonly IPersonaManager _personaManager;
+        private readonly IEmailManager _emailManager;
         private readonly IMapper<Empleado> _mapper;
         #endregion
 
@@ -32,14 +33,16 @@ namespace Business.Managers
             Response<Empleado> response, 
             IUsuarioManager usuarioManager, 
             IDireccionManager direccionManager, 
-            IPersonaManager personaManager) 
+            IPersonaManager personaManager,
+            IEmailManager emailManager) 
         { 
             _DBManager = manager;
             _response = response;
             _usuarioManager = usuarioManager;
             _direccionManager = direccionManager;
             _personaManager = personaManager;
-            _mapper = new Mapper<Empleado>(); ;
+            _emailManager = emailManager;
+            _mapper = new Mapper<Empleado>();
         }
         #endregion
 
@@ -48,8 +51,9 @@ namespace Business.Managers
         {
             try
             {
-                var user = _usuarioManager.GenerarUsuario((Persona)entity, (int)RolesEnum.Empleado);
+                var user = _usuarioManager.GenerarUsuario((Persona)entity, entity.RolId);
                 var usuarioCreado = _usuarioManager.Crear(user);
+                _emailManager.EnviarMailValidacionNuevaCuenta(entity.EmailPersonal, usuarioCreado.Data.Id);
 
                 if (!usuarioCreado.Success)
                 {

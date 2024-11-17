@@ -34,7 +34,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
         protected void Button1_Click(object sender, EventArgs e)
         {
             //_emailManager.EnviarMailValidacionNuevaCuenta("escuderopablo.m@gmail.com", 1);
-            var res = _pacienteManager.ObtenerTodos();
+            var res = _pacienteManager.ObtenerPorId(1);
         }
     }
 }

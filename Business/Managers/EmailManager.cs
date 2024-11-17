@@ -96,6 +96,8 @@ namespace Business.Managers
             var expirationDate = DateTime.Now.AddMinutes(30);
 
             string query = "INSERT INTO EmailValidaciones (Token, TiempoExpiracion, UsuarioId) VALUES (@Token, @TiempoExpiracion, @UsuarioId)";
+            string retrieveData = @"SELECT * FROM EmailValidaciones where UsuarioId = @UsuarioId";
+
             SqlParameter[] parameters = new SqlParameter[]
             {
                 new SqlParameter("@Token", token),
@@ -103,7 +105,7 @@ namespace Business.Managers
                 new SqlParameter("@UsuarioId", usuarioId)
             };
 
-            var res = _DBManager.ExecuteQuery(query, parameters);
+            var res = _DBManager.ExecuteNonQueryAndGetData(query, parameters, retrieveData);
 
             if (res == null)
             {

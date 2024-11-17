@@ -13,6 +13,7 @@ namespace Domain.Entities
         public string Passwordhash { get; set; }
         public DateTime FechaCreacion { get; set; }
         public Rol Rol { get; set; }
+        public int RolId { get; set; }
         public string ImagenPerfil { get; set; }
         public bool Activo { get; set; }
     }

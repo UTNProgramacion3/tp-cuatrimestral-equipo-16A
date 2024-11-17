@@ -4,25 +4,25 @@ namespace Domain
 {
     public enum DiasEnum
     {
+        [Description("Domingo")]
+        Domingo = 1,
+
         [Description("Lunes")]
-        Lunes = 1,
+        Lunes = 2,
 
         [Description("Martes")]
-        Martes = 2,
+        Martes = 3,
 
         [Description("Miércoles")]
-        Miercoles = 3,
+        Miercoles = 4,
 
         [Description("Jueves")]
-        Jueves = 4,
+        Jueves = 5,
 
         [Description("Viernes")]
-        Viernes = 5,
+        Viernes = 6,
 
         [Description("Sábado")]
-        Sabado = 6,
-
-        [Description("Domingo")]
-        Domingo = 7,
+        Sabado = 7,
     }
 }

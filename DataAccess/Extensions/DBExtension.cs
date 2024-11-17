@@ -24,9 +24,9 @@ namespace DataAccess.Extensions
         /// <typeparam name="T"></typeparam>
         /// <param name="data"></param>
         /// <returns>La entidad T</returns>
-        public static T GetEntity<T>(this DataTable data) where T : class
+        public static T GetEntity<T>(this DataTable data, bool create=false) where T : class
         {
-            if (data == null || data.Rows.Count == 0)
+            if (data == null ||(create == false &&  data.Rows.Count == 0))
                 return null;
 
             var item = Activator.CreateInstance<T>();

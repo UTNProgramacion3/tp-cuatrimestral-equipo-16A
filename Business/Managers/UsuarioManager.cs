@@ -9,7 +9,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading;
 using System.Web.UI;
+using System.Web.UI.WebControls;
 using Utils;
 
 
@@ -30,8 +32,10 @@ namespace Business.Managers
 
         public Response<Usuario> Crear(Usuario entity)
         {
-            string query = @"INSERT INTO USUARIOS (email, passwordhash, idrol, activo)
-                             VALUES (@email, @passwordhash, @idrol, @activo)";
+            string query = @"INSERT INTO USUARIOS (Email, Passwordhash, RolId, Activo)
+                             VALUES (@email, @passwordhash, @rolId, @activo)";
+
+            string retrieveData = @"SELECT * FROM USUARIOS WHERE Email = @email";
 
             entity.Passwordhash = PasswordHasher.HashPassword(entity.Passwordhash);
 
@@ -39,36 +43,18 @@ namespace Business.Managers
             {
                 new SqlParameter("@email", entity.Email),
                 new SqlParameter("@passwordhash", entity.Passwordhash),
-                new SqlParameter("@idrol", entity.Rol.Id),
+                new SqlParameter("@rolId", entity.Rol.Id),
                 new SqlParameter("@activo", entity.Activo)
 
             };
 
             var response = new Response<Usuario>();
 
-            try
-            {
-                response.Success = Convert.ToBoolean(_dbManager.ExecuteNonQuery(query, parameters));
 
-                if (response.Success)
-                {
-                    response = ObtenerPorEmail(entity.Email);
-                    response.Message = $"Enviamos un mail de activacion a {response.Data.Email}.\n Gracias por Crear tu cuenta!";
+            var res = _dbManager.ExecuteNonQueryAndGetData(query, parameters, retrieveData);
+            var usuario = res.GetEntity<Usuario>(create:true);
+            response.Ok(usuario);
                     
-                }
-                else
-                {
-                    response.Data = entity;
-                    response.Message = "Error, el usuario no puede ser creado";
-                }
-
-            }
-            catch (Exception ex)
-            {
-                response.Data = null;
-                response.Success = false;
-                response.Message = $"Error al Crear Usuario: {ex.Message}";
-            }
             return response;
         }
 
@@ -412,9 +398,9 @@ namespace Business.Managers
             Usuario usuario = new Usuario
             {
                 Email = email,
-                Passwordhash = "123456", // Generar una pass por defecto, y enviar por mail a casilla personal
+                Passwordhash = "123456",
                 FechaCreacion = DateTime.Now,
-                Rol = GenerarRol(persona, tipoUsuario),
+                Rol = AsignarRol(persona, tipoUsuario),
                 ImagenPerfil = "",
                 Activo = true,
             };
@@ -423,10 +409,14 @@ namespace Business.Managers
         }
 
         #region Private methods
-        private Rol GenerarRol(Persona persona, int tipoUsuario)
+        private Rol AsignarRol(Persona persona, int tipoUsuario)
         {
-            Rol rolAsignado = new Rol();
-            return rolAsignado;
+            string query = $"Select * from Roles where Id = ${tipoUsuario}";
+
+            var res = _dbManager.ExecuteQuery(query);
+
+            return res.GetEntity<Rol>();
+
         }
         #endregion
     }

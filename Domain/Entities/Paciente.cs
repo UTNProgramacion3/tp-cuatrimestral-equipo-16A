@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,12 @@ namespace Domain.Entities
         public List<Turno> Turnos { get; set; }
         public HistoriaClinica HistoriaClinica { get; set; }
         public int PersonaId { get; set; }
+        public int RolId { get; set; }
+
+        public Paciente()
+        {
+            RolId = (int)RolesEnum.Paciente;
+        }
 
     }
 }

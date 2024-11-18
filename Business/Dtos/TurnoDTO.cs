@@ -14,5 +14,16 @@ namespace Business.Dtos
         public Medico Medico { get; set; }
         public Paciente Paciente { get; set; }
         public Sede Sede { get; set; }
+        public EstadoTurno EstadoTurno { get; set; }
+        
+        public TurnoDTO()
+        {
+            Turno = new Turno();
+            Medico = new Medico();
+            Paciente = new Paciente();
+            Sede = new Sede();
+            EstadoTurno = new EstadoTurno();
+        }
     }
+
 }

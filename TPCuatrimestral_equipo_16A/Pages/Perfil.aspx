@@ -14,7 +14,7 @@
                 <label class="form-label fw-bold">Contraseña</label>
                 <input type="text" class="form-control" id="pass" required runat="server" disabled="disabled">
                 <div class="form-check">
-                    <asp:CheckBox class="form-check-input d-flex align-items-center" type="checkbox" ID="passCheck" runat="server" AutoPostBack="True" OnCheckedChanged="ChkBoxChecked"/>
+                    <asp:CheckBox class="form-check-input d-flex align-items-center" type="checkbox" ID="passCheck" runat="server" AutoPostBack="True" OnCheckedChanged="ChkBoxChecked" />
                     <label class="form-check-label">Mostrar Contraseña</label>
                 </div>
             </div>
@@ -35,8 +35,8 @@
                 <input type="text" class="form-control" id="mail" required runat="server" disabled="disabled">
             </div>
             <div class="mb-3">
-                <asp:Button  class="btn btn-light" type="button" id="btnGuardar" runat="server" disabled="disabled" Text="Guardar Cambios" runat="server" OnClick="BtnGuardar_OnClick" />
-                <asp:Button class="btn btn-light" text="Modificar" type="button" id="btnModificar" runat="server" OnClick="BtnModificar_OnClick"/>
+                <asp:Button class="btn btn-light" type="button" ID="btnGuardar" runat="server" disabled="disabled" Text="Guardar Cambios" runat="server" OnClick="BtnGuardar_OnClick" />
+                <asp:Button class="btn btn-light" Text="Modificar" type="button" ID="btnModificar" runat="server" OnClick="BtnModificar_OnClick" />
             </div>
         </div>
         <div class="col-md-2">

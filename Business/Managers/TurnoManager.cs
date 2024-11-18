@@ -165,6 +165,37 @@ namespace Business.Managers
             }
         }
 
+        public DataTable ObtenerTurnosDisponibles(int idMedico, string fecha)
+        {
+
+            //string query = @"EXEC ObtenerTurnosDisponibles @MedicoId = @idMedico, @Fecha = @fecha;";
+
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter ("@MedicoId", idMedico),
+                new SqlParameter ("@Fecha", fecha)
+            };
+
+            try
+            {
+                DataTable res = _dbManager.ExecuteStoredProcedure("ObtenerTurnosDisponibles", parameters);
+
+                if (res.Rows.Count == 0)
+                {
+                    return new DataTable();
+                }
+
+                return res;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            
+        }
+
         /*public bool Update(Turno turno)
         {
             string query = @"Update Turnos 
@@ -198,7 +229,7 @@ namespace Business.Managers
             }
 
         }*/
-  
+
     }
 }
 

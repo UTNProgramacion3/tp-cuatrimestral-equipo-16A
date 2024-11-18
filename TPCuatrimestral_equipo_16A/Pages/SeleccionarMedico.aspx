@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Main.Master" AutoEventWireup="true" CodeBehind="SeleccionarTurno.aspx.cs" Inherits="TPCuatrimestral_equipo_16A.Pages.SeleccionarMedico" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Main.Master" AutoEventWireup="true" CodeBehind="SeleccionarMedico.aspx.cs" Inherits="TPCuatrimestral_equipo_16A.Pages.SeleccionarMedico" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
@@ -8,8 +8,7 @@
         <div class="row g-4 d-flex justify-content-center">
             <div class="col-md-6">
                 <div class="mb-3">
-                    <label class="form-label fw-bold" runat="server">Seleccionar Fecha de Turno</label>
-                    <asp:TextBox CssClass="form-control" TextMode="Date" runat="server" ID="txtBoxFechaTurno" />
+                    <label class="form-label fw-bold" runat="server">Seleccionar Medico</label>
                 </div>
                 <div>
                     <label class="form-label fw-bold" runat="server">Filtrar Especialidad:</label>
@@ -29,7 +28,7 @@
                     <div class="mb-2">
                         <label class="from-label fw-bold" runat="server">Seleccionar un Medico:</label>
                     </div>
-                    <asp:GridView ID="dvgMedicos" runat="server" AutoGenerateColumns="false"
+                    <asp:GridView ID="dgvMedicos" runat="server" AutoGenerateColumns="false"
                         CssClass="table table-hover table-striped table-bordered">
                         <Columns>
                             <asp:BoundField DataField="Persona.Nombre" HeaderText="Nombre Medico" />

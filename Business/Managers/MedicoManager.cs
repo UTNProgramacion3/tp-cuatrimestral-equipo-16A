@@ -87,7 +87,7 @@ namespace Business.Managers
             return _response;
         }
 
-        public Response<List<MedicoDto>> ObetenerTodos()
+        public Response<List<MedicoDto>> ObtenerTodos()
         {
             string query = @"
                 Select

@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Main.Master" AutoEventWireup="true" CodeBehind="SeleccionarPaciente.aspx.cs" Inherits="TPCuatrimestral_equipo_16A.Views.WebForm1" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Main.Master" AutoEventWireup="true" CodeBehind="SeleccionarPaciente.aspx.cs" Inherits="TPCuatrimestral_equipo_16A.Views.SeleccionarPaciente" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
@@ -10,31 +10,33 @@
             <div class="col">
                 <label class="mb-2 fw-bold" runat="server">Filtrar por DNI</label>
                 <div class="input-group mb-2">
-                    <input type="text" class="form-control" id="ipDni" value="" />
-                    <input class="btn btn-dark" type="button" value="Filtrar" id="btnFiltrar" />
+                    <asp:TextBox class="form-control" ID="txtBoxFiltrar" runat="server" AutoPostBack="True" OnTextChanged="txtBoxFiltrar_TextChanged" ></asp:TextBox>
                 </div>
             </div>
             <label class="from-label mb-3 fw-bold" runat="server">Seleccionar un Paciente:</label>
             <asp:GridView ID="dgvPacientes" runat="server" AutoGenerateColumns="False"
-                CssClass="table table-hover table-striped table-bordered" OnSelectedIndexChanged="dgvPacientes_SelectedIndexChanged">
+                CssClass="table table-hover table-striped table-bordered" DataKeyNames="PacienteId" OnSelectedIndexChanged="dgvPacientes_SelectedIndexChanged">
                 <Columns>
+                    <asp:BoundField Visible="False" DataField="PacienteId" HeaderText="Id" />
                     <asp:BoundField DataField="Nombre" HeaderText="Nombre" />
                     <asp:BoundField DataField="Apellido" HeaderText="Apellido" />
-                    <asp:BoundField DataField="Dni" HeaderText="Dni" />
+                    <asp:BoundField DataField="Documento" HeaderText="Documento" />
+                    <asp:BoundField DataField="NroAfiliado" HeaderText="Numero de Afiliado" />
+                    <asp:BoundField DataField="ObraSocial" HeaderText="Obra Social" />
                     <asp:CommandField ShowSelectButton="True" SelectText="Seleccionar" />
                 </Columns>
             </asp:GridView>
             <div class="mb-3">
                 <label class="form-label fw-bold" runat="server">Nombre de Paciente:</label>
-                <input type="text" class="form-control" id="inputNombrePaciente" value="" disabled readonly runat="server" />
+                <asp:TextBox Text="" runat="server" class="form-control" Disabled="True" ReadOnly="True" ID="txtBoxNombrePaciente"/>
             </div>
             <div class="mb-3">
                 <label class="form-label fw-bold" runat="server">Apellido de Paciente:</label>
-                <input type="text" class="form-control" id="inputApellidoPaciente" value="" disabled readonly runat="server" />
+                <asp:TextBox Text="" runat="server" CssClass="form-control" Disabled="True" ReadOnly="True" ID="txtBoxApellidoPaciente"/>
             </div>
             <div class="mb-3">
-                <input class="btn btn-light" type="button" value="Atrás" id="btnAtras" />
-                <asp:Button class="btn btn-light" type="button" text="Siguiente" id="btnSiguiente" runat="server" OnClick="BtnSiguiente_OnClick"/>
+                <asp:Button class="btn btn-dark" Text="Atrás" runat="server" ID="btnAtras" OnClick="btnAtras_Click" />
+                <asp:Button class="btn btn-dark" text="Siguiente" id="btnSiguiente" runat="server" OnClick="BtnSiguiente_OnClick"/>
             </div>
         </div>
     </div>

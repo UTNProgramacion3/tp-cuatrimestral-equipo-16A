@@ -17,11 +17,15 @@
                         <asp:BoundField DataField="Hora" HeaderText="Hora" />
                         <asp:CommandField ShowSelectButton="True" SelectText="Seleccionar" />
                     </Columns>
-                </asp:GridView>
+               </asp:GridView>
+            </div>
+            <div class="mb-3">
+                <asp:Button class="btn btn-dark" Text="Atrás" runat="server" ID="btnAtras" OnClick="btnAtras_Click" />
+                <asp:Button class="btn btn-dark" Text="Siguiente" ID="btnSiguiente" runat="server" OnClick="btnSiguiente_Click" />
             </div>
         </div>
     </div>
-</div>
+    </div>
 
 
 

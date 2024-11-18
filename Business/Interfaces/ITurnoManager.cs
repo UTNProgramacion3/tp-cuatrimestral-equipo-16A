@@ -12,7 +12,6 @@ namespace Business.Interfaces
     {
         TurnoDTO Crear(TurnoDTO dtoTurno);
         List<TurnoDTO> ObtenerTodos();
-
         DataTable ObtenerTurnosDisponibles(int idMedico, string fecha);
     }
 }

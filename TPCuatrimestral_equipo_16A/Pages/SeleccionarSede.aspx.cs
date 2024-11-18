@@ -59,5 +59,15 @@ namespace TPCuatrimestral_equipo_16A.Pages
             dgvSedes.DataSource = filteredList;
             dgvSedes.DataBind();
         }
+
+        protected void btnAtras_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("~/Pages/SeleccionarPaciente.aspx", false);
+        }
+
+        protected void btnSiguiente_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("~/Pages/SeleccionarMedico.aspx", false);
+        }
     }
 }

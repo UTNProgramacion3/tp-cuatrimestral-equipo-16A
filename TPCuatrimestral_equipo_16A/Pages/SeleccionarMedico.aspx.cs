@@ -99,5 +99,15 @@ namespace TPCuatrimestral_equipo_16A.Pages
             ddlEspecialidades.DataValueField = "Id";
             ddlEspecialidades.DataBind();
         }
+        protected void btnAtras_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("~/Pages/SeleccionarSede.aspx", false);
+        }
+
+        protected void btnSiguiente_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("~/Pages/SeleccionarFechaHora.aspx", false);
+        }
+
     }
 }

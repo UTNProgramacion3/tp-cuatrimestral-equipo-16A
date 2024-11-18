@@ -25,15 +25,18 @@ namespace Business.Managers
 
         public TurnoDTO Crear(TurnoDTO dtoTurno)
         {
-            string query = @"Insert into Turnos values (@IdMedico, @IdPaciente, @Fecha, @Activo)";
+            string query = @"Insert into Turnos (IdMedico, IdPaciente, IdEstadoTurno, IdSede, Fecha, Hora, Observaciones) VALUES (@IdMedico, @IdPaciente, @IdEstadoTurno, @IdSede, @Fecha, @Hora, @Observaciones)";
 
 
             SqlParameter[] parametros = new SqlParameter[]
                 {
                     new SqlParameter("@IdMedico", dtoTurno.Medico.Id),
                     new SqlParameter("@IdPaciente", dtoTurno.Paciente.Id),
+                    new SqlParameter("@IdEstadoTurno", dtoTurno.EstadoTurno.Id),
+                    new SqlParameter("@IdSede", dtoTurno.Sede.Id),
                     new SqlParameter("@Fecha", dtoTurno.Turno.Fecha),
-                    new SqlParameter("@Activo", true)
+                    new SqlParameter("@Hora", dtoTurno.Turno.Hora),
+                    new SqlParameter("@Observaciones", dtoTurno.Turno.Observaciones)
                    
                 };
 

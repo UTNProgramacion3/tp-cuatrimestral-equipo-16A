@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dtos\PacienteDto.cs" />
     <Compile Include="Dtos\SedeDto.cs" />
     <Compile Include="Dtos\TurnoDTO.cs" />
     <Compile Include="Dtos\MedicoDto.cs" />

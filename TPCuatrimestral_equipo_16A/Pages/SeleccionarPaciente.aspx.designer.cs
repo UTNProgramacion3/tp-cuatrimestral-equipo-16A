@@ -11,8 +11,17 @@ namespace TPCuatrimestral_equipo_16A.Views
 {
 
 
-    public partial class WebForm1
+    public partial class SeleccionarPaciente
     {
+
+        /// <summary>
+        /// Control txtBoxFiltrar.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtBoxFiltrar;
 
         /// <summary>
         /// Control dgvPacientes.
@@ -24,22 +33,22 @@ namespace TPCuatrimestral_equipo_16A.Views
         protected global::System.Web.UI.WebControls.GridView dgvPacientes;
 
         /// <summary>
-        /// Control inputNombrePaciente.
+        /// Control txtBoxNombrePaciente.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText inputNombrePaciente;
+        protected global::System.Web.UI.WebControls.TextBox txtBoxNombrePaciente;
 
         /// <summary>
-        /// Control inputApellidoPaciente.
+        /// Control txtBoxApellidoPaciente.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText inputApellidoPaciente;
+        protected global::System.Web.UI.WebControls.TextBox txtBoxApellidoPaciente;
 
         /// <summary>
         /// Control btnSiguiente.

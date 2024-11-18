@@ -20,18 +20,20 @@ namespace Business.Managers
         private readonly DBManager _dbManager;
         private readonly SessionManager _sessionManager;
         private readonly Mapper<Usuario> _mapper;
+        private Response<Usuario> _response;
 
         public UsuarioManager()
         {
             _dbManager = new DBManager();
             _sessionManager = new SessionManager();
             _mapper = new Mapper<Usuario>();
+            _response = new Response<Usuario>();
         }
 
         public Response<Usuario> Crear(Usuario entity)
         {
-            string query = @"INSERT INTO USUARIOS (email, passwordhash, idrol, activo)
-                             VALUES (@email, @passwordhash, @idrol, @activo)";
+            string query = @"INSERT INTO USUARIOS (Email, PasswordHash, RolId)
+                             VALUES (@email, @passwordhash, @idrol)";
 
             entity.Passwordhash = PasswordHasher.HashPassword(entity.Passwordhash);
 
@@ -40,70 +42,59 @@ namespace Business.Managers
                 new SqlParameter("@email", entity.Email),
                 new SqlParameter("@passwordhash", entity.Passwordhash),
                 new SqlParameter("@idrol", entity.Rol.Id),
-                new SqlParameter("@activo", entity.Activo)
 
             };
 
-            var response = new Response<Usuario>();
-
             try
             {
-                response.Success = Convert.ToBoolean(_dbManager.ExecuteNonQuery(query, parameters));
+                _response.Success = Convert.ToBoolean(_dbManager.ExecuteNonQuery(query, parameters));
 
-                if (response.Success)
+                if (_response.Success)
                 {
-                    response = ObtenerPorEmail(entity.Email);
-                    response.Message = $"Enviamos un mail de activacion a {response.Data.Email}.\n Gracias por Crear tu cuenta!";
-                    
+                    var res = ObtenerPorEmail(entity.Email).Data;
+                    _response.Ok(res, "Usuario creado correctamente.");
                 }
                 else
                 {
-                    response.Data = entity;
-                    response.Message = "Error, el usuario no puede ser creado";
+                    _response.NotOk("Error al crear usuario.");
                 }
 
             }
             catch (Exception ex)
             {
-                response.Data = null;
-                response.Success = false;
-                response.Message = $"Error al Crear Usuario: {ex.Message}";
+                _response.NotOk(ex.Message);
             }
-            return response;
+            return _response;
         }
 
         public Response<bool> Eliminar(int id)
         {
             string query = @"update USUARIOS
-                            SET activo = 0
-                            WHERE id = @id;
+                            SET Activo = 0
+                            WHERE Id = @id;
                             ";
             SqlParameter[] parameters = new SqlParameter[]
                 {
-                    new SqlParameter("@id",id) 
+                    new SqlParameter("@id",id)
                 };
             Response<bool> response = new Response<bool>();
 
             try
             {
-                response.Success = Convert.ToBoolean(_dbManager.ExecuteNonQuery(query, parameters));
-                if (response.Success)
+                var res = Convert.ToBoolean(_dbManager.ExecuteNonQuery(query, parameters));
+                if (res == true)
                 {
-                    response.Data = true;
-                    response.Message = "Usuario Eliminado fisicamente.";
+                    response.Ok(true, "Usuario desactivado.");
                 }
                 else
                 {
-                    response.Data = false;
-                    response.Message = "Error, el usuario no pudo ser eliminado";
+                    response.NotOk("Error, el usuario no pudo ser eliminado");
                 }
 
             }
             catch (Exception ex)
             {
-                response.Data = false;
-                response.Success = false;
-                response.Message = $"Error al Eliminar Usuario: {ex.Message}";
+                response.NotOk(ex.Message);
             }
             return response;
         }
@@ -111,40 +102,34 @@ namespace Business.Managers
 
         public Response<bool> LogIn(Usuario usuario)
         {
-            Response<Usuario> responseUser = new Response<Usuario>();
             Response<bool> response = new Response<bool>();
 
             try
             {
 
-                responseUser = ObtenerPorEmail(usuario.Email);
+                _response = ObtenerPorEmail(usuario.Email);
 
-                if(responseUser.Success)
+                if (_response.Success)
                 {
-                    response = VerificarPassword(usuario.Passwordhash, responseUser.Data.Passwordhash);
-                    if(response.Success)
+                    var res = VerificarPassword(usuario.Passwordhash, _response.Data.Passwordhash);
+                    if (res == true)
                     {
-                        _sessionManager.SetSessionValue("UserLogueado", responseUser.Data);
-                        response.Data = true;
-                        response.Data = true;
-                        response.Message = "Logeado Correctamente.";
-                    }else
-                    {
-                        response.Data = false;
-                        response.Success = false;
-                        response.Message = "Contraseña incorrecta";
+                        _sessionManager.SetSessionValue("UserLogueado", _response.Data);
+                        response.Ok(true, "Usuario logeado correctamente.");
                     }
-                }else
-                {
-                    response.Data = false;
-                    response.Success = false;
-                    response.Message = responseUser.Message;
+                    else
+                    {
+                        response.NotOk("Contraseña incorrecta.");
+                    }
                 }
-            }catch (Exception ex)
+                else
+                {
+                    response.NotOk("Email no encontrado.");
+                }
+            }
+            catch (Exception ex)
             {
-                response.Data= false;
-                response.Success = false;
-                response.Message = $"Error al querer loguear usuario: {ex.Message}";
+                response.NotOk($"Error al loguear usuario: {ex.Message}");
             }
             return response;
         }
@@ -157,173 +142,150 @@ namespace Business.Managers
         public Response<Usuario> ObtenerPorEmail(string email)
         {
             string query = @"Select 
-	                            U.id,
-	                            U.email,
-	                            U.passwordhash,
-	                            U.fecha_creacion,
-	                            U.idrol as Rol_Id,
-	                            R.nombre as Rol_Nombre,
-	                            R.activo as Rol_Activo,
-	                            U.img_perfil,
-	                            U.activo
+	                            U.Id,
+	                            U.Email,
+	                            U.Passwordhash,
+	                            U.FechaCreacion,
+	                            U.RolId as Rol_Id,
+	                            R.Nombre as Rol_Nombre,
+	                            R.Activo as Rol_Activo,
+	                            U.ImagenPerfil,
+	                            U.Activo
                             From USUARIOS U
-                            Left Join ROLES R ON U.idrol = R.id
-                            Where U.email = @email;";
+                            Left Join ROLES R ON U.RolId = R.Id
+                            Where U.Email = @email;";
             SqlParameter[] parametrs = new SqlParameter[]
             {
                 new SqlParameter("@email", email)
             };
 
-            var response = new Response<Usuario>();
-
             try
             {
-                DataTable res = _dbManager.ExecuteQuery(query, parametrs);
+                var res = _dbManager.ExecuteQuery(query, parametrs);
 
                 if (res.Rows.Count == 0)
                 {
-                    response.Data = null;
-                    response.Success = false;
-                    response.Message = $"No existe una cuenta con el Email ingresado.";
+                    _response.NotOk("Usuario no encontrado.");
 
-                    return response;
+                    return _response;
                 }
 
-                response.Data = _mapper.MapFromRow(res.Rows[0]);
+                var usuario = _mapper.MapFromRow(res.Rows[0]);
 
-                if (response.Data != null)
+                if (usuario != null)
                 {
-                    response.Success = true;
-                    response.Message = $"Usuario {response.Data.Email} encontrado";
-                    return response;
+                    _response.Ok(usuario, "Usuario encontrado.");
+                    return _response;
                 }
                 else
                 {
-                    response.Data = null;
-                    response.Success = false;
-                    response.Message = $"Error de mapeo";
-                    return response;
+                    _response.NotOk("Error de mapeo");
+                    return _response;
                 }
             }
             catch (Exception ex)
             {
-                response.Data = null;
-                response.Success = false;
-                response.Message = $"Error {ex.Message}";
-                return response;
+                _response.NotOk(ex.Message);
+                return _response;
             }
         }
 
         public Response<Usuario> ObtenerPorId(int id)
         {
             string query = @"Select 
-	                            U.id,
-	                            U.email,
-	                            U.passwordhash,
-	                            U.fecha_creacion,
-	                            U.idrol as Rol_Id,
-	                            R.nombre as Rol_Nombre,
-	                            R.activo as Rol_Activo,
-	                            U.img_perfil,
-	                            U.activo
+	                            U.Id,
+	                            U.Email,
+	                            U.Passwordhash,
+	                            U.FechaCreacion,
+	                            U.RolId as Rol_Id,
+	                            R.Nombre as Rol_Nombre,
+	                            R.Activo as Rol_Activo,
+	                            U.ImagenPerfil,
+	                            U.Activo
                             From USUARIOS U
-                            Left Join ROLES R ON U.idrol = R.id
-                            Where U.id = @id;";
-            SqlParameter[] parametrs = new SqlParameter[] 
-            { 
+                            Left Join ROLES R ON U.RolId = R.Id
+                            Where U.Id = @id;";
+            SqlParameter[] parametrs = new SqlParameter[]
+            {
                 new SqlParameter("@id", id)
             };
 
-            var response = new Response<Usuario>();
-
             try
             {
-                DataTable res = _dbManager.ExecuteQuery(query, parametrs);
+                var res = _dbManager.ExecuteQuery(query, parametrs);
 
                 if (res.Rows.Count == 0)
                 {
-                    response.Data = null;
-                    response.Success = false;
-                    response.Message = $"Usuario con id {id} no existe.";
-
-                    return response;
+                    _response.NotOk($"Usuario con id {id} no encontrado.");
+                    return _response;
                 }
 
-                response.Data = _mapper.MapFromRow(res.Rows[0]);
+                var usuario = _mapper.MapFromRow(res.Rows[0]);
 
-                if (response.Data != null)
+                if (usuario != null)
                 {
-                    response.Success = true;
-                    response.Message = $"Usuario {response.Data.Email} encontrado";
-                    return response;
+                    _response.Ok(usuario, "Usuario encontrado.");
+                    return _response;
                 }
                 else
                 {
-                    response.Data = null;
-                    response.Success = false;
-                    response.Message = $"Error de mapeo";
-                    return response;
+                    _response.NotOk($"Usuario con id {id} no encontrado.");
+                    return _response;
                 }
             }
             catch (Exception ex)
             {
-                response.Data = null;
-                response.Success = false;
-                response.Message = $"Error {ex.Message}";
-                return response;
-            } 
+                _response.NotOk(ex.Message);
+                return _response;
+            }
         }
 
         public Response<List<Usuario>> ObtenerTodos()
         {
             string query = @"Select 
-	                            U.id,
-	                            U.email,
-	                            U.passwordhash,
-	                            U.fecha_creacion,
-	                            U.idrol as Rol_Id,
-	                            R.nombre as Rol_Nombre,
-	                            R.activo as Rol_Activo,
-	                            U.img_perfil,
-	                            U.activo
+	                            U.Id,
+	                            U.Email,
+	                            U.Passwordhash,
+	                            U.FechaCreacion,
+	                            U.RolId as Rol_Id,
+	                            R.Nombre as Rol_Nombre,
+	                            R.Activo as Rol_Activo,
+	                            U.ImagenPerfil,
+	                            U.Activo
                             From USUARIOS U
-                            Left Join ROLES R ON U.idrol = R.id";
+                            Left Join ROLES R ON U.RolId = R.Id";
             Response<List<Usuario>> response = new Response<List<Usuario>>();
 
             try
             {
                 DataTable table = _dbManager.ExecuteQuery(query);
-                response.Data = _mapper.ListMapFromRow(table);
+                var lista = _mapper.ListMapFromRow(table);
 
-                if(response.Data != null && response.Data.Count != 0)
+                if (lista.Count != 0)
                 {
-                    response.Success = true;
-                    response.Message = "Lista de usuarios obtenida.";
-                }else
-                {
-                    response.Data = null;
-                    response.Success = false;
-                    response.Message = "No se pudo obtener la lista de usuarios.";
+                    response.Ok(lista);
                 }
-            }catch (Exception ex)
+                else
+                {
+                    response.NotOk("Error al traer lista de usuarios.");
+                }
+            }
+            catch (Exception ex)
             {
-                response.Data = null;
-                response.Success = false;
-                response.Message = $"Error al querer obtener lista de usuarios: {ex.Message}";
+                response.NotOk(ex.Message);
             }
 
-            return response; 
+            return response;
         }
 
         public Response<bool> Update(Usuario entity)
         {
             string query = @"Update USUARIOS
-                            Set   email = @email,
-	                              passwordhash = @passwordhash,
-	                              idrol = @idrol,
-	                              img_perfil = @img_perfil,
-	                              activo = @activo
-                            Where id = @id";
+                            Set   Email = @email,
+	                              PasswordHash = @passwordhash,
+	                              RolId = @idrol,
+	                              ImagenPerfil = @img_perfil,
+                            Where Id = @id";
             //Hasheamos la password antes de guardarla
             entity.Passwordhash = PasswordHasher.HashPassword(entity.Passwordhash);
             SqlParameter[] parameters = new SqlParameter[]
@@ -332,7 +294,6 @@ namespace Business.Managers
                     new SqlParameter("@passwordhash", entity.Passwordhash),
                     new SqlParameter("@idrol", entity.Rol.Id),
                     new SqlParameter("@img_perfil", string.IsNullOrEmpty(entity.ImagenPerfil) ? null : entity.ImagenPerfil),
-                    new SqlParameter("@activo", entity.Activo),
                     new SqlParameter("@id", entity.Id)
                 };
 
@@ -340,47 +301,30 @@ namespace Business.Managers
 
             try
             {
-                response.Success = Convert.ToBoolean(_dbManager.ExecuteNonQuery(query, parameters));
+                var res = Convert.ToBoolean(_dbManager.ExecuteNonQuery(query, parameters));
 
-                if(response.Success == false)
+                if (res == false)
                 {
-                    response.Data = false;
-                    response.Success = false;
-                    response.Message = "No se encuentra este usuario a editar.";
-                }else
+                    response.NotOk("No se pudo editar el usuario");
+                }
+                else
                 {
-                    response.Data = true;
-                    response.Success = true;
-                    response.Message = $"Usuario {entity.Email} editado correctamente.";
+                    response.Ok(res, "Usuario editado correctamente.");
                 }
 
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
-                response.Data = false;
-                response.Success = false;
-                response.Message = $"Error al editar usuario: {ex.Message}";
+                response.NotOk(ex.Message);
             }
 
             return response;
         }
 
-        public Response<bool> VerificarPassword(string password, string hashedpassword)
+        public bool VerificarPassword(string password, string hashedpassword)
         {
-            Response<bool> response = new Response<bool>();
-
-            response.Success = PasswordHasher.VerifyPassword(password, hashedpassword);
-            if (response.Success == false)
-            {
-                response.Data = false;
-                response.Success = false;
-                response.Message = "La contraseña es incorrecta.";
-            }else
-            {
-                response.Data = true;
-                response.Success = true;
-                response.Message = "La contraseña es correcta";
-            }
-            return response;
+            return PasswordHasher.VerifyPassword(password, hashedpassword);
+            
         }
 
         public bool ExisteMail(string email)
@@ -400,7 +344,7 @@ namespace Business.Managers
             }
             catch (Exception ex)
             {
-                result = true;  
+                throw new Exception(ex.Message);    
             }
 
             return result;

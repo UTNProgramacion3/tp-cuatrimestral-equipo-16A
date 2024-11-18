@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Main.Master" AutoEventWireup="true" CodeBehind="Login.aspx.cs" Inherits="TPCuatrimestral_equipo_16A.Pages.Login" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Main.Master" AutoEventWireup="true" CodeBehind="Login.aspx.cs" Inherits="TPCuatrimestral_equipo_16A.Pages.Login" Async="true"%>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link href="/Stylesheets/Login.css" rel="stylesheet" type="text/css" />
     <script src="/Scripts/login.js" type="text/javascript"></script>

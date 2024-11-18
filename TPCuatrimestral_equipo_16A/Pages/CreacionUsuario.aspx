@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Main.Master" AutoEventWireup="true" CodeBehind="CreacionUsuario.aspx.cs" Inherits="TPCuatrimestral_equipo_16A.Pages.CreacionUsuario" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Main.Master" AutoEventWireup="true" CodeBehind="CreacionUsuario.aspx.cs" Async="true" Inherits="TPCuatrimestral_equipo_16A.Pages.CreacionUsuario" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>

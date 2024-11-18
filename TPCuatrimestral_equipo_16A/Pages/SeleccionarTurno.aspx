@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Main.Master" AutoEventWireup="true" CodeBehind="SeleccionarTurno.aspx.cs" Inherits="TPCuatrimestral_equipo_16A.Pages.SeleccionarMedico" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Main.Master" AutoEventWireup="true" CodeBehind="SeleccionarTurno.aspx.cs" Inherits="TPCuatrimestral_equipo_16A.Pages.SeleccionarMedico" Async="true"%>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>

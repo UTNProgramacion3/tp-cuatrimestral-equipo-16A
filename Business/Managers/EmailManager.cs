@@ -25,6 +25,7 @@ namespace Business.Managers
         private readonly string _SMTP_PASSWORD;
         private readonly string _APP_NAME;
         private readonly string _BASE_URL;
+        private readonly string _validacionMailTemplate;
         private SmtpClient _SmtpClient;
         #endregion
 
@@ -37,6 +38,10 @@ namespace Business.Managers
             _SMTP_PASSWORD = Environment.GetEnvironmentVariable("SMTP_PASSWORD");
             _APP_NAME = Environment.GetEnvironmentVariable("APP_NAME");
             _BASE_URL = Environment.GetEnvironmentVariable("BASE_URL");
+            string basePath = AppDomain.CurrentDomain.BaseDirectory;
+            _validacionMailTemplate = Path.Combine(basePath, "..", "Business", "Templates", "ValidacionEmailTemplate.html");
+
+
             _SmtpClient = new SmtpClient(_SMTP_SERVER, _SMTP_PORT)
             {
                 Credentials = new System.Net.NetworkCredential(_SMTP_USER, _SMTP_PASSWORD),
@@ -74,7 +79,7 @@ namespace Business.Managers
         /// <param name="usuarioId"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public void EnviarMailValidacionNuevaCuenta(string destinatario, int usuarioId)
+        public async Task EnviarMailValidacionNuevaCuenta(string destinatario, int usuarioId, string nombreUsuario)
         {
             var now = DateTime.Now;
             string tokenExistenteQuery = "SELECT * FROM EmailValidaciones WHERE UsuarioId = @id AND TiempoExpiracion <= @ahora ";
@@ -92,7 +97,7 @@ namespace Business.Managers
                 throw new Exception("Ya se ha enviado un mail de validacion para este usuario");
             }
 
-            var token = new Guid().ToString();
+            Guid token = Guid.NewGuid();
             var expirationDate = DateTime.Now.AddMinutes(30);
 
             string query = "INSERT INTO EmailValidaciones (Token, TiempoExpiracion, UsuarioId) VALUES (@Token, @TiempoExpiracion, @UsuarioId)";
@@ -111,12 +116,36 @@ namespace Business.Managers
             {
                 throw new Exception("Hubo un error al crear el token de validacion");
             }
+            
+                var validacion = res.GetEntity<EmailValidationDto>();
 
-            var validacion = res.GetEntity<EmailValidationDto>();
+            var mailTemplate = _validacionMailTemplate;
+            string htmlBody = @"<h1 style=""color: blue;"">¡Bienvenido, {{Nombre}}!</h1>
+    <p>Gracias por registrarte en nuestra aplicación.</p>
+    <p>Haz clic en el siguiente enlace para verificar tu cuenta:</p>
+    <a href=""{{BASE_URL}}validarEmail?token={{Token}}"" style=""background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none;"">Verificar Cuenta</a>
+    <p>Saludos,<br>El equipo de {{APP_NAME}}</p>";
 
-            var url = $"${_BASE_URL}/validar-cuenta/{validacion.Token}";
+                htmlBody = htmlBody.Replace("{{Nombre}}", nombreUsuario)
+                           .Replace("{{Token}}", validacion.Token.ToString())
+                           .Replace("{{BASE_URL}}", _BASE_URL)
+                           .Replace("{{APP_NAME}}", _APP_NAME);
 
-            GenerarNuevoEmail(destinatario, $"Validación de cuenta - ${_APP_NAME}", $"Haga click en el siguiente link para validar su cuenta: {url}");
+                var mail = GenerarNuevoEmail(destinatario, $"Validación de cuenta - {_APP_NAME}",htmlBody);
+
+            try
+            {
+                await _SmtpClient.SendMailAsync(mail);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                mail.Dispose();
+                _SmtpClient.Dispose();
+            }
         }
 
         private MailMessage GenerarNuevoEmail(string destinatario, string subject, string body)
@@ -126,9 +155,9 @@ namespace Business.Managers
 
             MailAddress to = new MailAddress(destinatario);
             var mail = new MailMessage(from, to);
-
             mail.Subject = subject;
             mail.Body = body;
+            mail.IsBodyHtml = true;
 
             return mail;
         }

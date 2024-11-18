@@ -11,6 +11,6 @@ namespace Business.Interfaces
     public interface IEmailManager
     {
         Task EnviarEmail(string destinatario, string subject, string body);
-        void EnviarMailValidacionNuevaCuenta(string destinatario, int usuarioId);
+        Task EnviarMailValidacionNuevaCuenta(string destinatario, int usuarioId, string nombreUsuario);
     }
 }

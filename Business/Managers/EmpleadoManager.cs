@@ -29,13 +29,13 @@ namespace Business.Managers
 
         #region Builder
         public EmpleadoManager(
-            DBManager manager, 
-            Response<Empleado> response, 
-            IUsuarioManager usuarioManager, 
-            IDireccionManager direccionManager, 
+            DBManager manager,
+            Response<Empleado> response,
+            IUsuarioManager usuarioManager,
+            IDireccionManager direccionManager,
             IPersonaManager personaManager,
-            IEmailManager emailManager) 
-        { 
+            IEmailManager emailManager)
+        {
             _DBManager = manager;
             _response = response;
             _usuarioManager = usuarioManager;
@@ -53,7 +53,8 @@ namespace Business.Managers
             {
                 var user = _usuarioManager.GenerarUsuario((Persona)entity, entity.RolId);
                 var usuarioCreado = _usuarioManager.Crear(user);
-                _emailManager.EnviarMailValidacionNuevaCuenta(entity.EmailPersonal, usuarioCreado.Data.Id);
+                var nombreUsuario = $"{entity.Apellido}, {entity.Nombre}";
+                _emailManager.EnviarMailValidacionNuevaCuenta(entity.EmailPersonal, usuarioCreado.Data.Id, nombreUsuario);
 
                 if (!usuarioCreado.Success)
                 {
@@ -70,7 +71,7 @@ namespace Business.Managers
                     EmailPersonal = entity.EmailPersonal,
                     FechaNacimiento = entity.FechaNacimiento,
                     Telefono = entity.Telefono,
-                    Direccion = direccionCreada.Data,
+                    DireccionId = direccionCreada.Data.Id,
                     UsuarioId = usuarioCreado.Data.Id,
                 };
 
@@ -81,27 +82,28 @@ namespace Business.Managers
                     throw new Exception("Error al crear la persona");
                 }
 
-                var query = "Insert into Empleados values(@PersonaId, @UsuarioId, @Legajo, @EmailCorporativo, @Posicion, @JornadaTrabajoId)";
+                //var query = "Insert into Empleados(Legajo, EmailCorporativo, CargoId, JornadaTrabajoId,PersonaId) values(@Legajo ,@EmailCorporativo,  @CargoId,@PersonaId, @JornadaTrabajoId)";
+                //string retrieveData = "select * from Empleados where Legajo = @Legajo";
 
-                var parameters = new SqlParameter[]
-                {
-                    new SqlParameter("@PersonaId", personaCreada.Data.Id),
-                    new SqlParameter("@UsuarioId", usuarioCreado.Data.Id),
-                    new SqlParameter("@Legajo", entity.Legajo),
-                    new SqlParameter("@EmailCorporativo", entity.EmailCorporativo),
-                    new SqlParameter("@Posicion", entity.Posicion),
-                    new SqlParameter("@JornadaTrabajoId", entity.JornadaTrabajoId),
-                };
+                //var parameters = new SqlParameter[]
+                //{
+                //    new SqlParameter("@Legajo", entity.Legajo),
+                //    new SqlParameter("@EmailCorporativo", usuarioCreado.Data.Email),
+                //    new SqlParameter("@CargoId", 2),
+                //    new SqlParameter("@JornadaTrabajoId", entity.JornadaTrabajoId),
+                //    new SqlParameter("@PersonaId", personaCreada.Data.Id),
 
-                var res = _DBManager.ExecuteQuery(query, parameters);
+                //};
 
-                entity.Id = res.GetId();
+                //var res = _DBManager.ExecuteNonQueryAndGetData(query, parameters, retrieveData);
+
+                //entity.Id = res.GetId(isNewId: true);
 
                 _response.Ok(entity);
 
                 return _response;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -114,7 +116,7 @@ namespace Business.Managers
 
         public Response<Empleado> ObtenerPorId(int empleadoId)
         {
-           string query = "SELECT * FROM Empleados WHERE Id = @Id";
+            string query = "SELECT * FROM Empleados WHERE Id = @Id";
             SqlParameter[] parameters = new SqlParameter[]
             {
                 new SqlParameter("@Id", empleadoId)
@@ -128,7 +130,7 @@ namespace Business.Managers
                 return _response;
             }
 
-            
+
 
             var empleado = _mapper.MapFromRow(res.Rows[0]);
             empleado.Direccion = _direccionManager.ObtenerPorId(empleado.DireccionId).Data;

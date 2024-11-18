@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Main.Master" AutoEventWireup="true" CodeBehind="RegisterSuccess.aspx.cs" Inherits="TPCuatrimestral_equipo_16A.Pages.RegisterSuccess" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Main.Master" AutoEventWireup="true" CodeBehind="RegisterSuccess.aspx.cs" Inherits="TPCuatrimestral_equipo_16A.Pages.RegisterSuccess" Async="true"%>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <style>

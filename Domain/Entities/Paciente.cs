@@ -9,7 +9,7 @@ namespace Domain.Entities
 {
     public class Paciente : Persona
     {
-        public int Id { get; set; }
+        public int PacienteId { get; set; }
         public string ObraSocial { get; set; }
         public string NroAfiliado { get; set; }
         public List<Turno> Turnos { get; set; }

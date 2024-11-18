@@ -12,6 +12,7 @@ namespace Domain.Entities
         public int IdMedico { get; set; }
         public int IdPaciente { get; set; }
         public DateTime Fecha { get; set; }
+        public TimeSpan Hora { get; set; }
         public string EstadoTurno { get; set; }
         public string Observaciones { get; set; }
     }

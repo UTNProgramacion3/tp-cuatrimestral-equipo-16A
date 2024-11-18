@@ -11,7 +11,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
 {
 
 
-    public partial class SeleccionarMedico
+    public partial class SeleccionarFechaHora
     {
 
         /// <summary>
@@ -24,30 +24,30 @@ namespace TPCuatrimestral_equipo_16A.Pages
         protected global::System.Web.UI.WebControls.TextBox txtBoxFechaTurno;
 
         /// <summary>
-        /// ddlEspecialidades control.
+        /// Control dgvFechaHorario.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlEspecialidades;
+        protected global::System.Web.UI.WebControls.GridView dgvFechaHorario;
 
         /// <summary>
-        /// btnBuscar control.
+        /// Control btnAtras.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnBuscar;
+        protected global::System.Web.UI.WebControls.Button btnAtras;
 
         /// <summary>
-        /// dvgMedicos control.
+        /// Control btnSiguiente.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView dvgMedicos;
+        protected global::System.Web.UI.WebControls.Button btnSiguiente;
     }
 }

@@ -11,11 +11,20 @@ namespace TPCuatrimestral_equipo_16A.Views
 {
 
 
-    public partial class WebForm1
+    public partial class SeleccionarPaciente
     {
 
         /// <summary>
-        /// dgvPacientes control.
+        /// Control txtBoxFiltrar.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtBoxFiltrar;
+
+        /// <summary>
+        /// Control dgvPacientes.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
@@ -24,22 +33,31 @@ namespace TPCuatrimestral_equipo_16A.Views
         protected global::System.Web.UI.WebControls.GridView dgvPacientes;
 
         /// <summary>
-        /// inputNombrePaciente control.
+        /// Control txtBoxNombrePaciente.
         /// </summary>
         /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText inputNombrePaciente;
+        protected global::System.Web.UI.WebControls.TextBox txtBoxNombrePaciente;
 
         /// <summary>
-        /// inputApellidoPaciente control.
+        /// Control txtBoxApellidoPaciente.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText inputApellidoPaciente;
+        protected global::System.Web.UI.WebControls.TextBox txtBoxApellidoPaciente;
+
+        /// <summary>
+        /// Control btnAtras.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnAtras;
 
         /// <summary>
         /// btnSiguiente control.

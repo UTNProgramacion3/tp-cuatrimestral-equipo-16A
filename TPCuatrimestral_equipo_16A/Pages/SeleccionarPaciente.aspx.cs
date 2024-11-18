@@ -5,60 +5,94 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Web.Util;
 using Business;
+using Business.Interfaces;
 using Business.Managers;
+using DataAccess;
 using Domain;
+using Domain.Entities;
+using Unity;
 
 namespace TPCuatrimestral_equipo_16A.Views
 {
-    public partial class WebForm1 : System.Web.UI.Page
+    public partial class SeleccionarPaciente : System.Web.UI.Page
     {
+
+        private PacienteManager managerPaciente;
         protected void Page_Load(object sender, EventArgs e)
         {
+            
+            
+
             if (!IsPostBack)
             {
-                //PacienteManager _manager = new PacienteManager();
+                CargarPacientes();
+                
+                
+                /*listaPacientes = managerPaciente.ObtenerTodos().Data;
 
-                //dgvPacientes.DataSource = _manager.ObtenerTodos();
-
-                dgvPacientes.DataSource = ObtenerDatos();
-                dgvPacientes.DataBind();
+                dgvPacientes.DataSource = listaPacientes;
+                dgvPacientes.DataBind();*/
             }
         }
 
-        protected DataTable ObtenerDatos()
+
+        private void CargarPacientes()
         {
-            
-            DataTable dt = new DataTable();
-            dt.Columns.Add("Nombre");
-            dt.Columns.Add("Apellido");
-            dt.Columns.Add("DNI");
+            managerPaciente = (PacienteManager)Global.Container.Resolve(typeof(PacienteManager));
+            List<Paciente> listaPacientes = new List<Paciente>();
 
-            
-            dt.Rows.Add("Juan", "Perez", "654321");
-            dt.Rows.Add("Pablo", "Gonzalez", "654987");
-            dt.Rows.Add("Alberto", "Pascal", "123456");
+            listaPacientes = managerPaciente.ObtenerTodos().Data;
 
-            return dt;
+            if (listaPacientes != null)
+            {
+                dgvPacientes.DataSource = listaPacientes;
+                dgvPacientes.DataBind();
+            }
+
         }
-
+       
         protected void dgvPacientes_SelectedIndexChanged(object sender, EventArgs e)
         {
             
-            int index = dgvPacientes.SelectedIndex;
+            int idPaciente = Convert.ToInt32(dgvPacientes.SelectedDataKey.Value);
 
-            
-            string nombre = dgvPacientes.SelectedRow.Cells[0].Text;
-            string apellido = dgvPacientes.SelectedRow.Cells[1].Text;
+            string nombre = HttpUtility.HtmlDecode(dgvPacientes.SelectedRow.Cells[1].Text);
+            string apellido = HttpUtility.HtmlDecode(dgvPacientes.SelectedRow.Cells[2].Text);
             string dni = dgvPacientes.SelectedRow.Cells[2].Text;
 
-            inputNombrePaciente.Value = nombre;
-            inputApellidoPaciente.Value = apellido;
+            txtBoxNombrePaciente.Text = nombre;
+            txtBoxApellidoPaciente.Text = apellido;
+
+            Session.Add("IdPaciente", idPaciente);
+        }
+
+        protected void txtBoxFiltrar_TextChanged(object sender, EventArgs e)
+        {
+            managerPaciente = (PacienteManager)Global.Container.Resolve(typeof(PacienteManager));
+
+
+            string searchText = txtBoxFiltrar.Text.ToLower();
+
+            // Filtramos la lista de especialidades según el texto buscado
+            List<Paciente> filteredList = managerPaciente.ObtenerTodos()
+                .Data // Usamos el Data de la respuesta
+                .Where(paciente => paciente.Documento.ToString().ToLower().Contains(searchText))
+                .ToList();
+
+            dgvPacientes.DataSource = filteredList;
+            dgvPacientes.DataBind();
         }
 
         protected void BtnSiguiente_OnClick(object sender, EventArgs e)
         {
-            Response.Redirect("~/Pages/SeleccionarTurno.aspx", false);
+            Response.Redirect("~/Pages/SeleccionarSede.aspx", false);
+        }
+
+        protected void btnAtras_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("~/Pages/Home.aspx", false);
         }
     }
 }

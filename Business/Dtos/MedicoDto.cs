@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,5 +12,8 @@ namespace Business.Dtos
         public int Matricula { get; set; }
         public int EspecialidadId { get; set; }
         public int EmpleadoId { get; set; }
+        public Medico Medico { get; set; }
+        public Especialidad Especialidad { get; set; }
+        public Persona Persona { get; set; }
     }
 }

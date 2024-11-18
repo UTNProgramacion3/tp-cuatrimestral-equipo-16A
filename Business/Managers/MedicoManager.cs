@@ -5,7 +5,11 @@ using DataAccess.Extensions;
 using Domain.Entities;
 using Domain.Response;
 using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
+using Utils;
+using Utils.Interfaces;
 
 namespace Business.Managers
 {
@@ -13,11 +17,13 @@ namespace Business.Managers
     {
         private readonly DBManager _DBManager;
         private readonly Response<Medico> _response;
+        private readonly Mapper <MedicoDto> _mapper;
 
-        public MedicoManager(DBManager dbManager, Response<Medico> response)
+        public MedicoManager(DBManager dbManager, Response<Medico> response, Mapper<MedicoDto> mapper)
         {
             _DBManager = dbManager;
             _response = response;
+            _mapper = mapper;
         }
 
         public Response<Medico> CrearMedico(MedicoDto entity)
@@ -79,6 +85,43 @@ namespace Business.Managers
             _response.Ok(medico);
 
             return _response;
+        }
+
+        public Response<List<MedicoDto>> ObtenerTodos()
+        {
+            string query = @"
+                Select
+	            PE.Apellido AS Persona_Apellido,
+	            PE.Nombre AS Persona_Nombre,
+	            ES.Nombre AS Especialidad_Nombre
+                From Medicos M
+                Inner Join Especialidades ES ON M.EspecialidadId = ES.Id
+                Inner Join Empleados EM ON M.EmpleadoId = EM.Id
+                Inner Join Personas PE ON EM.PersonaId = PE.Id";
+
+            DataTable res = new DataTable();
+
+            try
+            {
+                res = _DBManager.ExecuteQuery(query);
+                int rows = res.Rows.Count;
+
+                if (rows == 0)
+                {
+                    return new Response<List<MedicoDto>>();
+                }
+
+                Response <List<MedicoDto>> response = new Response<List<MedicoDto>>();  
+
+                response.Data = _mapper.ListMapFromRow(res);
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
     }

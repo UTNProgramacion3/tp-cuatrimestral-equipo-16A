@@ -56,8 +56,6 @@ namespace TPCuatrimestral_equipo_16A.Views
         protected void dgvPacientes_SelectedIndexChanged(object sender, EventArgs e)
         {
             
-            int index = dgvPacientes.SelectedIndex;
-
             int idPaciente = Convert.ToInt32(dgvPacientes.SelectedDataKey.Value);
 
             string nombre = HttpUtility.HtmlDecode(dgvPacientes.SelectedRow.Cells[1].Text);
@@ -89,7 +87,12 @@ namespace TPCuatrimestral_equipo_16A.Views
 
         protected void BtnSiguiente_OnClick(object sender, EventArgs e)
         {
-            Response.Redirect("~/Pages/SeleccionarTurno.aspx", false);
+            Response.Redirect("~/Pages/SeleccionarSede.aspx", false);
+        }
+
+        protected void btnAtras_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("~/Pages/Home.aspx", false);
         }
     }
 }

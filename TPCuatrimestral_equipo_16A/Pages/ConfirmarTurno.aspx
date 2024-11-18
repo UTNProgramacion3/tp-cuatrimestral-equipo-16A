@@ -52,6 +52,7 @@
                             <asp:Label Text="" runat="server" ID="lblHora" />
                         </div>
                         <div class="mb-3">
+                            <asp:Button class="btn btn-dark" Type="button" ID="btnAtras" OnClick="btnAtras_Click" Text="Atrás" runat="server" />
                             <asp:Button class="btn btn-dark" Type="button" ID="btnCancelar" OnClick="btnCancelar_Click" Text="Cancelar" runat="server" />
                             <asp:Button class="btn btn-dark" Type="button" ID="btnConfirmar" OnClick="btnConfirmar_Click" Text="Confirmar" runat="server" />
                             <div>

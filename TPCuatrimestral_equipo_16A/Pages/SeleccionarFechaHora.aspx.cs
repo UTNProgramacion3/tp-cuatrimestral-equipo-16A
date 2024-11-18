@@ -47,5 +47,15 @@ namespace TPCuatrimestral_equipo_16A.Pages
 			dgvFechaHorario.DataBind();
 
         }
+
+        protected void btnAtras_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("~/Pages/SeleccionarMedico.aspx", false);
+        }
+
+        protected void btnSiguiente_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("~/Pages/ConfirmarTurno.aspx", false);
+        }
     }
 }

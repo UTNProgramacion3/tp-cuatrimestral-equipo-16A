@@ -122,5 +122,9 @@ namespace TPCuatrimestral_equipo_16A.Pages
             Session["HoraTurno"] = TimeSpan.Parse("10:00");
         }
 
+        protected void btnAtras_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("~/Pages/SeleccionarFechaHora.aspx", false);
+        }
     }
 }

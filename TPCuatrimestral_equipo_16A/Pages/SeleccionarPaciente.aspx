@@ -35,8 +35,8 @@
                 <asp:TextBox Text="" runat="server" CssClass="form-control" Disabled="True" ReadOnly="True" ID="txtBoxApellidoPaciente"/>
             </div>
             <div class="mb-3">
-                <input class="btn btn-dark" type="button" value="Atrás" id="btnAtras" />
-                <asp:Button class="btn btn-dark" type="button" text="Siguiente" id="btnSiguiente" runat="server" OnClick="BtnSiguiente_OnClick"/>
+                <asp:Button class="btn btn-dark" Text="Atrás" runat="server" ID="btnAtras" OnClick="btnAtras_Click" />
+                <asp:Button class="btn btn-dark" text="Siguiente" id="btnSiguiente" runat="server" OnClick="BtnSiguiente_OnClick"/>
             </div>
         </div>
     </div>

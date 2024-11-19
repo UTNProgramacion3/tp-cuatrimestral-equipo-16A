@@ -45,6 +45,7 @@ namespace Business.Managers
         {
             string query = @"
                             SELECT
+                            SE.Id AS Sede_Id,
 	                        SE.Nombre AS Sede_Nombre,
 	                        DI.Calle AS Direccion_Calle,
 	                        DI.Numero AS Direccion_Numero,

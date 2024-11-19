@@ -81,8 +81,13 @@ namespace TPCuatrimestral_equipo_16A.Views
                 .Where(paciente => paciente.Documento.ToString().ToLower().Contains(searchText))
                 .ToList();
 
+            dgvPacientes.SelectedIndex = -1;
+            txtBoxNombrePaciente.Text = "";
+            txtBoxApellidoPaciente.Text = "";
+
             dgvPacientes.DataSource = filteredList;
             dgvPacientes.DataBind();
+
         }
 
         protected void BtnSiguiente_OnClick(object sender, EventArgs e)

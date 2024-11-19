@@ -25,6 +25,8 @@ namespace TPCuatrimestral_equipo_16A.Pages
             dbManager = new DBManager();
             sedeManager = new SedeManager();
 
+            //int idPaciente = Convert.ToInt32(Session["IdPaciente"]); --- prueba de session
+
             if (!IsPostBack)
             {
                 CargarSedes();
@@ -58,6 +60,24 @@ namespace TPCuatrimestral_equipo_16A.Pages
             
             dgvSedes.DataSource = filteredList;
             dgvSedes.DataBind();
+        }
+        protected void dgvSedes_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            GridViewRow selectedRow = dgvSedes.SelectedRow;
+
+            if (selectedRow != null)
+            {
+                string cellValue = selectedRow.Cells[0].Text;
+
+                if (!string.IsNullOrEmpty(cellValue) && int.TryParse(cellValue.Trim(), out int idSede))
+                {
+                    Session["IdSede"] = idSede;
+                }
+                else
+                {
+                    Response.Write("El valor seleccionado no es un ID válido.");
+                }
+            }
         }
 
         protected void btnAtras_Click(object sender, EventArgs e)

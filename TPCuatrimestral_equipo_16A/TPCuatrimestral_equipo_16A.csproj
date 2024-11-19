@@ -96,6 +96,7 @@
     <Content Include="Stylesheets\Login.css" />
     <Content Include="Stylesheets\Master.css" />
     <Content Include="Stylesheets\Listado.css" />
+    <Content Include="Stylesheets\SeleccionarSede.css" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

@@ -12,10 +12,16 @@ namespace Domain.Enums
         [Description("Administrador")]
         Administrador = 1,
 
-        [Description("Empleado")]
-        Empleado = 2,
+        [Description("Recepcionista")]
+        Recepcionista = 2,
+
+        [Description("Medico")]
+        Medico = 3,
 
         [Description("Paciente")]
-        Paciente = 3,
+        Paciente = 4,
+
+        [Description("Empleado")]
+        Empleado = 5,
     }
 }

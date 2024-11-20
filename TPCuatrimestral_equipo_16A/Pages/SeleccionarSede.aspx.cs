@@ -26,6 +26,8 @@ namespace TPCuatrimestral_equipo_16A.Pages
             dbManager = new DBManager();
             sedeManager = new SedeManager();
 
+            txtbSedeSeleccionada.Text = (string)Session["NombreSede"];
+
             if (!IsPostBack)
             {
                 CargarSedes();

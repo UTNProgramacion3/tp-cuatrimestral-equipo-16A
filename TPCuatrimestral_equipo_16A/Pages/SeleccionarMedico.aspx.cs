@@ -30,6 +30,8 @@ namespace TPCuatrimestral_equipo_16A.Pages
             especialidadManager = new EspecialidadManager(dbManager, responseEspecialidad);
             medicoManager = new MedicoManager(dbManager, new Response<Medico>(), new Mapper<MedicoDto>());
 
+            txtbMedicoSeleccionado.Text = (string)Session["DatosMedico"];
+
             try
             {
                 
@@ -118,7 +120,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
         {
             txtbMedicoSeleccionado.Text = (string)Session["DatosMedico"];
 
-            int idMedico = (int)Session["IdMedico"];
+            //int idMedico = (int)Session["IdMedico"];
             
             if(txtBuscarEspecialidad.Text != "")
             {

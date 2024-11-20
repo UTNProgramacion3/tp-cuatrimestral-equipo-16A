@@ -104,7 +104,6 @@ namespace TPCuatrimestral_equipo_16A.Views
             txtBoxApellidoPaciente.Text = (string)Session["ApellidoPaciente"];
             txtBNumeroDeDocumento.Text = (string)Session["DniPaciente"];
 
-            //int idMedico = (int)Session["IdMedico"];
 
             if (txtbFiltrar.Text != "")
             {

@@ -16,5 +16,7 @@ namespace Domain.Entities
         public int RolId { get; set; }
         public string ImagenPerfil { get; set; }
         public bool Activo { get; set; }
+
+        public Usuario() { Rol = new Rol(); }    
     }
 }

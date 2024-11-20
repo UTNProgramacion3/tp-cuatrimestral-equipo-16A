@@ -1,4 +1,5 @@
-﻿using Business.Managers;
+﻿using Business.Dtos;
+using Business.Managers;
 using Domain.Entities;
 using Domain.Response;
 using System;
@@ -11,6 +12,6 @@ namespace Business.Interfaces
 {
     public interface IEmpleadoManager : ICrudRepository<Empleado>
     {
-
+        Response<Empleado> CrearNuevo(NuevoEmpleadoDto entity);
     }
 }

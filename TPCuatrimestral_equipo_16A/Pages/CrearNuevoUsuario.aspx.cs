@@ -1,4 +1,5 @@
-﻿using Business.Interfaces;
+﻿using Business.Dtos;
+using Business.Interfaces;
 using Domain.Entities;
 using Domain.Enums;
 using System;
@@ -11,7 +12,7 @@ using Unity;
 
 namespace TPCuatrimestral_equipo_16A.Pages
 {
-    public partial class CreacionUsuario : Page
+    public partial class CrearNuevoUsuario : System.Web.UI.Page
     {
         private IPacienteManager _pacienteManager;
         private IEmpleadoManager _empleadoManager;
@@ -28,6 +29,11 @@ namespace TPCuatrimestral_equipo_16A.Pages
             InitDependencies();
             if (!IsPostBack)
             {
+                ddlRol.Items.Clear(); // Limpia cualquier opción existente para evitar duplicados
+
+                ddlRol.Items.Add(new ListItem("Administrador", "1"));
+                ddlRol.Items.Add(new ListItem("Empleado", "2"));
+                ddlRol.Items.Add(new ListItem("Paciente", "3"));
                 CargarEspecialidades();
                 CargarRoles();
             }
@@ -42,6 +48,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
             string especialidad = ddlEspecialidad.SelectedValue;
             int rol = int.Parse(ddlRol.SelectedValue);
             string legajo = txtLegajo.Text.Trim();
+            int posicion = int.Parse(posicionEmpleado.SelectedValue);
 
             if (string.IsNullOrEmpty(nombre) || string.IsNullOrEmpty(apellido) || string.IsNullOrEmpty(documento))
             {
@@ -63,7 +70,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
             switch (rol)
             {
                 case (int)RolesEnum.Empleado:
-                    Empleado nuevoEmpleado = new Empleado
+                    NuevoEmpleadoDto nuevoEmpleado = new NuevoEmpleadoDto
                     {
                         Apellido = apellido,
                         Nombre = nombre,
@@ -72,9 +79,13 @@ namespace TPCuatrimestral_equipo_16A.Pages
                         Legajo = int.Parse(legajo),
                         EmailPersonal = txtEmailPersonal.Text.Trim(),
                         Telefono = txtTelefono.Text.Trim(),
-                        FechaNacimiento = txtFechaNacimiento.SelectedDate
+                        FechaNacimiento = txtFechaNacimiento.SelectedDate,
+                        Posicion = posicion,
+                        Matricula = int.Parse(txtMatricula.Text),
+                        EspecialidadId = int.Parse(ddlEspecialidad.SelectedValue),
+                        RolId = (int)RolesEnum.Empleado
                     };
-                    _empleadoManager.Crear(nuevoEmpleado);
+                    _empleadoManager.CrearNuevo(nuevoEmpleado);
                     break;
 
                 case (int)RolesEnum.Paciente:
@@ -86,7 +97,9 @@ namespace TPCuatrimestral_equipo_16A.Pages
                         Direccion = direccion,
                         EmailPersonal = txtEmailPersonal.Text.Trim(),
                         Telefono = txtTelefono.Text.Trim(),
-                        FechaNacimiento = txtFechaNacimiento.SelectedDate
+                        FechaNacimiento = txtFechaNacimiento.SelectedDate,
+                        RolId = (int)RolesEnum.Paciente
+
                     };
                     _pacienteManager.Crear(nuevoPaciente);
                     break;
@@ -141,9 +154,8 @@ namespace TPCuatrimestral_equipo_16A.Pages
         {
             ddlRol.Items.Clear();
             ddlRol.Items.Add(new ListItem("Administrador", "1"));
-            ddlRol.Items.Add(new ListItem("Médico", "2"));
+            ddlRol.Items.Add(new ListItem("Empleado", "2"));
             ddlRol.Items.Add(new ListItem("Paciente", "3"));
-            ddlRol.Items.Add(new ListItem("Empleado", "4"));
         }
 
 
@@ -156,7 +168,6 @@ namespace TPCuatrimestral_equipo_16A.Pages
             ddlEspecialidad.SelectedIndex = 0;
             ddlRol.SelectedIndex = 0;
             txtLegajo.Text = string.Empty;
-            // Otros campos a limpiar
         }
 
         protected void ddlRol_SelectedIndexChanged(object sender, EventArgs e)

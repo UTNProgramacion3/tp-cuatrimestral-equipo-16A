@@ -41,6 +41,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
                 }
                 else
                 {
+                    lblMessage.ForeColor = System.Drawing.Color.Red;
                     lblMessage.Text = response.Message;
                 }
         }

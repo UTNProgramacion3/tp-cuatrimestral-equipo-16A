@@ -10,8 +10,8 @@ namespace Domain.Entities
     {
         public int Id { get; set; }
         public int Dia { get; set; }
-        public DateTime Inicio { get; set; }
-        public DateTime Fin { get; set; }
+        public TimeSpan Inicio { get; set; }
+        public TimeSpan Fin { get; set; }
         public int JornadaTrabajoId { get; set;}
     }
 }

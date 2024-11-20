@@ -117,17 +117,17 @@ namespace Business.Managers
                 throw new Exception("Hubo un error al crear el token de validacion");
             }
             
-                var validacion = res.GetEntity<EmailValidationDto>();
-
             var mailTemplate = _validacionMailTemplate;
-            string htmlBody = @"<h1 style=""color: blue;"">¡Bienvenido, {{Nombre}}!</h1>
-    <p>Gracias por registrarte en nuestra aplicación.</p>
-    <p>Haz clic en el siguiente enlace para verificar tu cuenta:</p>
-    <a href=""{{BASE_URL}}validarEmail?token={{Token}}"" style=""background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none;"">Verificar Cuenta</a>
-    <p>Saludos,<br>El equipo de {{APP_NAME}}</p>";
+            string htmlBody;
 
-                htmlBody = htmlBody.Replace("{{Nombre}}", nombreUsuario)
-                           .Replace("{{Token}}", validacion.Token.ToString())
+
+            using (StreamReader reader = new StreamReader(mailTemplate))
+            {
+                htmlBody = await reader.ReadToEndAsync();
+            }
+
+            htmlBody = htmlBody.Replace("{{Nombre}}", nombreUsuario)
+                           .Replace("{{Token}}", token.ToString())
                            .Replace("{{BASE_URL}}", _BASE_URL)
                            .Replace("{{APP_NAME}}", _APP_NAME);
 

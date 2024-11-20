@@ -11,7 +11,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
 {
 
 
-    public partial class CreacionUsuario
+    public partial class CrearNuevoUsuario
     {
 
         /// <summary>
@@ -31,6 +31,42 @@ namespace TPCuatrimestral_equipo_16A.Pages
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlRol;
+
+        /// <summary>
+        /// posicionEmpleado control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList posicionEmpleado;
+
+        /// <summary>
+        /// txtLegajo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtLegajo;
+
+        /// <summary>
+        /// txtMatricula control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtMatricula;
+
+        /// <summary>
+        /// ddlEspecialidad control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlEspecialidad;
 
         /// <summary>
         /// txtNombre control.
@@ -157,33 +193,6 @@ namespace TPCuatrimestral_equipo_16A.Pages
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtCodigoPostal;
-
-        /// <summary>
-        /// txtMatricula control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtMatricula;
-
-        /// <summary>
-        /// ddlEspecialidad control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlEspecialidad;
-
-        /// <summary>
-        /// txtLegajo control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtLegajo;
 
         /// <summary>
         /// btnCrear control.

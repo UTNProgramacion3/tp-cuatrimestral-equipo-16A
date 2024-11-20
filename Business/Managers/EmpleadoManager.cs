@@ -1,4 +1,5 @@
-﻿using Business.Interfaces;
+﻿using Business.Dtos;
+using Business.Interfaces;
 using DataAccess;
 using DataAccess.Extensions;
 using Domain.Entities;
@@ -24,6 +25,8 @@ namespace Business.Managers
         private readonly IDireccionManager _direccionManager;
         private readonly IPersonaManager _personaManager;
         private readonly IEmailManager _emailManager;
+        private readonly IJornadaManager _jornadaManager;
+        private readonly IMedicoManager _medicoManager;
         private readonly IMapper<Empleado> _mapper;
         #endregion
 
@@ -34,6 +37,8 @@ namespace Business.Managers
             IUsuarioManager usuarioManager,
             IDireccionManager direccionManager,
             IPersonaManager personaManager,
+            IJornadaManager jornadaManager,
+            IMedicoManager medicoManager,
             IEmailManager emailManager)
         {
             _DBManager = manager;
@@ -42,12 +47,15 @@ namespace Business.Managers
             _direccionManager = direccionManager;
             _personaManager = personaManager;
             _emailManager = emailManager;
+            _jornadaManager = jornadaManager;
+            _medicoManager = medicoManager;
             _mapper = new Mapper<Empleado>();
         }
-        #endregion
+
+
 
         #region Public methods
-        public Response<Empleado> Crear(Empleado entity)
+        public Response<Empleado> CrearNuevo(NuevoEmpleadoDto entity)
         {
             try
             {
@@ -82,24 +90,37 @@ namespace Business.Managers
                     throw new Exception("Error al crear la persona");
                 }
 
-                //var query = "Insert into Empleados(Legajo, EmailCorporativo, CargoId, JornadaTrabajoId,PersonaId) values(@Legajo ,@EmailCorporativo,  @CargoId,@PersonaId, @JornadaTrabajoId)";
-                //string retrieveData = "select * from Empleados where Legajo = @Legajo";
+                JornadaTrabajo jornadaEmpleado = new JornadaTrabajo();
+                var jornada = _jornadaManager.Crear(jornadaEmpleado);
 
-                //var parameters = new SqlParameter[]
-                //{
-                //    new SqlParameter("@Legajo", entity.Legajo),
-                //    new SqlParameter("@EmailCorporativo", usuarioCreado.Data.Email),
-                //    new SqlParameter("@CargoId", 2),
-                //    new SqlParameter("@JornadaTrabajoId", entity.JornadaTrabajoId),
-                //    new SqlParameter("@PersonaId", personaCreada.Data.Id),
+                var query = "Insert into Empleados(Legajo, EmailCorporativo, CargoId, JornadaTrabajoId,PersonaId) values(@Legajo ,@EmailCorporativo,  @CargoId,@JornadaTrabajoId, @PersonaId )";
 
-                //};
+                string retrieveData = "select * from Empleados where Legajo = @Legajo";
 
-                //var res = _DBManager.ExecuteNonQueryAndGetData(query, parameters, retrieveData);
+                var parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@Legajo", entity.Legajo),
+                    new SqlParameter("@EmailCorporativo", usuarioCreado.Data.Email),
+                    new SqlParameter("@CargoId", entity.Posicion),
+                    new SqlParameter("@JornadaTrabajoId", jornada.Data.Id),
+                    new SqlParameter("@PersonaId", personaCreada.Data.Id),
+                };
 
-                //entity.Id = res.GetId(isNewId: true);
+                var res = _DBManager.ExecuteNonQueryAndGetData(query, parameters, retrieveData);
+                Empleado empleadoCreado = res.GetEntity<Empleado>();
 
-                _response.Ok(entity);
+                if (entity.Posicion == (int)PosicionEnum.Medico)
+                {
+                    MedicoDto nuevoMedico = new MedicoDto()
+                    {
+                        EmpleadoId = empleadoCreado.Id,
+                        Matricula = entity.Matricula,
+                        EspecialidadId = entity.EspecialidadId
+                    };
+                    _medicoManager.CrearMedico(nuevoMedico);
+                }
+
+                _response.Ok(empleadoCreado);
 
                 return _response;
             }
@@ -149,6 +170,12 @@ namespace Business.Managers
         {
             throw new NotImplementedException();
         }
+
+        public Response<Empleado> Crear(Empleado entity)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
         #endregion
 
         #region Private methods

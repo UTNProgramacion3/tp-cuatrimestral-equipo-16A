@@ -11,6 +11,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Utils;
 
 namespace Business.Managers
 {
@@ -71,6 +72,42 @@ namespace Business.Managers
         public Response<bool> Update(Persona entity)
         {
             throw new NotImplementedException();
+        }
+
+        public Response<PersonaDto> ObtenerPorUsuario(int id)
+        {
+            string query = @"SELECT * FROM Personas
+                             WHERE UsuarioId = @UsuarioId;";
+
+            SqlParameter[] parameters = new SqlParameter[] 
+            {   
+                new SqlParameter("@UsuarioId", id)
+            };
+            Mapper<PersonaDto> mapper = new Mapper<PersonaDto>();
+            Response<PersonaDto> response = new Response<PersonaDto>();
+            try
+            {
+                var res = _DBManager.ExecuteQuery(query, parameters);
+
+                if (res.Rows.Count == 0)
+                {
+                    response.NotOk("Error al buscar Persona");
+                    return response;
+                }
+
+                var persona = mapper.MapFromRow(res.Rows[0]);
+
+                if (persona != null)
+                {
+                    response.Ok(persona);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.NotOk(ex.Message);
+            }
+
+            return response;
         }
     }
 }

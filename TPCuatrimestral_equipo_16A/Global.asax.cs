@@ -1,5 +1,6 @@
 ﻿using Business.Interfaces;
 using Business.Managers;
+using Business.Services;
 using DataAccess;
 using Domain.Entities;
 using Domain.Response;
@@ -44,6 +45,7 @@ namespace TPCuatrimestral_equipo_16A
             Container.RegisterType<ISedeManager, SedeManager>();
             Container.RegisterType<IEspecialidadManager, EspecialidadManager>();
             Container.RegisterType<IEmailManager, EmailManager>();
+            Container.RegisterType<ISeguridadService, SeguridadService>();
         }
     }
 }

@@ -1,81 +1,149 @@
-﻿using System;
+﻿using Business.Interfaces;
+using Domain.Entities;
+using Domain.Enums;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Unity;
 
 namespace TPCuatrimestral_equipo_16A.Views
 {
     public partial class WebForm3 : System.Web.UI.Page
     {
-        protected void Page_Load(object sender, EventArgs e)
+        private IPersonaManager _personaManager;
+        private IUsuarioManager _usuarioManager;
+        private Usuario _usuario;
+
+        private void InitDependencies()
         {
-
-            if(!IsPostBack)
-            {
-                pass.Attributes["type"] = "password";
-
-                //Aca deberia leer la contraseña de la base de datos
-                pass.Attributes["value"] = "";
-
-            }
-
+            IUnityContainer unityContainer;
+            _personaManager = (IPersonaManager)Global.Container.Resolve(typeof(IPersonaManager));
+            _usuarioManager = (IUsuarioManager)Global.Container.Resolve(typeof (IUsuarioManager));
         }
 
-        protected void ChkBoxChecked(object sender, EventArgs e)
+        private void VerificarRol(RolesEnum rol)
         {
-
-            Session.Add("tempPass", pass.Value.ToString());
-
-            
-            if (passCheck.Checked)
+            if (RolesEnum.Administrador == rol)
             {
-
-                pass.Attributes["type"] = "text";
+                btnVerTurnos.Visible = false;
+                btnCambiarPass.Visible = true;
+                btnEditar.Visible = true;
+            }
+            else if (RolesEnum.Medico == rol || RolesEnum.Paciente == rol)
+            {
+                btnVerTurnos.Visible = true;
+                btnCambiarPass.Visible = true;
+                btnEditar.Visible = false;
             }
             else
             {
+                btnVerTurnos.Visible = false;
+                btnCambiarPass.Visible = true;
+                btnEditar.Visible = false;
+            }
+        }
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            InitDependencies();
+            if(!IsPostBack)
+            {
+                if (Session["UserLogueado"] != null)
+                {
+                    _usuario = (Usuario)Session["UserLogueado"];
+                    VerificarRol((RolesEnum)_usuario.Rol.Id);
+                    var res = _personaManager.ObtenerPorUsuario(_usuario.Id);
 
-                pass.Attributes["type"] = "password";
+                    if (res.Success) 
+                    {
+                        lblNombreApellido.Text = res.Data.Nombre + " " + res.Data.Apellido;
+                        lblEmail.Text = res.Data.EmailPersonal;
+                        lblTelefono.Text = res.Data.Telefono;
+                        lblFechaNacimiento.Text = res.Data.FechaNacimiento.ToString("yyyy-MM-dd");
+
+                        if (_usuario.ImagenPerfil != null)
+                        {
+                            imgPerfil.ImageUrl = _usuario.ImagenPerfil;
+                        }else
+                        {
+                            CargarImagenPerfil();
+                        }
+                    }
+
+                } else
+                {
+                    Response.Redirect("~/Pages/Home.aspx");
+                }
 
             }
-            
-            RestorePass();
-
-
 
         }
 
-        protected void RestorePass()
+        private void CargarImagenPerfil()
         {
-            pass.Attributes["value"] = Session["tempPass"].ToString();
+            string email = lblEmail.Text;
+
+            string[] extensionesPermitidas = { ".jpg", ".jpeg", ".png", ".gif" };
+
+            string imagenPath = null;
+
+            foreach (string extension in extensionesPermitidas)
+            {
+                imagenPath = Server.MapPath($"~/Images/{email}{extension}");
+
+                if (File.Exists(imagenPath))
+                {
+                    imgPerfil.ImageUrl = $"~/Images/{email}{extension}";
+                    return; 
+                }
+            }
+
+            imgPerfil.ImageUrl = "~/ImagesFolder/default-profile.jpg";
+
+
+
         }
 
-        protected void BtnModificar_OnClick(object sender, EventArgs e)
+        protected void btnSubirFoto_Click(object sender, EventArgs e)
         {
-            user.Attributes.Remove("disabled");
-            pass.Attributes.Remove("disabled");
-            nombre.Attributes.Remove("disabled");
-            apellido.Attributes.Remove("disabled");
-            dni.Attributes.Remove("disabled");
-            mail.Attributes.Remove("disabled");
-            btnGuardar.Attributes.Remove("disabled");
-            btnCargarImagen.Attributes.Remove("disabled");
-        }
+            if (fileUpload.HasFile)
+            {
+                string email = lblEmail.Text;
 
-        protected void BtnGuardar_OnClick(object sender, EventArgs e)
-        {
-            user.Attributes.Add("disabled", "disabled");
-            pass.Attributes.Add("disabled", "disabled");
-            nombre.Attributes.Add("disabled", "disabled");
-            apellido.Attributes.Add("disabled", "disabled");
-            dni.Attributes.Add("disabled", "disabled");
-            mail.Attributes.Add("disabled", "disabled");
-            btnGuardar.Attributes.Add("disabled", "disabled");
-            btnCargarImagen.Attributes.Add("disabled", "disabled");
-        }
+                if (!string.IsNullOrEmpty(email))
+                {
+                    string extension = Path.GetExtension(fileUpload.PostedFile.FileName).ToLower();
 
+                    if (extension == ".jpg" || extension == ".jpeg" || extension == ".png" || extension == ".gif")
+                    {
+                        // Construye la ruta del archivo utilizando el correo electrónico
+                        string fileName = email + extension;  // El nombre de la imagen será el correo electrónico + la extensión
+                        string filePath = Server.MapPath("~/UploadedImages/" + fileName);
+
+                        // Si el archivo ya existe, se reemplaza
+                        if (File.Exists(filePath))
+                        {
+                            File.Delete(filePath);  
+                        }
+
+                        // Guarda el nuevo archivo
+                        fileUpload.SaveAs(filePath);
+
+                        // Actualiza la imagen del perfil en la página
+                        imgPerfil.ImageUrl = "~/UploadedImages/" + fileName;
+
+                        // Guardamos la direccion en db y en session.
+                        _usuario = (Usuario)Session["UserLogueado"];
+                        _usuario.ImagenPerfil = imgPerfil.ImageUrl;
+                        _usuarioManager.Update(_usuario);
+                        Session["UserLogueado"] = _usuario;
+                    }
+                }
+            }
+        }
     }
 }

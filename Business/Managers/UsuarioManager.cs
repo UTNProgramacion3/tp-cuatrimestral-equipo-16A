@@ -278,7 +278,7 @@ namespace Business.Managers
                             Set   Email = @email,
 	                              PasswordHash = @passwordhash,
 	                              RolId = @idrol,
-	                              ImagenPerfil = @img_perfil,
+	                              ImagenPerfil = @img_perfil
                             Where Id = @id";
             //Hasheamos la password antes de guardarla
             entity.Passwordhash = PasswordHasher.HashPassword(entity.Passwordhash);
@@ -318,7 +318,6 @@ namespace Business.Managers
         public bool VerificarPassword(string password, string hashedpassword)
         {
             return PasswordHasher.VerifyPassword(password, hashedpassword);
-            
         }
 
         public bool ExisteMail(string email)

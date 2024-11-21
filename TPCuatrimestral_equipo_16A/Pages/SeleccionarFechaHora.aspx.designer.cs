@@ -33,6 +33,15 @@ namespace TPCuatrimestral_equipo_16A.Pages
         protected global::System.Web.UI.WebControls.GridView dgvFechaHorario;
 
         /// <summary>
+        /// Control txtBoxFechaHora.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtBoxFechaHora;
+
+        /// <summary>
         /// Control btnAtras.
         /// </summary>
         /// <remarks>

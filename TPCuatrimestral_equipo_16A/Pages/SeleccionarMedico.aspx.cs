@@ -80,11 +80,16 @@ namespace TPCuatrimestral_equipo_16A.Pages
                     string datosMedico = cellNombre + " " + cellApellido + " - Especialidad: " + cellEspecialidad;
                     txtbMedicoSeleccionado.Text = datosMedico;
                     Session["DatosMedico"] = datosMedico;
+                    
+                    Session["NombreMedico"] = cellNombre;
+                    Session["ApellidoMedico"] = cellApellido;
+                    Session["Especialidad"] = cellEspecialidad;
                 }
 
                 if (!string.IsNullOrEmpty(cellValue) && int.TryParse(cellValue.Trim(), out int idMedico))
                 {
                     Session["IdMedico"] = idMedico;
+
                 }
                 else
                 {

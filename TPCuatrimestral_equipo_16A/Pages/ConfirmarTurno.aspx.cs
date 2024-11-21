@@ -25,7 +25,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
             if (!IsPostBack)
             {
-                DatosSesion();
+                //DatosSesion();
                 ObtenerTurno();
 
             }
@@ -40,8 +40,8 @@ namespace TPCuatrimestral_equipo_16A.Pages
             lblEspecialidad.Text = (string)Session["Especialidad"];
             lblNombreSede.Text = (string)Session["NombreSede"];
             lblDireccionSede.Text = (string)Session["DireccionSede"];
-            lblFecha.Text = ((DateTime)Session["FechaTurno"]).ToString("yyyy-MM-dd");
-            lblHora.Text = ((TimeSpan)Session["HoraTurno"]).ToString(@"hh\:mm");
+            lblFecha.Text = (string)Session["FechaTurno"];
+            lblHora.Text = (string)Session["HoraTurno"];
 
         }
 
@@ -53,14 +53,29 @@ namespace TPCuatrimestral_equipo_16A.Pages
             turno.Medico.Id = (int)Session["IdMedico"];
             turno.Sede.Id = (int)Session["IdSede"];
             turno.EstadoTurno.Id = (int)Session["IdEstadoTurno"];
-            turno.Turno.Fecha = (DateTime)Session["FechaTurno"];
-            turno.Turno.Hora = (TimeSpan)Session["HoraTurno"];
+            turno.Turno.Fecha = DateTime.Parse((string)Session["FechaTurno"]);
+            turno.Turno.Hora = TimeSpan.Parse((string)Session["HoraTurno"]);
             turno.Turno.Observaciones = (string)Session["Observaciones"];
 
             turnoManager.Crear(turno);
 
         }
 
+        protected void btnConfirmar_Click(object sender, EventArgs e)
+        {
+            btnConfirmar.Enabled = false;
+            btnCancelar.Enabled = false;
+            turnoSuccess.Visible = true;
+
+            Session["IdEstadoTurno"] = 1;
+            Session["Observaciones"] = "Ninguna";
+
+            CrearTurno();
+
+            Session.Clear();
+            RedirectHome();
+
+        }
 
         protected void btnCancelar_Click(object sender, EventArgs e)
         {
@@ -71,20 +86,6 @@ namespace TPCuatrimestral_equipo_16A.Pages
             Session.Clear();
             RedirectHome();
         }
-
-        protected void btnConfirmar_Click(object sender, EventArgs e)
-        {
-            btnConfirmar.Enabled = false;
-            btnCancelar.Enabled = false;
-            turnoSuccess.Visible = true;
-
-            CrearTurno();
-
-            Session.Clear();
-            RedirectHome();
-
-        }
-
 
         protected void RedirectHome()
         {
@@ -97,7 +98,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
         }
 
 
-        protected void DatosSesion()
+        /*protected void DatosSesion()
         {
             // Información del paciente
             Session["IdPaciente"] = 1;
@@ -120,7 +121,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
             Session["Observaciones"] = "Ninguna";
             Session["FechaTurno"] = DateTime.Parse("2024-11-20");
             Session["HoraTurno"] = TimeSpan.Parse("10:00");
-        }
+        }*/
 
         protected void btnAtras_Click(object sender, EventArgs e)
         {

@@ -21,7 +21,7 @@ namespace TPCuatrimestral_equipo_16A.Views
                 Usuario = (Usuario) Session["UserLogueado"];
 
                
-                imgProfile.ImageUrl = Session["ImgPerfil"] != null ? "~/ImagesFolder/" + Session["ImgPerfil"].ToString() : "~/ImagesFolder/" + "default-profile.jpg";
+                imgProfile.ImageUrl = Usuario.ImagenPerfil != null ? Usuario.ImagenPerfil : "~/ImagesFolder/" + "default-profile.jpg";
             }
             else
             {
@@ -34,7 +34,6 @@ namespace TPCuatrimestral_equipo_16A.Views
         protected void btnLogout_Click(object sender, EventArgs e)
         {
             Session["UserLogueado"] = null;
-            Session["ImgPerfil"] = null;
 
             Response.Redirect("~/Pages/Home.aspx");
         }

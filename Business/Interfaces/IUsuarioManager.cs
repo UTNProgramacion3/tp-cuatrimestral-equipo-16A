@@ -15,5 +15,6 @@ namespace Business.Interfaces
         Usuario GenerarUsuario(Persona persona, int tipoUsuario);
         Usuario ValidarToken(string token);
         Usuario ActivarUsuario(Usuario usuario, string password);
+        Response<bool> CambiarPassword(string newPass, int userId);
     }
 }

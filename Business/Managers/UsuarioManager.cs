@@ -280,8 +280,6 @@ namespace Business.Managers
 	                              ImagenPerfil = @img_perfil,
                                     Activo = @activo
                             Where Id = @id";
-            //Hasheamos la password antes de guardarla
-            entity.Passwordhash = PasswordHasher.HashPassword(entity.Passwordhash);
             SqlParameter[] parameters = new SqlParameter[]
                 {
                     new SqlParameter("@email", entity.Email),
@@ -318,7 +316,6 @@ namespace Business.Managers
         public bool VerificarPassword(string password, string hashedpassword)
         {
             return PasswordHasher.VerifyPassword(password, hashedpassword);
-            
         }
 
         public bool ExisteMail(string email)
@@ -382,6 +379,45 @@ namespace Business.Managers
                         new SqlParameter("@email", email),
                         new SqlParameter("@token", token)
                     };
+        public Response<bool> CambiarPassword(string newPass, int userId)
+        {
+            string query = @"Update USUARIOS
+                            Set   PasswordHash = @newPass
+                            Where Id = @id";
+            string hashedPass = PasswordHasher.HashPassword(newPass);
+            SqlParameter[] parameters = new SqlParameter[]
+                {
+                    new SqlParameter ("@newPass", hashedPass),
+                    new SqlParameter ("@id", userId)
+                };
+
+            Response<bool> response = new Response<bool>();
+
+            try
+            {
+                var res = Convert.ToBoolean(_dbManager.ExecuteNonQuery(query, parameters));
+
+                if (res == false)
+                {
+                    response.NotOk("No se pudo editar La contraseña");
+                }
+                else
+                {
+                    response.Ok(res, "Contraseña editada.");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                response.NotOk(ex.Message);
+            }
+
+            return response;
+        }
+
+        //public static bool ValidarToken(this string token, out string email)
+        //{
+        //    email = null;
 
                     var res = _dbManager.ExecuteQuery(query, parameters);
                     return res.GetEntity<Usuario>();

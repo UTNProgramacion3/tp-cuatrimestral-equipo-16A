@@ -379,6 +379,31 @@ namespace Business.Managers
                         new SqlParameter("@email", email),
                         new SqlParameter("@token", token)
                     };
+        
+
+        //public static bool ValidarToken(this string token, out string email)
+        //{
+        //    email = null;
+
+                    var res = _dbManager.ExecuteQuery(query, parameters);
+                    return res.GetEntity<Usuario>();
+                }
+                return new Usuario();
+            }
+            catch (FormatException)
+            {
+                return new Usuario();
+            }
+        }
+
+        public Usuario ActivarUsuario(Usuario usuario, string password)
+        {
+            usuario.Activo = true;
+            usuario.Passwordhash = password;
+
+            return usuario;
+        }
+
         public Response<bool> CambiarPassword(string newPass, int userId)
         {
             string query = @"Update USUARIOS
@@ -413,29 +438,6 @@ namespace Business.Managers
             }
 
             return response;
-        }
-
-        //public static bool ValidarToken(this string token, out string email)
-        //{
-        //    email = null;
-
-                    var res = _dbManager.ExecuteQuery(query, parameters);
-                    return res.GetEntity<Usuario>();
-                }
-                return new Usuario();
-            }
-            catch (FormatException)
-            {
-                return new Usuario();
-            }
-        }
-
-        public Usuario ActivarUsuario(Usuario usuario, string password)
-        {
-            usuario.Activo = true;
-            usuario.Passwordhash = password;
-
-            return usuario;
         }
 
         #region Private methods

@@ -360,28 +360,28 @@ namespace Business.Managers
             return usuario;
         }
 
-        public static bool ValidarToken(this string token, out string email)
-        {
-            email = null;
+        //public static bool ValidarToken(this string token, out string email)
+        //{
+        //    email = null;
 
-            try
-            {
-                string decodedToken = Encoding.UTF8.GetString(Convert.FromBase64String(token));
-                var parts = decodedToken.Split('|');
+        //    try
+        //    {
+        //        string decodedToken = Encoding.UTF8.GetString(Convert.FromBase64String(token));
+        //        var parts = decodedToken.Split('|');
 
-                if (parts.Length == 3 && DateTime.TryParse(parts[2], out DateTime expirationDate) && expirationDate > DateTime.UtcNow)
-                {
-                    email = parts[0];
-                    return true;
-                }
-            }
-            catch (FormatException)
-            {
-                return false;
-            }
+        //        if (parts.Length == 3 && DateTime.TryParse(parts[2], out DateTime expirationDate) && expirationDate > DateTime.UtcNow)
+        //        {
+        //            email = parts[0];
+        //            return true;
+        //        }
+        //    }
+        //    catch (FormatException)
+        //    {
+        //        return false;
+        //    }
 
-            return false;
-        }
+        //    return false;
+        //}
 
         #region Private methods
         private Rol AsignarRol(Persona persona, int tipoUsuario)

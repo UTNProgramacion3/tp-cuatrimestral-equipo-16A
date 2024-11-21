@@ -82,7 +82,7 @@ CREATE TABLE Empleados (
     EmailCorporativo VARCHAR(100) UNIQUE,
     CargoId INT,
     JornadaTrabajoId INT,
-    PersonaId INT,
+    PersonaId INT NOT NULL UNIQUE,
     FOREIGN KEY (CargoId) REFERENCES Cargos(Id),
     FOREIGN KEY (JornadaTrabajoId) REFERENCES JornadasTrabajo(Id),
     FOREIGN KEY (PersonaId) REFERENCES Personas(Id)
@@ -108,6 +108,7 @@ CREATE TABLE Turnos (
     Fecha DATE,
 	Hora TIME(0),
     Observaciones TEXT,
+	Activo BIT NOT NULL DEFAULT 1,
     FOREIGN KEY (IdMedico) REFERENCES Empleados(Id),
     FOREIGN KEY (IdPaciente) REFERENCES Pacientes(Id),
 	FOREIGN KEY (IdEstadoTurno) REFERENCES EstadoTurnos(Id),
@@ -167,6 +168,15 @@ CREATE TABLE Medicos (
     FOREIGN KEY (EmpleadoId) REFERENCES Empleados(Id)
 );
 
+CREATE TABLE EmailValidaciones(
+	Id INT PRIMARY KEY IDENTITY,
+	UsuarioId int NOT NULL,
+	Token VARCHAR(100) UNIQUE NOT NULL,
+	TiempoExpiracion DATETIME NOT NULL
+	
+	FOREIGN KEY (UsuarioId) REFERENCES Usuarios(Id)
+)
+
 	Commit transaction
 
 End Try
@@ -175,6 +185,43 @@ Begin Catch
 	Rollback transaction
 	Print 'Error al crear la base de datos'
 End Catch
+
+
+GO
+
+--PROCEDIMIENTOS ALMACENADOS
+
+CREATE PROCEDURE ObtenerTurnosDisponibles
+    @MedicoId INT,
+    @Fecha DATE
+AS
+BEGIN
+    
+    SET NOCOUNT ON;
+
+    SELECT 
+        CONVERT(VARCHAR(5), DATEADD(HOUR, n.Number, CAST(DL.Inicio AS DATETIME)), 108) AS Hora
+    FROM 
+        DiasLaborales DL
+    JOIN 
+        master.dbo.spt_values n 
+        ON n.Type = 'P' AND n.Number < DATEDIFF(HOUR, DL.Inicio, DL.Fin)
+    LEFT JOIN 
+        JornadasTrabajo JT ON DL.JornadaTrabajoId = JT.Id
+    LEFT JOIN 
+        Empleados EM ON JT.Id = EM.JornadaTrabajoId
+    LEFT JOIN 
+        Medicos ME ON EM.Id = ME.EmpleadoId
+    LEFT JOIN 
+        Turnos T 
+        ON T.IdMedico = ME.Id 
+        AND T.Fecha = @Fecha
+        AND T.Hora = DATEADD(HOUR, n.Number, DL.Inicio)
+    WHERE 
+        ME.Id = @MedicoId
+        AND DL.Dia = DATEPART(WEEKDAY, @Fecha)
+        AND T.Id IS NULL;
+END;
 
 GO
 
@@ -207,4 +254,3 @@ Returns varchar(100)
 
 	return @apellido
 	End
-

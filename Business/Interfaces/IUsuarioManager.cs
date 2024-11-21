@@ -13,6 +13,5 @@ namespace Business.Interfaces
         Response<bool> LogIn(Usuario usuario);
         void LogOut(Usuario usuario);
         Usuario GenerarUsuario(Persona persona, int tipoUsuario);
-        bool ValidarToken
     }
 }

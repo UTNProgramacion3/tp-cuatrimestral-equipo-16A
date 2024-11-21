@@ -104,6 +104,18 @@ namespace Business.Services
             return _response;
         }
 
+        public void InhabilitarToken(string token)
+        {
+            string query = "UPDATE EmailValidaciones set Activo = 0 where Token = @token";
+
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@token", token)
+            };
+
+            var res = _dbManager.ExecuteQuery(query, parameters);
+        }
+
         public bool TienePermiso(int rolId, string permisoId)
         {
             string query = @"SELECT COUNT(*) 

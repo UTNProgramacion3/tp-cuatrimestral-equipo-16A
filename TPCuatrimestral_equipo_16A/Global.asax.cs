@@ -13,6 +13,7 @@ using System.Web.Security;
 using System.Web.SessionState;
 using System.Xml.Linq;
 using Unity;
+using Business.Services;
 
 namespace TPCuatrimestral_equipo_16A
 {
@@ -44,6 +45,7 @@ namespace TPCuatrimestral_equipo_16A
             Container.RegisterType<ISedeManager, SedeManager>();
             Container.RegisterType<IEspecialidadManager, EspecialidadManager>();
             Container.RegisterType<IEmailManager, EmailManager>();
+            Container.RegisterType<ISeguridadService, SeguridadService>();
         }
     }
 }

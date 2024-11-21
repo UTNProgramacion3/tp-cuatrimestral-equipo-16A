@@ -39,7 +39,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
         protected void Button2_Click(object sender, EventArgs e)
         {
-            Response.Redirect("CrearNuevoUsuario.aspx");
+            Response.Redirect("Pages/CrearNuevoUsuario.aspx");
         }
     }
 }

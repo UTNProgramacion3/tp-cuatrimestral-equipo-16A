@@ -14,5 +14,6 @@ namespace Business.Interfaces
         void LogOut(Usuario usuario);
         Usuario GenerarUsuario(Persona persona, int tipoUsuario);
         Usuario ValidarToken(string token);
+        Usuario ActivarUsuario(Usuario usuario, string password);
     }
 }

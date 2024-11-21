@@ -276,16 +276,12 @@ namespace Business.Managers
         {
             string query = @"Update USUARIOS
                             Set   Email = @email,
-	                              PasswordHash = @passwordhash,
 	                              RolId = @idrol,
-	                              ImagenPerfil = @img_perfil,
+	                              ImagenPerfil = @img_perfil
                             Where Id = @id";
-            //Hasheamos la password antes de guardarla
-            entity.Passwordhash = PasswordHasher.HashPassword(entity.Passwordhash);
             SqlParameter[] parameters = new SqlParameter[]
                 {
                     new SqlParameter("@email", entity.Email),
-                    new SqlParameter("@passwordhash", entity.Passwordhash),
                     new SqlParameter("@idrol", entity.Rol.Id),
                     new SqlParameter("@img_perfil", string.IsNullOrEmpty(entity.ImagenPerfil) ? null : entity.ImagenPerfil),
                     new SqlParameter("@id", entity.Id)
@@ -318,7 +314,6 @@ namespace Business.Managers
         public bool VerificarPassword(string password, string hashedpassword)
         {
             return PasswordHasher.VerifyPassword(password, hashedpassword);
-            
         }
 
         public bool ExisteMail(string email)
@@ -358,6 +353,42 @@ namespace Business.Managers
             };
 
             return usuario;
+        }
+
+        public Response<bool> CambiarPassword(string newPass, int userId)
+        {
+            string query = @"Update USUARIOS
+                            Set   PasswordHash = @newPass
+                            Where Id = @id";
+            string hashedPass = PasswordHasher.HashPassword(newPass);
+            SqlParameter[] parameters = new SqlParameter[]
+                {
+                    new SqlParameter ("@newPass", hashedPass),
+                    new SqlParameter ("@id", userId)
+                };
+
+            Response<bool> response = new Response<bool>();
+
+            try
+            {
+                var res = Convert.ToBoolean(_dbManager.ExecuteNonQuery(query, parameters));
+
+                if (res == false)
+                {
+                    response.NotOk("No se pudo editar La contraseña");
+                }
+                else
+                {
+                    response.Ok(res, "Contraseña editada.");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                response.NotOk(ex.Message);
+            }
+
+            return response;
         }
 
         //public static bool ValidarToken(this string token, out string email)

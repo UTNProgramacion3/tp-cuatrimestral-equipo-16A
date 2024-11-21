@@ -382,6 +382,40 @@ namespace Business.Managers
 
         //    return false;
         //}
+        public Usuario ValidarToken(string token)
+        {
+            try
+            {
+                string decodedToken = Encoding.UTF8.GetString(Convert.FromBase64String(token));
+                var parts = decodedToken.Split('|');
+
+                if (parts.Length == 2 && DateTime.TryParse(parts[1], out DateTime expirationDate) && expirationDate > DateTime.UtcNow)
+                {
+                    var email = parts[0];
+
+                    string query = @"
+                    SELECT U.* 
+                    FROM Usuarios U
+                    LEFT JOIN EmailValidaciones VAL ON U.Id = VAL.UsuarioId
+                    WHERE U.Email = @email AND VAL.FechaExpiracion <= GETDATE()";
+
+                    SqlParameter[] parameters = new SqlParameter[]
+                    {
+                        new SqlParameter("@email", email)
+                    };
+
+                    var res = _dbManager.ExecuteQuery(query, parameters);
+                    var usuario = res.GetEntity<Usuario>();
+
+                    return usuario;
+                }
+                return new Usuario();
+            }
+            catch (FormatException)
+            {
+                return new Usuario();
+            }
+        }
 
         #region Private methods
         private Rol AsignarRol(Persona persona, int tipoUsuario)
@@ -393,6 +427,8 @@ namespace Business.Managers
             return res.GetEntity<Rol>();
 
         }
+
+
         #endregion
     }
 }

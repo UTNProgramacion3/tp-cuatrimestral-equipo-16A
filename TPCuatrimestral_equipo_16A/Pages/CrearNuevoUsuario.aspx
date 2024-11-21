@@ -115,7 +115,7 @@
             document.getElementById('legajoDiv').style.display = 'none';
             document.getElementById('posicion').style.display = 'none';
 
-            if (role == "2") { // 2 es Empleado
+            if (role == "4") { // 2 es Empleado
                 document.getElementById('posicion').style.display = 'block';
 
                 if (posicion == "1") { // 1 es Médico

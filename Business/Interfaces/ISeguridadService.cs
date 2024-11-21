@@ -14,6 +14,7 @@ namespace Business.Interfaces
         Response<List<Permiso>> GetPermisosPorRol(int rolId);
         Response<List<Permiso>> GetPermisosPorModulo(int moduloId);
         void InhabilitarToken(string token);
+        void VerificarTokensVencidos();
 
     }
 }

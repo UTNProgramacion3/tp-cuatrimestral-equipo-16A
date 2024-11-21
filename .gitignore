@@ -361,3 +361,9 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+WebConfig
+/TPCuatrimestral_equipo_16A/Web.config
+/TPCuatrimestral_equipo_16A/Web.Debug.config
+/TPCuatrimestral_equipo_16A/Web.local.config
+/TPCuatrimestral_equipo_16A/Web.Release.config

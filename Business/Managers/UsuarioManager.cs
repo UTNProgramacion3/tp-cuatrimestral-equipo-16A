@@ -375,11 +375,11 @@ namespace Business.Managers
 
                 if (res == false)
                 {
-                    response.NotOk("No se pudo editar el usuario");
+                    response.NotOk("No se pudo editar La contraseña");
                 }
                 else
                 {
-                    response.Ok(res, "Usuario editado correctamente.");
+                    response.Ok(res, "Contraseña editada.");
                 }
 
             }

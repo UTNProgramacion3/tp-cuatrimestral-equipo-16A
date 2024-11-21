@@ -73,9 +73,9 @@
                             </p>
                             <!-- Botones -->
                             <div class="mt-4 d-flex flex-wrap gap-2">
-                                <button id="btnVerTurnos" class="btn btn-custom" runat="server" onclick="VerTurnos_Click">Ver mis Turnos</button>
-                                <button id="btnCambiarPass" class="btn btn-custom" runat="server" onclick="CambiarPassword_Click">Cambiar Contraseña</button>
-                                <button id="btnEditar" class="btn btn-custom" runat="server" onclick="EditarPerfil_Click">Editar</button>
+                                <asp:Button Text="Ver Mis Turnos" id="btnVerTurnos" CssClass="btn btn-custom" runat="server" OnClick="btnVerTurnos_Click" />
+                                <asp:Button Text="Cambiar Contraseña" id="btnCambiarPass" CssClass="btn btn-custom" runat="server" Onclick="btnCambiarPass_Click"/>
+                                <asp:Button Text="Editar" id="btnEditar" CssClass="btn-custom btn-custom" runat="server" OnClick="btnEditar_Click" />
                             </div>
                         </div>
                     </div>

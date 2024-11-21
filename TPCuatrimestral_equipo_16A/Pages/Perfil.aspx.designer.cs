@@ -84,7 +84,7 @@ namespace TPCuatrimestral_equipo_16A.Views
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlButton btnVerTurnos;
+        protected global::System.Web.UI.WebControls.Button btnVerTurnos;
 
         /// <summary>
         /// Control btnCambiarPass.
@@ -93,7 +93,7 @@ namespace TPCuatrimestral_equipo_16A.Views
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlButton btnCambiarPass;
+        protected global::System.Web.UI.WebControls.Button btnCambiarPass;
 
         /// <summary>
         /// Control btnEditar.
@@ -102,6 +102,6 @@ namespace TPCuatrimestral_equipo_16A.Views
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlButton btnEditar;
+        protected global::System.Web.UI.WebControls.Button btnEditar;
     }
 }

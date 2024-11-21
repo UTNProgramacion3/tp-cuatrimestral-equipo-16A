@@ -50,11 +50,11 @@ namespace TPCuatrimestral_equipo_16A.Views
         protected void Page_Load(object sender, EventArgs e)
         {
             InitDependencies();
+            _usuario = (Usuario)Session["UserLogueado"];
             if(!IsPostBack)
             {
                 if (Session["UserLogueado"] != null)
                 {
-                    _usuario = (Usuario)Session["UserLogueado"];
                     VerificarRol((RolesEnum)_usuario.Rol.Id);
                     var res = _personaManager.ObtenerPorUsuario(_usuario.Id);
 
@@ -137,13 +137,28 @@ namespace TPCuatrimestral_equipo_16A.Views
                         imgPerfil.ImageUrl = "~/UploadedImages/" + fileName;
 
                         // Guardamos la direccion en db y en session.
-                        _usuario = (Usuario)Session["UserLogueado"];
+                        //_usuario = (Usuario)Session["UserLogueado"];
                         _usuario.ImagenPerfil = imgPerfil.ImageUrl;
                         _usuarioManager.Update(_usuario);
                         Session["UserLogueado"] = _usuario;
                     }
                 }
             }
+        }
+
+        protected void btnVerTurnos_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void btnCambiarPass_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("~/Pages/CambioPassword.aspx");
+        }
+
+        protected void btnEditar_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

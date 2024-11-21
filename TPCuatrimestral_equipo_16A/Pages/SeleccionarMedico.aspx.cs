@@ -32,6 +32,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
             txtbMedicoSeleccionado.Text = (string)Session["DatosMedico"];
 
+
             try
             {
                 
@@ -48,20 +49,28 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
         private void CargarMedicos()
         {
-            Response <List<MedicoDto>> listaMedicos = medicoManager.ObtenerTodos();
-
-
-            try
+            if(Session["IdSede"] != null)
             {
-                dgvMedicos.DataSource = listaMedicos.Data;
-                dgvMedicos.DataBind();
-            }
-            catch (Exception ex)
-            {
+                int idSede = (int)Session["IdSede"];
+                Response<List<MedicoDto>> listaMedicos = medicoManager.ObtenerTodosBySede(idSede);
 
-                throw ex;
+                try
+                {
+                    dgvMedicos.DataSource = listaMedicos.Data;
+                    dgvMedicos.DataBind();
+                }
+                catch (Exception ex)
+                {
+
+                    throw ex;
+                }
+
             }
-            
+            else
+            {
+                Session["IdSede"] = -1;
+            }    
+             
         }
 
         protected void FiltrarTabla()
@@ -107,18 +116,28 @@ namespace TPCuatrimestral_equipo_16A.Pages
         protected void btnBuscar_Click(object sender, EventArgs e)
         {
             
-            txtbMedicoSeleccionado.Text = (string)Session["DatosMedico"];
-
-            string searchText = txtBuscarEspecialidad.Text.Trim().ToLower();
-
-            // Filtramos la lista de especialidades según el texto buscado
-            List<MedicoDto> filteredList = medicoManager.ObtenerTodos()
+            if (Session["IdSede"] != null)
+            {
+                
+                string searchText = txtBuscarEspecialidad.Text.Trim().ToLower();
+                int idSede = (int)Session["IdSede"];
+                
+                List<MedicoDto> filteredList = medicoManager.ObtenerTodosBySede(idSede)
                 .Data // Usamos el Data de la respuesta
                 .Where(MedicoDto => MedicoDto.Especialidad.Nombre.Trim().ToLower().Contains(searchText))
                 .ToList();
+                
+                dgvMedicos.DataSource = filteredList;
+                dgvMedicos.DataBind();
 
-            dgvMedicos.DataSource = filteredList;
-            dgvMedicos.DataBind();
+            }
+            else
+            {
+                Session["IdSede"] = -1;
+            }
+
+            txtbMedicoSeleccionado.Text = (string)Session["DatosMedico"];
+            
         }
 
         protected void btnLimpiarFiltros_Click(object sender, EventArgs e)

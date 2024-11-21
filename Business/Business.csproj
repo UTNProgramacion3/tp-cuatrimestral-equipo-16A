@@ -59,6 +59,7 @@
     <Compile Include="Interfaces\IPacienteManager.cs" />
     <Compile Include="Interfaces\IPersonaManager.cs" />
     <Compile Include="Interfaces\ISedeManager.cs" />
+    <Compile Include="Interfaces\ISeguridadService.cs" />
     <Compile Include="Interfaces\ITurnoManager.cs" />
     <Compile Include="Interfaces\IUsuarioManager.cs" />
     <Compile Include="Managers\DireccionManager.cs" />
@@ -74,6 +75,8 @@
     <Compile Include="Managers\TurnoManager.cs" />
     <Compile Include="Managers\UsuarioManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ActionLog.cs" />
+    <Compile Include="Services\SeguridadService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataAccess\DataAccess.csproj">

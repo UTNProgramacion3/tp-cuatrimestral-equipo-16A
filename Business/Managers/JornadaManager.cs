@@ -25,16 +25,19 @@ namespace Business.Managers
         }
         public Response<JornadaTrabajo> Crear(JornadaTrabajo entity)
         {
-           var query = "Insert into JornadaTrabajo values(@SedeId)";
+           var query = "Insert into JornadasTrabajo(SedeId) values(@SedeId)";
+            var retrieveData = "SELECT TOP(1) * FROM JornadasTrabajo order by Id desc";
 
             SqlParameter[] parameters = new SqlParameter[]
             {
-               new SqlParameter("@SedeId", entity.Sede.Id)
+               new SqlParameter("@SedeId", entity.SedeId)
             };
 
 
             var res = _DBManager.ExecuteQuery(query, parameters);
-            entity.Id = res.GetId();
+
+            var retrievedData = _DBManager.ExecuteQuery(retrieveData);
+            entity.Id = retrievedData.GetId();
 
             RegistrarJornadaSemanal(entity.Jornada, entity.Id);
 
@@ -84,7 +87,7 @@ namespace Business.Managers
 
         public void RegistrarJornadaSemanal(List<DiaLaboral> jornadas,int jornadaId)
         {
-            var query = "Insert into DiaLaboral values(@Dia, @Inicio, @Fin, @JornadaTrabajoId)";
+            var query = "Insert into DiasLaborales(Dia, Inicio,Fin, JornadaTrabajoId) values(@Dia, @Inicio, @Fin, @JornadaTrabajoId)";
             foreach (var dia in jornadas)
             {
                 _DBManager.ExecuteQuery(query, new SqlParameter[]

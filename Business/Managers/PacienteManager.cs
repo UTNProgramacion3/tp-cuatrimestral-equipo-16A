@@ -113,7 +113,7 @@ namespace Business.Managers
                 return _response;
             }
 
-            var paciente = _mapper.MapFromRow(res.Rows[0]);
+            var paciente = res.GetEntity<Paciente>();
             paciente.Direccion = _direccionManager.ObtenerPorId(paciente.DireccionId).Data;
             //paciente.HistoriaClinica = ObtenerHistoriaClinicaPorPacienteId(pacienteId).Data;
 

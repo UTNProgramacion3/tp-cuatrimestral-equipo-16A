@@ -9,7 +9,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Text;
+using System.Threading;
 using System.Web.UI;
+using System.Web.UI.WebControls;
 using Utils;
 
 
@@ -32,8 +35,10 @@ namespace Business.Managers
 
         public Response<Usuario> Crear(Usuario entity)
         {
-            string query = @"INSERT INTO USUARIOS (Email, PasswordHash, RolId)
-                             VALUES (@email, @passwordhash, @idrol)";
+            string query = @"INSERT INTO USUARIOS (Email, Passwordhash, RolId, Activo)
+                             VALUES (@email, @passwordhash, @rolId, @activo)";
+
+            string retrieveData = @"SELECT * FROM USUARIOS WHERE Email = @email";
 
             entity.Passwordhash = PasswordHasher.HashPassword(entity.Passwordhash);
 
@@ -41,30 +46,19 @@ namespace Business.Managers
             {
                 new SqlParameter("@email", entity.Email),
                 new SqlParameter("@passwordhash", entity.Passwordhash),
-                new SqlParameter("@idrol", entity.Rol.Id),
+                new SqlParameter("@rolId", entity.Rol.Id),
+                new SqlParameter("@activo", entity.Activo)
 
             };
 
-            try
-            {
-                _response.Success = Convert.ToBoolean(_dbManager.ExecuteNonQuery(query, parameters));
+            var response = new Response<Usuario>();
 
-                if (_response.Success)
-                {
-                    var res = ObtenerPorEmail(entity.Email).Data;
-                    _response.Ok(res, "Usuario creado correctamente.");
-                }
-                else
-                {
-                    _response.NotOk("Error al crear usuario.");
-                }
 
-            }
-            catch (Exception ex)
-            {
-                _response.NotOk(ex.Message);
-            }
-            return _response;
+            var res = _dbManager.ExecuteNonQueryAndGetData(query, parameters, retrieveData);
+            var usuario = res.GetEntity<Usuario>(create:true);
+            response.Ok(usuario);
+                    
+            return response;
         }
 
         public Response<bool> Eliminar(int id)
@@ -356,9 +350,9 @@ namespace Business.Managers
             Usuario usuario = new Usuario
             {
                 Email = email,
-                Passwordhash = "123456", // Generar una pass por defecto, y enviar por mail a casilla personal
+                Passwordhash = "123456",
                 FechaCreacion = DateTime.Now,
-                Rol = GenerarRol(persona, tipoUsuario),
+                Rol = AsignarRol(persona, tipoUsuario),
                 ImagenPerfil = "",
                 Activo = true,
             };
@@ -366,11 +360,38 @@ namespace Business.Managers
             return usuario;
         }
 
-        #region Private methods
-        private Rol GenerarRol(Persona persona, int tipoUsuario)
+        public static bool ValidarToken(this string token, out string email)
         {
-            Rol rolAsignado = new Rol();
-            return rolAsignado;
+            email = null;
+
+            try
+            {
+                string decodedToken = Encoding.UTF8.GetString(Convert.FromBase64String(token));
+                var parts = decodedToken.Split('|');
+
+                if (parts.Length == 3 && DateTime.TryParse(parts[2], out DateTime expirationDate) && expirationDate > DateTime.UtcNow)
+                {
+                    email = parts[0];
+                    return true;
+                }
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
+
+            return false;
+        }
+
+        #region Private methods
+        private Rol AsignarRol(Persona persona, int tipoUsuario)
+        {
+            string query = $"Select * from Roles where Id = ${tipoUsuario}";
+
+            var res = _dbManager.ExecuteQuery(query);
+
+            return res.GetEntity<Rol>();
+
         }
         #endregion
     }

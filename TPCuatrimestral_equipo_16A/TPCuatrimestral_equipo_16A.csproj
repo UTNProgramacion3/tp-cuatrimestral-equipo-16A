@@ -81,7 +81,7 @@
     <Content Include="ImagesFolder\github.png" />
     <Content Include="ImagesFolder\logo.png" />
     <Content Include="Pages\ConfirmarTurno.aspx" />
-    <Content Include="Pages\CreacionUsuario.aspx" />
+    <Content Include="Pages\CrearNuevoUsuario.aspx" />
     <Content Include="Pages\Home.aspx" />
     <Content Include="Pages\Login.aspx" />
     <Content Include="Pages\RegisterSuccess.aspx" />
@@ -92,6 +92,7 @@
     <Content Include="Pages\UserRegister.aspx" />
     <Content Include="Pages\SeleccionarFechaHora.aspx" />
     <Content Include="Pages\SeleccionarSede.aspx" />
+    <Content Include="Pages\ValidarEmail.aspx" />
     <Content Include="Scripts\Login.js" />
     <Content Include="Stylesheets\Login.css" />
     <Content Include="Stylesheets\Master.css" />
@@ -110,12 +111,12 @@
     <Compile Include="Pages\ConfirmarTurno.aspx.designer.cs">
       <DependentUpon>ConfirmarTurno.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Pages\CreacionUsuario.aspx.cs">
-      <DependentUpon>CreacionUsuario.aspx</DependentUpon>
+    <Compile Include="Pages\CrearNuevoUsuario.aspx.cs">
+      <DependentUpon>CrearNuevoUsuario.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Pages\CreacionUsuario.aspx.designer.cs">
-      <DependentUpon>CreacionUsuario.aspx</DependentUpon>
+    <Compile Include="Pages\CrearNuevoUsuario.aspx.designer.cs">
+      <DependentUpon>CrearNuevoUsuario.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\Home.aspx.cs">
       <DependentUpon>Home.aspx</DependentUpon>
@@ -165,6 +166,13 @@
     </Compile>
     <Compile Include="Pages\SeleccionarSede.aspx.designer.cs">
       <DependentUpon>SeleccionarSede.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ValidarEmail.aspx.cs">
+      <DependentUpon>ValidarEmail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\ValidarEmail.aspx.designer.cs">
+      <DependentUpon>ValidarEmail.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Pages\Main.Master.cs">

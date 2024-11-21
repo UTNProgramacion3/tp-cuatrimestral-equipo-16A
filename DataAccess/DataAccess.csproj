@@ -45,6 +45,7 @@
     <Compile Include="DBManager.cs" />
     <Compile Include="Extensions\DBExtension.cs" />
     <Compile Include="Extensions\EmailExtension.cs" />
+    <Compile Include="Extensions\HashExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

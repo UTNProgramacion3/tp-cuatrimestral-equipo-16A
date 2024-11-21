@@ -10,11 +10,9 @@ namespace Domain.Entities
     {
         public int Id { get; set; }
         public string Nombre { get; set; }
-        public List<Permiso> Operaciones { get; set; }    
+        public List<Permiso> Permisos { get; set; }
         public bool Activo { get; set; }
 
-        public Rol() {
-            Id = 0;
-            Operaciones = new List<Permiso>(); }    
+        public Rol() { Permisos = new List<Permiso>(); }    
     }
 }

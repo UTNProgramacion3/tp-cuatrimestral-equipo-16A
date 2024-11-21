@@ -11,43 +11,34 @@ namespace TPCuatrimestral_equipo_16A.Pages
 {
 
 
-    public partial class SeleccionarFechaHora
+    public partial class ValidarEmail
     {
 
         /// <summary>
-        /// txtBoxFechaTurno control.
+        /// lblMensaje control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtBoxFechaTurno;
+        protected global::System.Web.UI.WebControls.Label lblMensaje;
 
         /// <summary>
-        /// Control dgvFechaHorario.
+        /// txtNuevaContraseña control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView dgvFechaHorario;
+        protected global::System.Web.UI.WebControls.TextBox txtNuevaContraseña;
 
         /// <summary>
-        /// Control btnAtras.
+        /// btnCambiarContraseña control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnAtras;
-
-        /// <summary>
-        /// Control btnSiguiente.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSiguiente;
+        protected global::System.Web.UI.WebControls.Button btnCambiarContraseña;
     }
 }

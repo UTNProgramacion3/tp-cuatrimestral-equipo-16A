@@ -42,9 +42,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dtos\NuevoEmpleadoDto.cs" />
     <Compile Include="Dtos\PacienteDto.cs" />
     <Compile Include="Dtos\SedeDto.cs" />
     <Compile Include="Dtos\TurnoDTO.cs" />
+    <Compile Include="Dtos\EmailValidationDto.cs" />
     <Compile Include="Dtos\MedicoDto.cs" />
     <Compile Include="Dtos\PersonaDto.cs" />
     <Compile Include="Images\ICrudRepository.cs" />
@@ -90,6 +92,8 @@
       <Name>Utils</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Templates\ValidacionEmailTemplate.html" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

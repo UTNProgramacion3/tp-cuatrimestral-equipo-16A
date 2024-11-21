@@ -1,4 +1,4 @@
-﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Main.Master.cs" Inherits="TPCuatrimestral_equipo_16A.Views.Site1" %>
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Main.Master.cs"Inherits="TPCuatrimestral_equipo_16A.Views.Site1" %>
 
 <!DOCTYPE html>
 

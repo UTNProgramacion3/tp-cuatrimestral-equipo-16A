@@ -276,15 +276,17 @@ namespace Business.Managers
         {
             string query = @"Update USUARIOS
                             Set   Email = @email,
-	                              RolId = @idrol,
-	                              ImagenPerfil = @img_perfil
+	                              PasswordHash = @passwordhash,
+	                              ImagenPerfil = @img_perfil,
+                                    Activo = @activo
                             Where Id = @id";
             SqlParameter[] parameters = new SqlParameter[]
                 {
                     new SqlParameter("@email", entity.Email),
-                    new SqlParameter("@idrol", entity.Rol.Id),
-                    new SqlParameter("@img_perfil", string.IsNullOrEmpty(entity.ImagenPerfil) ? null : entity.ImagenPerfil),
-                    new SqlParameter("@id", entity.Id)
+                    new SqlParameter("@passwordhash", entity.Passwordhash),
+                    new SqlParameter("@img_perfil", entity.ImagenPerfil ?? ""),
+                    new SqlParameter("@id", entity.Id),
+                    new SqlParameter("@activo", entity.Activo)
                 };
 
             Response<bool> response = new Response<bool>();
@@ -345,16 +347,38 @@ namespace Business.Managers
             Usuario usuario = new Usuario
             {
                 Email = email,
-                Passwordhash = "123456",
+                Passwordhash = persona.Documento.ToString(),
                 FechaCreacion = DateTime.Now,
                 Rol = AsignarRol(persona, tipoUsuario),
                 ImagenPerfil = "",
-                Activo = true,
+                Activo = false,
             };
 
             return usuario;
         }
 
+        public Usuario ValidarToken(string token)
+        {
+            try
+            {
+                string decodedToken = Encoding.UTF8.GetString(Convert.FromBase64String(token));
+                var parts = decodedToken.Split('|');
+
+                if (parts.Length == 2 && DateTime.TryParse(parts[1], out DateTime expirationDate) && expirationDate > DateTime.Now)
+                {
+                    var email = parts[0];
+
+                    string query = @"
+                        SELECT U.* FROM Personas P
+                        LEFT JOIN Usuarios U on P.UsuarioId = U.Id
+                        LEFT JOIN Emailvalidaciones VAL on VAL.UsuarioId = U.Id
+                        where P.EmailPersonal = 'escuderopablo.m@gmail.com' and VAL.TiempoExpiracion >= GETDATE() AND VAL.Token = @token and VAL.Activo = 1";
+
+                    SqlParameter[] parameters = new SqlParameter[]
+                    {
+                        new SqlParameter("@email", email),
+                        new SqlParameter("@token", token)
+                    };
         public Response<bool> CambiarPassword(string newPass, int userId)
         {
             string query = @"Update USUARIOS
@@ -395,24 +419,24 @@ namespace Business.Managers
         //{
         //    email = null;
 
-        //    try
-        //    {
-        //        string decodedToken = Encoding.UTF8.GetString(Convert.FromBase64String(token));
-        //        var parts = decodedToken.Split('|');
+                    var res = _dbManager.ExecuteQuery(query, parameters);
+                    return res.GetEntity<Usuario>();
+                }
+                return new Usuario();
+            }
+            catch (FormatException)
+            {
+                return new Usuario();
+            }
+        }
 
-        //        if (parts.Length == 3 && DateTime.TryParse(parts[2], out DateTime expirationDate) && expirationDate > DateTime.UtcNow)
-        //        {
-        //            email = parts[0];
-        //            return true;
-        //        }
-        //    }
-        //    catch (FormatException)
-        //    {
-        //        return false;
-        //    }
+        public Usuario ActivarUsuario(Usuario usuario, string password)
+        {
+            usuario.Activo = true;
+            usuario.Passwordhash = password;
 
-        //    return false;
-        //}
+            return usuario;
+        }
 
         #region Private methods
         private Rol AsignarRol(Persona persona, int tipoUsuario)
@@ -424,6 +448,8 @@ namespace Business.Managers
             return res.GetEntity<Rol>();
 
         }
+
+
         #endregion
     }
 }

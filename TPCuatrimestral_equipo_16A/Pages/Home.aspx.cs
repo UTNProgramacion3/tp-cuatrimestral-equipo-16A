@@ -36,5 +36,10 @@ namespace TPCuatrimestral_equipo_16A.Pages
             //_emailManager.EnviarMailValidacionNuevaCuenta("escuderopablo.m@gmail.com", 1);
             var res = _pacienteManager.ObtenerPorId(1);
         }
+
+        protected void Button2_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("Pages/CrearNuevoUsuario.aspx");
+        }
     }
 }

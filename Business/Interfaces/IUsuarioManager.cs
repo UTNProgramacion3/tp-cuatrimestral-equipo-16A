@@ -13,6 +13,8 @@ namespace Business.Interfaces
         Response<bool> LogIn(Usuario usuario);
         void LogOut(Usuario usuario);
         Usuario GenerarUsuario(Persona persona, int tipoUsuario);
+        Usuario ValidarToken(string token);
+        Usuario ActivarUsuario(Usuario usuario, string password);
         Response<bool> CambiarPassword(string newPass, int userId);
     }
 }

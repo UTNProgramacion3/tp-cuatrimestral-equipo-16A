@@ -154,8 +154,8 @@ namespace TPCuatrimestral_equipo_16A.Pages
         {
             ddlRol.Items.Clear();
             ddlRol.Items.Add(new ListItem("Administrador", "1"));
-            ddlRol.Items.Add(new ListItem("Empleado", "2"));
-            ddlRol.Items.Add(new ListItem("Paciente", "3"));
+            ddlRol.Items.Add(new ListItem("Empleado", "4"));
+            ddlRol.Items.Add(new ListItem("Paciente", "5"));
         }
 
 

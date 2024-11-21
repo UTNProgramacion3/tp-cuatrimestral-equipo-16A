@@ -91,6 +91,7 @@ namespace Business.Managers
         {
             string query = @"
                 Select
+                M.Id AS Medico_Id,
 	            PE.Apellido AS Persona_Apellido,
 	            PE.Nombre AS Persona_Nombre,
 	            ES.Nombre AS Especialidad_Nombre

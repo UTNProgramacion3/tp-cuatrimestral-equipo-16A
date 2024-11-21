@@ -39,9 +39,18 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
 		private void ObtenerTurnosDisponibles()
 		{
+			int idMedico = (int)Session["IdMedico"];
+
+            Session["DiaTurno"] = txtBoxFechaTurno.Text;
+
+            string fecha = (string)Session["DiaTurno"];
+
+			
+			
+			
 			DataTable table = new DataTable();
 
-			table = turnoManager.ObtenerTurnosDisponibles(1, "2024-11-16");
+			table = turnoManager.ObtenerTurnosDisponibles(idMedico, fecha);
 
             dgvFechaHorario.DataSource = table;
 			dgvFechaHorario.DataBind();

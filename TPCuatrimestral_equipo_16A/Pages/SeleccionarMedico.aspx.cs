@@ -157,6 +157,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
         protected void btnAtras_Click(object sender, EventArgs e)
         {
+            Session.Remove("IdSede");
             Response.Redirect("~/Pages/SeleccionarSede.aspx", false);
         }
 

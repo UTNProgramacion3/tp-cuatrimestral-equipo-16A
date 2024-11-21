@@ -161,12 +161,6 @@ BEGIN TRY
 
 
 --!!!!!!!!!!! ROLES Y PERMISOS A PARTIR DE ACÁ !!!!!!!!!!!!!!!!!
-INSERT INTO Roles (Nombre)
-VALUES
-('Administrador'),
-('Recepcionista'),
-('Médico'),
-('Paciente');
 
 INSERT INTO Modulos (Nombre)
 VALUES
@@ -229,11 +223,11 @@ VALUES
 ('Editar sedes', 6);
 
 -- Gestión de Usuario Paciente
---INSERT INTO Permisos (Nombre, ModuloId)
---VALUES
---('Ver sus turnos', 8),
---('Reprogramar sus turnos', 8),
---('Cancelar sus turnos', 8);
+INSERT INTO Permisos (Nombre, ModuloId)
+VALUES
+('Ver sus turnos', 8),
+('Reprogramar sus turnos', 8),
+('Cancelar sus turnos', 8);
 
 INSERT INTO Permisos (Nombre, ModuloId)
 VALUES

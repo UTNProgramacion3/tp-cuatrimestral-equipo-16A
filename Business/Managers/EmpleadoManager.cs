@@ -1,4 +1,5 @@
-﻿using Business.Interfaces;
+﻿using Business.Dtos;
+using Business.Interfaces;
 using DataAccess;
 using DataAccess.Extensions;
 using Domain.Entities;
@@ -10,6 +11,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Utils;
 using Utils.Interfaces;
 
 namespace Business.Managers
@@ -22,34 +24,45 @@ namespace Business.Managers
         private readonly IUsuarioManager _usuarioManager;
         private readonly IDireccionManager _direccionManager;
         private readonly IPersonaManager _personaManager;
+        private readonly IEmailManager _emailManager;
+        private readonly IJornadaManager _jornadaManager;
+        private readonly IMedicoManager _medicoManager;
         private readonly IMapper<Empleado> _mapper;
         #endregion
 
         #region Builder
         public EmpleadoManager(
-            DBManager manager, 
-            Response<Empleado> response, 
-            IUsuarioManager usuarioManager, 
-            IDireccionManager direccionManager, 
-            IPersonaManager personaManager, 
-            IMapper<Empleado> mapper) 
-        { 
+            DBManager manager,
+            Response<Empleado> response,
+            IUsuarioManager usuarioManager,
+            IDireccionManager direccionManager,
+            IPersonaManager personaManager,
+            IJornadaManager jornadaManager,
+            IMedicoManager medicoManager,
+            IEmailManager emailManager)
+        {
             _DBManager = manager;
             _response = response;
             _usuarioManager = usuarioManager;
             _direccionManager = direccionManager;
             _personaManager = personaManager;
-            _mapper = mapper;
+            _emailManager = emailManager;
+            _jornadaManager = jornadaManager;
+            _medicoManager = medicoManager;
+            _mapper = new Mapper<Empleado>();
         }
-        #endregion
+
+
 
         #region Public methods
-        public Response<Empleado> Crear(Empleado entity)
+        public Response<Empleado> CrearNuevo(NuevoEmpleadoDto entity)
         {
             try
             {
-                var user = _usuarioManager.GenerarUsuario((Persona)entity, (int)RolesEnum.Empleado);
+                var user = _usuarioManager.GenerarUsuario((Persona)entity, entity.RolId);
                 var usuarioCreado = _usuarioManager.Crear(user);
+                var nombreUsuario = $"{entity.Apellido}, {entity.Nombre}";
+                _emailManager.EnviarMailValidacionNuevaCuenta(entity.EmailPersonal, usuarioCreado.Data.Id, nombreUsuario);
 
                 if (!usuarioCreado.Success)
                 {
@@ -66,7 +79,7 @@ namespace Business.Managers
                     EmailPersonal = entity.EmailPersonal,
                     FechaNacimiento = entity.FechaNacimiento,
                     Telefono = entity.Telefono,
-                    Direccion = direccionCreada.Data,
+                    DireccionId = direccionCreada.Data.Id,
                     UsuarioId = usuarioCreado.Data.Id,
                 };
 
@@ -77,27 +90,41 @@ namespace Business.Managers
                     throw new Exception("Error al crear la persona");
                 }
 
-                var query = "Insert into Empleados values(@PersonaId, @UsuarioId, @Legajo, @EmailCorporativo, @Posicion, @JornadaTrabajoId)";
+                JornadaTrabajo jornadaEmpleado = new JornadaTrabajo();
+                var jornada = _jornadaManager.Crear(jornadaEmpleado);
+
+                var query = "Insert into Empleados(Legajo, EmailCorporativo, CargoId, JornadaTrabajoId,PersonaId) values(@Legajo ,@EmailCorporativo,  @CargoId,@JornadaTrabajoId, @PersonaId )";
+
+                string retrieveData = "select * from Empleados where Legajo = @Legajo";
 
                 var parameters = new SqlParameter[]
                 {
-                    new SqlParameter("@PersonaId", personaCreada.Data.Id),
-                    new SqlParameter("@UsuarioId", usuarioCreado.Data.Id),
                     new SqlParameter("@Legajo", entity.Legajo),
-                    new SqlParameter("@EmailCorporativo", entity.EmailCorporativo),
-                    new SqlParameter("@Posicion", entity.Posicion),
-                    new SqlParameter("@JornadaTrabajoId", entity.JornadaTrabajoId),
+                    new SqlParameter("@EmailCorporativo", usuarioCreado.Data.Email),
+                    new SqlParameter("@CargoId", entity.Posicion),
+                    new SqlParameter("@JornadaTrabajoId", jornada.Data.Id),
+                    new SqlParameter("@PersonaId", personaCreada.Data.Id),
                 };
 
-                var res = _DBManager.ExecuteQuery(query, parameters);
+                var res = _DBManager.ExecuteNonQueryAndGetData(query, parameters, retrieveData);
+                Empleado empleadoCreado = res.GetEntity<Empleado>();
 
-                entity.Id = res.GetId();
+                if (entity.Posicion == (int)PosicionEnum.Medico)
+                {
+                    MedicoDto nuevoMedico = new MedicoDto()
+                    {
+                        EmpleadoId = empleadoCreado.Id,
+                        Matricula = entity.Matricula,
+                        EspecialidadId = entity.EspecialidadId
+                    };
+                    _medicoManager.CrearMedico(nuevoMedico);
+                }
 
-                _response.Ok(entity);
+                _response.Ok(empleadoCreado);
 
                 return _response;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -110,7 +137,7 @@ namespace Business.Managers
 
         public Response<Empleado> ObtenerPorId(int empleadoId)
         {
-           string query = "SELECT * FROM Empleados WHERE Id = @Id";
+            string query = "SELECT * FROM Empleados WHERE Id = @Id";
             SqlParameter[] parameters = new SqlParameter[]
             {
                 new SqlParameter("@Id", empleadoId)
@@ -124,7 +151,7 @@ namespace Business.Managers
                 return _response;
             }
 
-            
+
 
             var empleado = _mapper.MapFromRow(res.Rows[0]);
             empleado.Direccion = _direccionManager.ObtenerPorId(empleado.DireccionId).Data;
@@ -143,6 +170,12 @@ namespace Business.Managers
         {
             throw new NotImplementedException();
         }
+
+        public Response<Empleado> Crear(Empleado entity)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
         #endregion
 
         #region Private methods

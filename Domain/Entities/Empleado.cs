@@ -15,5 +15,11 @@ namespace Domain.Entities
         public int Posicion { get; set; }
         public JornadaTrabajo HorarioTrabajo { get; set; }
         public int JornadaTrabajoId { get; set; }
+        public int RolId { get; set; }
+
+        public Empleado()
+        {
+            RolId = (int)RolesEnum.Empleado;
+        }
     }
 }

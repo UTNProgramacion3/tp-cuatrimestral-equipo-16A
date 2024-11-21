@@ -24,7 +24,11 @@ namespace Business.Managers
 
         public Response<Direccion> Crear(Direccion entity)
         {
-            string queryDireccion = @"Insert into Direcciones values(@Calle, @Numero, @Piso, @Departamento, @Localidad, @Provincia, @CodigoPostal)";
+            string queryDireccion = @"
+                INSERT INTO Direcciones (Calle, Numero, Piso, Depto, Localidad, Provincia, CodigoPostal)
+                VALUES (@Calle, @Numero, @Piso, @Departamento, @Localidad, @Provincia, @CodigoPostal);
+                ";
+            string retrieveData = "select * from direcciones where Calle=@Calle and Numero=@Numero and Localidad=@Localidad and Provincia=@Provincia";
 
             SqlParameter[] parameters = new SqlParameter[]
             {
@@ -37,7 +41,7 @@ namespace Business.Managers
                 new SqlParameter("@CodigoPostal", entity.CodigoPostal)
             };
 
-            var res = _DBManager.ExecuteQuery(queryDireccion, parameters);
+            var res = _DBManager.ExecuteNonQueryAndGetData(queryDireccion, parameters, retrieveData);
 
             entity.Id = res.GetId();
             _response.Ok(entity);

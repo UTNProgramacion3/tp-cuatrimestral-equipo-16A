@@ -9,13 +9,19 @@ namespace Domain.Enums
 {
     public enum RolesEnum
     {
-        [Description("Administrador")]
+        [Description("Admin")]
         Administrador = 1,
 
+        [Description("Medico")]
+        Medico = 2,
+
+        [Description("Recepcionista")]
+        Recepcionista = 3,
+
         [Description("Empleado")]
-        Empleado = 2,
+        Empleado = 4,
 
         [Description("Paciente")]
-        Paciente = 3,
+        Paciente = 5,
     }
 }

@@ -52,7 +52,6 @@ namespace TPCuatrimestral_equipo_16A.Pages
                 user.Email = txtEmail.Text;
                 user.Passwordhash = txtPassword.Text;
                 user.Rol.Id = 2;
-                user.Activo = true;
                 response = _usuarioManager.Crear(user);
 
                 if(response.Success == true)

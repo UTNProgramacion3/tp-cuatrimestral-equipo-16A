@@ -9,24 +9,26 @@ namespace DataAccess.Extensions
 {
     public static class DBExtension
     {
-        public static int GetId(this DataTable data)
+        /// <summary>
+        /// Obtiene el id desde DataTable
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public static int GetId(this DataTable data, bool isNewId=false)
         {
-            if(data != null)
-            {
-                return data.Rows[0].Field<int>("Id");
-            }
-            return -1;
+            return (data != null && data.Rows.Count > 0) ?
+                 Convert.ToInt32(data.Rows[0][isNewId ? "NewId" : "Id"]) : -1;
         }
-        
+
         /// <summary>
         /// Obtiene los datos de la entidad
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="data"></param>
         /// <returns>La entidad T</returns>
-        public static T GetEntity<T>(this DataTable data) where T : class
+        public static T GetEntity<T>(this DataTable data, bool create=false) where T : class
         {
-            if (data == null || data.Rows.Count == 0)
+            if (data == null ||(create == false &&  data.Rows.Count == 0))
                 return null;
 
             var item = Activator.CreateInstance<T>();

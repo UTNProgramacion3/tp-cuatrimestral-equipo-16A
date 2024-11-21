@@ -10,6 +10,7 @@ using System.Web.UI.WebControls;
 using Business.Dtos;
 using DataAccess;
 using Business.Managers;
+using Domain.Enums;
 
 namespace TPCuatrimestral_equipo_16A.Pages
 {
@@ -25,9 +26,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
             if (!IsPostBack)
             {
-                //DatosSesion();
                 ObtenerTurno();
-
             }
         }
 
@@ -66,15 +65,29 @@ namespace TPCuatrimestral_equipo_16A.Pages
             btnConfirmar.Enabled = false;
             btnCancelar.Enabled = false;
             turnoSuccess.Visible = true;
-
-            Session["IdEstadoTurno"] = 1;
-            Session["Observaciones"] = "Ninguna";
+            
+            TurnoConfirmado();
 
             CrearTurno();
 
             Session.Clear();
             RedirectHome();
 
+        }
+
+        protected void TurnoConfirmado()
+        {
+            if(txtbObservaciones != null)
+            {
+                Session["Observaciones"] = txtbObservaciones.InnerText;
+            }
+            else
+            {
+                Session["Observaciones"] = "";
+            }
+            
+
+            Session["IdEstadoTurno"] = (int)EstadosEnum.Confirmado;
         }
 
         protected void btnCancelar_Click(object sender, EventArgs e)
@@ -97,31 +110,6 @@ namespace TPCuatrimestral_equipo_16A.Pages
             ClientScript.RegisterStartupScript(this.GetType(), "DelayedRedirect", script, true);
         }
 
-
-        /*protected void DatosSesion()
-        {
-            // Información del paciente
-            Session["IdPaciente"] = 1;
-            Session["NombrePaciente"] = "Juan";
-            Session["ApellidoPaciente"] = "Pérez";
-
-            // Información del médico
-            Session["IdMedico"] = 2;
-            Session["NombreMedico"] = "María";
-            Session["ApellidoMedico"] = "González";
-
-            // Información de la sede
-            Session["IdSede"] = 1;
-            Session["NombreSede"] = "Sede Central";
-            Session["DireccionSede"] = "Av. Libertador 1000, Buenos Aires, Buenos Aires, 1000";
-
-            // Información del turno
-            Session["IdEstadoTurno"] = 1; // Pendiente
-            Session["Especialidad"] = "Neurología";
-            Session["Observaciones"] = "Ninguna";
-            Session["FechaTurno"] = DateTime.Parse("2024-11-20");
-            Session["HoraTurno"] = TimeSpan.Parse("10:00");
-        }*/
 
         protected void btnAtras_Click(object sender, EventArgs e)
         {

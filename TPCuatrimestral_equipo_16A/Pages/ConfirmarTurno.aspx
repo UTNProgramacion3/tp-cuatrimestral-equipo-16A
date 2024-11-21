@@ -48,8 +48,12 @@
                             <asp:Label Text="" runat="server" ID="lblFecha" />
                         </div>
                         <div class="mb-3">
-                            <asp:Label Font-bold="true" Text="Hora: " runat="server" />
+                            <asp:Label Font-Bold="true" Text="Hora: " runat="server" />
                             <asp:Label Text="" runat="server" ID="lblHora" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="txtbObservaciones" class="form-label">Observaciones</label>
+                            <textarea class="form-control" runat="server"  id="txtbObservaciones" rows="3"></textarea>
                         </div>
                         <div class="mb-3">
                             <asp:Button class="btn btn-dark" Type="button" ID="btnAtras" OnClick="btnAtras_Click" Text="Atrás" runat="server" />

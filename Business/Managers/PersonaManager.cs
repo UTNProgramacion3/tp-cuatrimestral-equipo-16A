@@ -26,21 +26,22 @@ namespace Business.Managers
         }
         public Response<Persona> Crear(Persona entity)
         {
-            var query = "Insert into Personas values(@Nombre, @Apellido, @Documento, @FechaNacimiento, @EmailPersonal, @Telefono, @DireccionId, @Localidad, @Provincia, @CodigoPostal, @UsuarioId)";
+            var query = "Insert into Personas(Nombre, Apellido, Documento, EmailPersonal, Telefono, FechaNacimiento, DireccionId, UsuarioId) values(@Nombre, @Apellido, @Documento, @EmailPersonal, @Telefono,@FechaNacimiento, @DireccionId, @UsuarioId)";
+            string retrieveData = "select * from Personas where UsuarioId = @UsuarioId";
 
             SqlParameter[] parameters = new SqlParameter[]
             {
                 new SqlParameter("@Nombre", entity.Nombre),
                 new SqlParameter("@Apellido", entity.Apellido),
                 new SqlParameter("@Documento", entity.Documento),
+                new SqlParameter("@Telefono", entity.Telefono),
                 new SqlParameter("@FechaNacimiento", entity.FechaNacimiento),
                 new SqlParameter("@EmailPersonal", entity.EmailPersonal),
-                new SqlParameter("@Telefono", entity.Telefono),
                 new SqlParameter("@DireccionId", entity.DireccionId),
                 new SqlParameter("@UsuarioId", entity.UsuarioId),
             };
 
-            var res = _DBManager.ExecuteQuery(query, parameters);
+            var res = _DBManager.ExecuteNonQueryAndGetData(query, parameters, retrieveData);
 
             entity.Id = res.GetId();
 

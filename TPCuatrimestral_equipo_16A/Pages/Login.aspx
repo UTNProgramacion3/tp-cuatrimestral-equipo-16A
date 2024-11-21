@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Main.Master" AutoEventWireup="true" CodeBehind="Login.aspx.cs" Inherits="TPCuatrimestral_equipo_16A.Pages.Login" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Main.Master" AutoEventWireup="true" CodeBehind="Login.aspx.cs" Inherits="TPCuatrimestral_equipo_16A.Pages.Login" Async="true"%>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link href="/Stylesheets/Login.css" rel="stylesheet" type="text/css" />
     <script src="/Scripts/login.js" type="text/javascript"></script>
@@ -23,9 +23,11 @@
                     <asp:TextBox ID="txtPassword" runat="server" CssClass="textbox" TextMode="Password" Enabled="false" oninput="toggleFields()"></asp:TextBox>
 
                     <asp:Button ID="btnLogin" CssClass="login-btn" Text="Ingresar!" runat="server" Enabled="false" OnClick="btnLogin_Click"/>
+                    <br />
                     <asp:Label Text="" runat="server" ID="lblMessage" />
+                    <br />
                     <asp:Label ID="lblRegistrarse" runat="server" Text="No tienes una cuenta?" CssClass="label"></asp:Label>
-                    <a href="#" class="reg-link">Registrate</a>
+                    <a href="<%= ResolveUrl("~/Pages/UserRegister.aspx") %>" class="reg-link">Registrate</a>
                 </div>
             </ContentTemplate>
         </asp:UpdatePanel>

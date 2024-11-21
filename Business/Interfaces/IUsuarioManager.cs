@@ -8,7 +8,8 @@ namespace Business.Interfaces
     public interface IUsuarioManager : ICrudRepository<Usuario>
     {
         Response<Usuario> ObtenerPorEmail(string email);   
-        Response<bool> VerificarPassword(string password, string hashedpassword);
+        bool VerificarPassword(string password, string hashedpassword);
+        bool ExisteMail(string email);
         Response<bool> LogIn(Usuario usuario);
         void LogOut(Usuario usuario);
         Usuario GenerarUsuario(Persona persona, int tipoUsuario);

@@ -28,7 +28,7 @@ namespace Business.Managers
 
         public Response<Medico> CrearMedico(MedicoDto entity)
         {
-            string query = "INSERT INTO Medico (Matricula, EspecialidadId, EmpleadoId) VALUES (@Matricula, @EspecialidadId, @EmpleadoId)";
+            string query = "INSERT INTO Medicos (Matricula, EspecialidadId, EmpleadoId) VALUES (@Matricula, @EspecialidadId, @EmpleadoId)";
             SqlParameter[] parameters = new SqlParameter[]
             {
                 new SqlParameter("@Matricula", entity.Matricula),

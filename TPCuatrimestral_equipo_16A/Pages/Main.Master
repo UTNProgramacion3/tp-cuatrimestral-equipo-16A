@@ -1,4 +1,4 @@
-﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Main.Master.cs" Inherits="TPCuatrimestral_equipo_16A.Views.Site1" %>
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Main.Master.cs"Inherits="TPCuatrimestral_equipo_16A.Views.Site1" %>
 
 <!DOCTYPE html>
 
@@ -50,7 +50,7 @@
             <nav>
                 <ul class="nav-links">
                     <li><a href="<%= ResolveUrl("~/Pages/Home.aspx") %>">Home</a></li>
-                    <%if (true)
+                    <%if (Usuario.Rol.Id == 1)
                         { %>
                     <li><a href="#">Adm Cuentas</a></li>
                     <li><a href="#">Adm Turnos</a></li>

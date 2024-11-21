@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using Domain.Response;
 
 namespace DataAccess
@@ -124,6 +125,58 @@ namespace DataAccess
             catch (SqlException ex)
             {
                 LogError("Error al ejecutar la consulta de modificación.", ex);
+                throw;
+            }
+            finally
+            {
+                CloseConnection();
+            }
+        }
+
+        /// <summary>
+        /// Ejecuta acciones (INSERT, UPDATE, DELETE) en la base de datos y devuelve un DataTable con los registros afectados.
+        /// </summary>
+        public DataTable ExecuteNonQueryAndGetData(string query, SqlParameter[] parameters = null, string selectQuery = null)
+        {
+            try
+            {
+                OpenConnection();
+
+                using (SqlCommand command = new SqlCommand(query, _connection))
+                {
+                    if (parameters != null)
+                    {
+                        command.Parameters.AddRange(parameters);
+                    }
+
+                    // Ejecutamos la acción de modificación (INSERT, UPDATE, DELETE)
+                    command.ExecuteNonQuery();
+                }
+
+                if (!string.IsNullOrEmpty(selectQuery))
+                {
+                    using (SqlCommand selectCommand = new SqlCommand(selectQuery, _connection))
+                    {
+                        if (parameters != null)
+                        {
+                            SqlParameter[] selectParameters = parameters.Select(p => new SqlParameter(p.ParameterName, p.Value)).ToArray();
+                            selectCommand.Parameters.AddRange(selectParameters);
+                        }
+
+                        using (SqlDataAdapter adapter = new SqlDataAdapter(selectCommand))
+                        {
+                            DataTable resultTable = new DataTable();
+                            adapter.Fill(resultTable);
+                            return resultTable;
+                        }
+                    }
+                }
+
+                return null;
+            }
+            catch (SqlException ex)
+            {
+                LogError("Error al ejecutar la consulta de modificación y obtener datos.", ex);
                 throw;
             }
             finally

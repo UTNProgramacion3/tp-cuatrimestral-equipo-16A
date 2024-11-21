@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -357,6 +358,29 @@ namespace Business.Managers
             };
 
             return usuario;
+        }
+
+        public static bool ValidarToken(this string token, out string email)
+        {
+            email = null;
+
+            try
+            {
+                string decodedToken = Encoding.UTF8.GetString(Convert.FromBase64String(token));
+                var parts = decodedToken.Split('|');
+
+                if (parts.Length == 3 && DateTime.TryParse(parts[2], out DateTime expirationDate) && expirationDate > DateTime.UtcNow)
+                {
+                    email = parts[0];
+                    return true;
+                }
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
+
+            return false;
         }
 
         #region Private methods

@@ -97,15 +97,14 @@ namespace Business.Managers
                 throw new Exception("Ya se ha enviado un mail de validacion para este usuario");
             }
 
-            Guid token = Guid.NewGuid();
             var expirationDate = DateTime.Now.AddMinutes(30);
 
             string query = "INSERT INTO EmailValidaciones (Token, TiempoExpiracion, UsuarioId) VALUES (@Token, @TiempoExpiracion, @UsuarioId)";
             string retrieveData = @"SELECT * FROM EmailValidaciones where UsuarioId = @UsuarioId";
-
+            var token = destinatario.GenerarToken(expirationDate);
             SqlParameter[] parameters = new SqlParameter[]
             {
-                new SqlParameter("@Token", token),
+                new SqlParameter("@Token", token ),
                 new SqlParameter("@TiempoExpiracion", expirationDate),
                 new SqlParameter("@UsuarioId", usuarioId)
             };

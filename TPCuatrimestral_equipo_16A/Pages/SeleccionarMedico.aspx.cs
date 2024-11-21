@@ -30,39 +30,19 @@ namespace TPCuatrimestral_equipo_16A.Pages
             especialidadManager = new EspecialidadManager(dbManager, responseEspecialidad);
             medicoManager = new MedicoManager(dbManager, new Response<Medico>(), new Mapper<MedicoDto>());
 
+            txtbMedicoSeleccionado.Text = (string)Session["DatosMedico"];
+
             try
             {
                 
                 if (!IsPostBack)
                 {
-                    CargarEspecialidades();
                     CargarMedicos();
                 }
             }
             catch (Exception ex)
             {
                 throw ex;
-            }
-        }
-
-        private void CargarEspecialidades()
-        {
-            
-            Response<List<Especialidad>> listaEspecialidad = especialidadManager.ObtenerTodos();
-
-           
-            if (listaEspecialidad != null && listaEspecialidad.Data != null)
-            {
-                ddlEspecialidades.DataSource = listaEspecialidad.Data;
-                ddlEspecialidades.DataTextField = "Nombre";
-                ddlEspecialidades.DataValueField = "Id";
-                ddlEspecialidades.DataBind();
-            }
-            else
-            {
-                
-                ddlEspecialidades.Items.Clear();
-                ddlEspecialidades.Items.Add(new ListItem("No hay especialidades disponibles", "-1"));
             }
         }
 
@@ -84,21 +64,73 @@ namespace TPCuatrimestral_equipo_16A.Pages
             
         }
 
-        protected void txtBuscarEspecialidad_TextChanged(object sender, EventArgs eventArgs)
+        protected void FiltrarTabla()
         {
-            string searchText = txtBuscarEspecialidad.Text.ToLower();
+            GridViewRow selectedRow = dgvMedicos.SelectedRow;
+
+            if (selectedRow != null)
+            {
+                string cellValue = selectedRow.Cells[0].Text;
+                string cellNombre = HttpUtility.HtmlDecode(selectedRow.Cells[1].Text);
+                string cellApellido = HttpUtility.HtmlDecode(selectedRow.Cells[2].Text);
+                string cellEspecialidad = HttpUtility.HtmlDecode(selectedRow.Cells[3].Text);
+
+                if (!string.IsNullOrEmpty(cellNombre) && !string.IsNullOrEmpty(cellApellido) && !string.IsNullOrEmpty(cellEspecialidad))
+                {
+                    string datosMedico = cellNombre + " " + cellApellido + " - Especialidad: " + cellEspecialidad;
+                    txtbMedicoSeleccionado.Text = datosMedico;
+                    Session["DatosMedico"] = datosMedico;
+                }
+
+                if (!string.IsNullOrEmpty(cellValue) && int.TryParse(cellValue.Trim(), out int idMedico))
+                {
+                    Session["IdMedico"] = idMedico;
+                }
+                else
+                {
+                    Response.Write("El valor seleccionado no es un ID válido.");
+                }
+            }
+        }
+
+        
+        protected void dgvMedicos_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            FiltrarTabla();
+        }
+
+        protected void btnBuscar_Click(object sender, EventArgs e)
+        {
+            
+            txtbMedicoSeleccionado.Text = (string)Session["DatosMedico"];
+
+            string searchText = txtBuscarEspecialidad.Text.Trim().ToLower();
 
             // Filtramos la lista de especialidades según el texto buscado
-            List<Especialidad> filteredList = especialidadManager.ObtenerTodos()
+            List<MedicoDto> filteredList = medicoManager.ObtenerTodos()
                 .Data // Usamos el Data de la respuesta
-                .Where(especialidad => especialidad.Nombre.ToLower().Contains(searchText))
+                .Where(MedicoDto => MedicoDto.Especialidad.Nombre.Trim().ToLower().Contains(searchText))
                 .ToList();
 
-            ddlEspecialidades.DataSource = filteredList;
-            ddlEspecialidades.DataTextField = "Nombre";
-            ddlEspecialidades.DataValueField = "Id";
-            ddlEspecialidades.DataBind();
+            dgvMedicos.DataSource = filteredList;
+            dgvMedicos.DataBind();
         }
+
+        protected void btnLimpiarFiltros_Click(object sender, EventArgs e)
+        {
+            txtbMedicoSeleccionado.Text = (string)Session["DatosMedico"];
+
+            //int idMedico = (int)Session["IdMedico"];
+            
+            if(txtBuscarEspecialidad.Text != "")
+            {
+                txtBuscarEspecialidad.Text = "";
+                CargarMedicos();
+            }
+            
+        }
+
+
         protected void btnAtras_Click(object sender, EventArgs e)
         {
             Response.Redirect("~/Pages/SeleccionarSede.aspx", false);

@@ -29,9 +29,6 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
         }
 
-       
-
-
         protected void Page_Load(object sender, EventArgs e)
         {
             InitDependencies();

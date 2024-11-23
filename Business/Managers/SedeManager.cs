@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using Utils.Interfaces;
 using Utils;
 using System.Data;
+using System.Data.SqlClient;
+using System.Security.Cryptography;
 
 namespace Business.Managers
 {
@@ -24,10 +26,39 @@ namespace Business.Managers
         {
             _dbManager = new DBManager();
             _mapper = new Mapper<SedeDto>();
+            _response = new Response<SedeDto>();
         }
-        public Response<Sede> Crear(Sede entity)
+        public Response<SedeDto> Crear(SedeDto entity)
         {
-            throw new NotImplementedException();
+            string query = @"Insert into Sedes (Nombre, DireccionId)
+                           VALUES (@Nombre, @IdDireccion)";
+
+            SqlParameter[]parameters = new SqlParameter[]
+            {
+               new SqlParameter(@"Nombre", entity.Sede.Nombre),
+               new SqlParameter(@"IdDireccion", entity.Direccion.Id)
+            };
+
+            try
+            {
+                var res = _dbManager.ExecuteNonQuery(query, parameters);
+
+                if(res == 0)
+                {
+                    return new Response<SedeDto>();
+                }
+                else
+                {
+                    _response.Ok(entity);
+                    return _response;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
         }
 
         public Response<bool> Eliminar(int id)

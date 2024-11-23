@@ -21,6 +21,8 @@ namespace TPCuatrimestral_equipo_16A.Pages
         TurnoManager turnoManager;
         protected void Page_Load(object sender, EventArgs e)
         {
+            
+            
             dbManager = new DBManager();
             turnoManager = new TurnoManager();
 

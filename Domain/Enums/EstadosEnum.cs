@@ -9,14 +9,20 @@ namespace Domain.Enums
 {
     public enum EstadosEnum
     {
-        [Description("Pendiente")]
-        Pendiente = 1,
-
         [Description("Confirmado")]
-        Confirmado = 2,
+        Confirmado = 1,
 
         [Description("Cancelado")]
-        Cancelado = 3,
+        Cancelado = 2,
+
+        [Description("Reprogramado")]
+        Reprogramado = 3,
+
+        [Description("Finalizado")]
+        Finalizado = 4,
+
+        [Description("Ausente")]
+        Ausente = 5,
 
     }
 }

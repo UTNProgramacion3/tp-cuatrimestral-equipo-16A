@@ -15,5 +15,9 @@ namespace Business.Interfaces
         Response<List<SedeDto>> ObtenerTodos();
 
         Response<SedeDto> Crear(SedeDto entity);
+
+        Sede Update(Sede entity);
+
+        Response<Sede> ObeterSedeById(int id);
     }
 }

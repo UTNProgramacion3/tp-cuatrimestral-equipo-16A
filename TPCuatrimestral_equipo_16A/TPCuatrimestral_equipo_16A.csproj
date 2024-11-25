@@ -78,21 +78,23 @@
   <ItemGroup>
     <Content Include="Global.asax" />
     <Content Include="ImagesFolder\default-profile.jpg" />
+    <Content Include="ImagesFolder\edit.png" />
     <Content Include="ImagesFolder\github.png" />
     <Content Include="ImagesFolder\logo.png" />
     <Content Include="Pages\CrearSede.aspx" />
     <Content Include="Pages\ConfirmarTurno.aspx" />
     <Content Include="Pages\CrearNuevoUsuario.aspx" />
     <Content Include="Pages\Home.aspx" />
+    <Content Include="Pages\ListarSedes.aspx" />
     <Content Include="Pages\Login.aspx" />
     <Content Include="Pages\RegisterSuccess.aspx" />
     <Content Include="Pages\SeleccionarMedico.aspx" />
     <Content Include="Pages\SeleccionarPaciente.aspx" />
     <Content Include="Pages\ListadoTurnos.aspx" />
     <Content Include="Pages\Perfil.aspx" />
+    <Content Include="Pages\SeleccionarSede.aspx" />
     <Content Include="Pages\UserRegister.aspx" />
     <Content Include="Pages\SeleccionarFechaHora.aspx" />
-    <Content Include="Pages\SeleccionarSede.aspx" />
     <Content Include="Pages\ValidarEmail.aspx" />
     <Content Include="Scripts\Login.js" />
     <Content Include="Stylesheets\Login.css" />
@@ -132,6 +134,13 @@
     <Compile Include="Pages\Home.aspx.designer.cs">
       <DependentUpon>Home.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Pages\ListarSedes.aspx.cs">
+      <DependentUpon>ListarSedes.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\ListarSedes.aspx.designer.cs">
+      <DependentUpon>ListarSedes.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Login.aspx.cs">
       <DependentUpon>Login.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -153,6 +162,13 @@
     <Compile Include="Pages\SeleccionarMedico.aspx.designer.cs">
       <DependentUpon>SeleccionarMedico.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Pages\SeleccionarSede.aspx.cs">
+      <DependentUpon>SeleccionarSede.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\SeleccionarSede.aspx.designer.cs">
+      <DependentUpon>SeleccionarSede.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Pages\UserRegister.aspx.cs">
       <DependentUpon>UserRegister.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -166,13 +182,6 @@
     </Compile>
     <Compile Include="Pages\SeleccionarFechaHora.aspx.designer.cs">
       <DependentUpon>SeleccionarFechaHora.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\SeleccionarSede.aspx.cs">
-      <DependentUpon>SeleccionarSede.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\SeleccionarSede.aspx.designer.cs">
-      <DependentUpon>SeleccionarSede.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\ValidarEmail.aspx.cs">
       <DependentUpon>ValidarEmail.aspx</DependentUpon>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.CodeDom;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net.Http.Headers;
@@ -28,6 +29,76 @@ namespace Business.Services
             _dbManager = new DBManager();
             _response = new Response<List<Permiso>>();
             _mapper = new Mapper<Permiso>();
+        }
+
+        public Response<List<Modulo>> GetModulos()
+        {
+            List<Modulo> modulos = new List<Modulo>();
+            Response<List<Modulo>> response = new Response<List<Modulo>>(); 
+
+            string query = @"
+                            SELECT M.Id, M.Nombre, P.Id AS Permiso_Id, P.Nombre AS Permiso_Nombre
+                            FROM Modulos M
+                            LEFT JOIN Permisos P ON M.Id = P.ModuloId";
+
+            try
+            {
+                var dt = _dbManager.ExecuteQuery(query);
+                modulos = MapearModulosConPermisos(dt);
+
+                if (modulos != null)
+                {
+                    response.Ok(modulos);
+                }
+                else
+                {
+                    response.NotOk("Error al querer mapear lista de modulos");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                response.NotOk(ex.Message);
+            }
+
+            return response;
+
+        }
+
+        private List<Modulo> MapearModulosConPermisos(DataTable dt)
+        {
+            var modulos = new List<Modulo>();
+
+            foreach (DataRow row in dt.Rows)
+            {
+                int moduloId = Convert.ToInt32(row["Id"]);
+                string moduloNombre = row["Nombre"].ToString();
+
+                var modulo = modulos.FirstOrDefault(m => m.Id == moduloId);
+
+                if (modulo == null)
+                {
+                    modulo = new Modulo
+                    {
+                        Id = moduloId,
+                        Nombre = moduloNombre
+                    };
+
+                    modulos.Add(modulo);
+                }
+
+                if (!row.IsNull("Permiso_Id"))
+                {
+                    var permiso = new Permiso
+                    {
+                        Id = Convert.ToInt32(row["Permiso_Id"]),
+                        Nombre = row["Permiso_Nombre"].ToString()
+                    };
+                    modulo.Permisos.Add(permiso);
+                }
+
+            }
+                return modulos;
         }
 
         public Response<List<Permiso>> GetPermisosPorModulo(int moduloId)
@@ -134,32 +205,53 @@ namespace Business.Services
             return Convert.ToInt32(res) > 0;
         }
 
-        public void VerificarTokensVencidos()
+        public bool AgregarPermiso(string permiso, int moduloId)
         {
+            string query = "INSERT INTO Permisos (Nombre, ModuloId) VALUES (@Nombre, @ModuloId)";
+            SqlParameter[] parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@Nombre", permiso),
+                    new SqlParameter("@ModuloId", moduloId)
+                };
+
             try
             {
-            string query = "SELECT * FROM EmailValidaciones where TiempoExpiracion <= GETDATE() AND Activo = 1";
-            var res = _dbManager.ExecuteQuery(query);
-            string update = "UPDATE EmailValidaciones set Activo = 0 where token = @token";
-
-            //var tokens = res.GetEntity<List<EmailValidationDto>>();
-            //    if (tokens.Any())
-            //    {
-            //        foreach(var token in tokens)
-            //        {
-            //            SqlParameter[] parameters = new SqlParameter[] {
-            //            new SqlParameter("@token", token.Token)
-            //            };
-
-            //            var result = _dbManager.ExecuteQuery(query,parameters);
-            //        }
-
-            //    }
-
-            }catch(Exception ex)
-            {
-                throw ex;
+                var res = _dbManager.ExecuteNonQuery(query, parameters);
+                return res > 0;
             }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
         }
+
+        //public void VerificarTokensVencidos()
+        //{
+        //    try
+        //    {
+        //    string query = "SELECT * FROM EmailValidaciones where TiempoExpiracion <= GETDATE() AND Activo = 1";
+        //    var res = _dbManager.ExecuteQuery(query);
+        //    string update = "UPDATE EmailValidaciones set Activo = 0 where token = @token";
+
+        //    //var tokens = res.GetEntity<List<EmailValidationDto>>();
+        //    //    if (tokens.Any())
+        //    //    {
+        //    //        foreach(var token in tokens)
+        //    //        {
+        //    //            SqlParameter[] parameters = new SqlParameter[] {
+        //    //            new SqlParameter("@token", token.Token)
+        //    //            };
+
+        //    //            var result = _dbManager.ExecuteQuery(query,parameters);
+        //    //        }
+
+        //    //    }
+
+        //    }catch(Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
     }
 }

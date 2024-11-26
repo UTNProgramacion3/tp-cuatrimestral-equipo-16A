@@ -17,13 +17,14 @@ namespace TPCuatrimestral_equipo_16A.Pages
         private IPacienteManager _pacienteManager;
         private IEmpleadoManager _empleadoManager;
         private IMedicoManager _medicoManager;
-
+        private IUsuarioManager _usuarioManager;
         private void InitDependencies()
         {
             IUnityContainer unityContainer;
             _pacienteManager = (IPacienteManager)Global.Container.Resolve(typeof(IPacienteManager));
             _empleadoManager = (IEmpleadoManager)Global.Container.Resolve(typeof(IEmpleadoManager));
             _medicoManager = (IMedicoManager)Global.Container.Resolve(typeof(IMedicoManager));
+            _usuarioManager = (IUsuarioManager)Global.Container.Resolve(typeof(IUsuarioManager));
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -49,7 +50,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
             string matricula = txtMatricula.Text.Trim();
             string especialidad = ddlEspecialidad.SelectedValue;
             int rol = int.Parse(ddlRol.SelectedValue);
-            string legajo = txtLegajo.Text.Trim();
+            //string legajo = txtLegajo.Text.Trim();
             int posicion = int.Parse(posicionEmpleado.SelectedValue);
 
             if (string.IsNullOrEmpty(nombre) || string.IsNullOrEmpty(apellido) || string.IsNullOrEmpty(documento))
@@ -78,10 +79,10 @@ namespace TPCuatrimestral_equipo_16A.Pages
                         Nombre = nombre,
                         Documento = int.Parse(documento),
                         Direccion = direccion,
-                        Legajo = int.Parse(legajo),
+                        //Legajo = int.Parse(legajo),
                         EmailPersonal = txtEmailPersonal.Text.Trim(),
                         Telefono = txtTelefono.Text.Trim(),
-                        FechaNacimiento = txtFechaNacimiento.SelectedDate,
+                        FechaNacimiento = DateTime.Parse(txtFechaNacimiento.Text),
                         Posicion = posicion,
                         Matricula = int.Parse(txtMatricula.Text),
                         EspecialidadId = int.Parse(ddlEspecialidad.SelectedValue),
@@ -99,45 +100,13 @@ namespace TPCuatrimestral_equipo_16A.Pages
                         Direccion = direccion,
                         EmailPersonal = txtEmailPersonal.Text.Trim(),
                         Telefono = txtTelefono.Text.Trim(),
-                        FechaNacimiento = txtFechaNacimiento.SelectedDate,
+                        FechaNacimiento = DateTime.Parse(txtFechaNacimiento.Text),
                         RolId = (int)RolesEnum.Paciente
 
                     };
                     _pacienteManager.Crear(nuevoPaciente);
                     break;
             }
-
-            //// Lógica según el rol seleccionado
-            //if (rol == (int)RolesEnum.Empleado)
-            //{
-            //    // Validación para médico (Matricula y Especialidad deben ser completados)
-            //    if (string.IsNullOrEmpty(matricula) || string.IsNullOrEmpty(especialidad))
-            //    {
-            //        Response.Write("<script>alert('Por favor, complete los campos de Matrícula y Especialidad para el Médico.');</script>");
-            //        return;
-            //    }
-
-            //    // Aquí puedes agregar la lógica para crear un Médico y guardar en base de datos.
-            //    GuardarUsuario(nombre, apellido, documento, direccion, matricula, especialidad, rol);
-            //}
-            //else if (rol == (int)RolesEnum.Empleado)
-            //{
-            //    // Validación para Empleado (Legajo debe ser completado)
-            //    string legajo = "123345"
-            //    if (string.IsNullOrEmpty(legajo))
-            //    {
-            //        Response.Write("<script>alert('Por favor, complete el campo de Legajo para el Empleado.');</script>");
-            //        return;
-            //    }
-
-            //    // Aquí puedes agregar la lógica para crear un Empleado y guardar en base de datos.
-            //    GuardarUsuario(nombre, apellido, documento, direccion, legajo, string.Empty, rol);
-            //}
-            //else if (rol == (int)RolesEnum.Paciente)
-            //{
-            //    // Lógica para Paciente (sin campos adicionales)
-            //    GuardarUsuario(nombre, apellido, documento, direccion, string.Empty, string.Empty, rol);
-            //}
 
             Response.Write("<script>alert('Usuario creado con éxito.');</script>");
             LimpiarCampos();
@@ -155,10 +124,12 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
         private void CargarRoles()
         {
+            var roles = _usuarioManager.ObtenerAllRoles();
             ddlRol.Items.Clear();
-            ddlRol.Items.Add(new ListItem("Administrador", "1"));
-            ddlRol.Items.Add(new ListItem("Empleado", "4"));
-            ddlRol.Items.Add(new ListItem("Paciente", "5"));
+            foreach(var rol in roles)
+            {
+                ddlRol.Items.Add(new ListItem(rol.Nombre, rol.Id.ToString()));
+            }
         }
 
 
@@ -170,7 +141,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
             txtMatricula.Text = string.Empty;
             ddlEspecialidad.SelectedIndex = 0;
             ddlRol.SelectedIndex = 0;
-            txtLegajo.Text = string.Empty;
+            //txtLegajo.Text = string.Empty;
         }
 
         protected void ddlRol_SelectedIndexChanged(object sender, EventArgs e)

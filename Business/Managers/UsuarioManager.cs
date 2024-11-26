@@ -451,6 +451,25 @@ namespace Business.Managers
 
         }
 
+        public List<Rol> ObtenerAllRoles()
+        {
+            string query = "select * from Roles";
+            var res = _dbManager.ExecuteQuery(query);
+
+            List<Rol> roles = new List<Rol>();
+
+            foreach(DataRow row in res.Rows)
+            {
+                roles.Add(new Rol
+                {
+                    Id = Convert.ToInt32(row["Id"]),
+                    Nombre = row["Nombre"].ToString(),
+                });
+            }
+
+            return roles;
+        }
+
 
         #endregion
     }

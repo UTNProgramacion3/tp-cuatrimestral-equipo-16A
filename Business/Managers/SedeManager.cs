@@ -103,13 +103,13 @@ namespace Business.Managers
             string query = @"
                             SELECT
                             SE.Id AS Sede_Id,
-	                        SE.Nombre AS Sede_Nombre,
-	                        DI.Calle AS Direccion_Calle,
-	                        DI.Numero AS Direccion_Numero,
-	                        DI.Localidad AS Direccion_Localidad
+                            SE.Nombre AS Sede_Nombre,
+                            DI.Calle AS Direccion_Calle,
+                            DI.Numero AS Direccion_Numero,
+                            DI.Localidad AS Direccion_Localidad
                             FROM Sedes SE
-                            INNER JOIN Direcciones DI ON SE.DireccionId = SE.Id
-                            Where SE.DireccionId = DI.Id";
+                            LEFT JOIN Direcciones DI ON SE.DireccionId = DI.Id
+                            WHERE SE.DireccionId = DI.Id;";
 
             try
             {

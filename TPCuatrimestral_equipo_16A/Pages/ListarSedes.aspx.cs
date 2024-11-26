@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Web;
+using System.Web.Services.Description;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Business;
@@ -45,6 +47,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
             {
                 CargarSedes();
             }
+
         }
 
         private void CargarSedes()
@@ -65,6 +68,8 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
         protected void dgvSedes_SelectedIndexChanged(object sender, EventArgs e)
         {
+            btnModificar.Enabled = true;
+            
             GridViewRow selectedRow = dgvSedes.SelectedRow;
 
             if (selectedRow != null)
@@ -94,11 +99,11 @@ namespace TPCuatrimestral_equipo_16A.Pages
         protected void btnModificar_Click(object sender, EventArgs e)
         {
             int idSede = int.Parse(Session["IdSede"].ToString());
-            
+
             CargarSede(idSede);
         }
 
-        private void CargarSede(int idSede)
+        public void CargarSede(int idSede)
         {
             Response<Sede> sede = new Response<Sede>();
             Response<Direccion> direccion = new Response<Direccion>();
@@ -121,7 +126,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
         }
 
-        
+
         protected void btnBuscar_Click(object sender, EventArgs e)
         {
 
@@ -140,7 +145,12 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
         protected void btnLimpiarFiltros_Click(object sender, EventArgs e)
         {
-            //txtbSedeSeleccionada.Text = (string)Session["NombreSede"];
+
+            Session["IdDireccion"] = null;
+            Session["IdSede"] = null;
+            Session["NombreSede"] = null;
+
+            btnModificar.Enabled = false;
 
             //int idSede = (int)Session["IdSede"];
 
@@ -153,47 +163,173 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
         }
 
-        protected void btnAtras_Click(object sender, EventArgs e)
+        protected void btnModificarSede_Click(object sender, EventArgs e)
         {
-            Response.Redirect("~/Pages/Home.aspx", false);
+
+            if (!string.IsNullOrEmpty(txtCrearNombreSede.Text)
+                && !string.IsNullOrEmpty(txtCrearCalleSede.Text)
+                && !string.IsNullOrEmpty(txtCrearNumeroSede.Text)
+                && !string.IsNullOrEmpty(txtCrearLocalidadSede.Text)
+                && !string.IsNullOrEmpty(txtCrearProvinciaSede.Text))
+            {
+
+                Direccion _direccion = new Direccion();
+                Sede _sede = new Sede();
+
+                try
+                {
+                    _direccion.Numero = int.Parse(txtNumero.Text);
+                }
+                catch (Exception)
+                {
+                    campoInvalidoNumerSede.Visible = true;
+                    return;
+                }
+
+                _direccion.Id = int.Parse(Session["IdDireccion"].ToString());
+                _direccion.Calle = txtCalleSede.Text.Trim();
+                _direccion.Piso = string.IsNullOrWhiteSpace(txtPiso.Text) ? "" : txtPiso.Text.Trim();
+                _direccion.Depto = string.IsNullOrWhiteSpace(txtDepto.Text) ? "" : txtDepto.Text.Trim();
+                _direccion.Localidad = txtLocalidad.Text.Trim();
+                _direccion.Provincia = txtProvincia.Text.Trim();
+                _direccion.CodigoPostal = string.IsNullOrWhiteSpace(txtCodigoPostal.Text) ? "" : txtCodigoPostal.Text.Trim();
+
+
+                try
+                {
+
+                    var resDreccion = _direccionManager.Update(_direccion);
+
+                    if (resDreccion.Success)
+                    {
+                        _sede.Id = int.Parse(Session["IdSede"].ToString());
+                        _sede.Nombre = txtNombreSede.Text;
+                        _sede.DireccionId = _direccion.Id;
+
+                        var res = sedeManager.Update(_sede);
+
+                        if (res != null)
+                        {
+                            modificarSedeSucces.Visible = true;
+                            campoInvalidoNumerSede.Visible = false;
+                        }
+                        else
+                        {
+                            modificarDedeFailure.Visible = true;
+
+                        }
+
+                    }
+
+                }
+                catch (Exception ex)
+                {
+
+                    modificarDedeFailure.Visible = true;
+
+                    throw ex;
+                }
+            }
+            else
+            {
+                modificarDedeFailure.Visible = true;
+            }
+            
+            ReloadSedes();
 
         }
 
-        protected void btnModificarSede_Click(object sender, EventArgs e)
+        protected void btnGuardarSede_Click(object sender, EventArgs e)
         {
-            Direccion _direccion = new Direccion();
-            Sede _sede = new Sede();
-
-            _direccion.Id = int.Parse(Session["IdDireccion"].ToString());
-            _direccion.Calle = txtCalleSede.Text.Trim();
-            _direccion.Numero = int.Parse(txtNumero.Text);
-            _direccion.Piso = txtPiso.Text.Trim();
-            _direccion.Depto = txtDepto.Text.Trim();
-            _direccion.Localidad = txtLocalidad.Text.Trim();
-            _direccion.Provincia = txtProvincia.Text.Trim();
-            _direccion.CodigoPostal = txtCodigoPostal.Text.Trim();
-
-
-            try
+            
+            if(!string.IsNullOrEmpty(txtCrearNombreSede.Text)
+                && !string.IsNullOrEmpty(txtCrearCalleSede.Text)
+                && !string.IsNullOrEmpty(txtCrearNumeroSede.Text)
+                && !string.IsNullOrEmpty(txtCrearLocalidadSede.Text)
+                && !string.IsNullOrEmpty(txtCrearProvinciaSede.Text))
             {
-                var resDreccion = _direccionManager.Update(_direccion);
-
-                if(resDreccion.Success)
+                Response<SedeDto> _sede = new Response<SedeDto>
                 {
-                    _sede.Id = int.Parse(Session["IdSede"].ToString());
-                    _sede.Nombre = txtNombreSede.Text;
-                    _sede.DireccionId = _direccion.Id;
+                    Data = new SedeDto
+                    {
+                        Sede = new Sede(),
+                        Direccion = new Direccion()
+                    }
+                };
 
-                    sedeManager.Update(_sede);
-                }      
+                Direccion _direccion = new Direccion();
 
+                try
+                {
+                    _direccion.Numero = int.Parse(txtCrearNumeroSede.Text);
+                }
+                catch (Exception)
+                {
+                    campoInvalidoNumerSede.Visible = true;
+                    return;
+                }
+
+                _direccion.Calle = txtCrearCalleSede.Text.Trim();
+                _direccion.Piso = string.IsNullOrWhiteSpace(txtCrearPisoSede.Text) ? "" : txtCrearPisoSede.Text.Trim();
+                _direccion.Depto = string.IsNullOrWhiteSpace(txtCrearDeptoSede.Text) ? "": txtCrearDeptoSede.Text.Trim();
+                _direccion.Localidad = txtCrearLocalidadSede.Text.Trim();
+                _direccion.Provincia = txtCrearProvinciaSede.Text.Trim();
+                _direccion.CodigoPostal = string.IsNullOrWhiteSpace(txtCrearCodigoPostalSede.Text) ? "" : txtCrearCodigoPostalSede.Text.Trim();
+
+
+
+                try
+                {
+                    var resDreccion = _direccionManager.Crear(_direccion);
+
+                    _sede.Data.Sede.Nombre = txtCrearNombreSede.Text;
+                    _sede.Data.Direccion.Id = resDreccion.Data.Id;
+
+                    var sedeDto = _sede.Data;
+
+                    sedeManager.Crear(sedeDto);
+
+                    crearSedeSuccess.Visible = true;
+
+
+
+                }
+                catch (Exception ex)
+                {
+                    crearSedeFailure.Visible = false;
+
+
+
+                    throw ex;
+                }
             }
-            catch (Exception ex)
+            else
             {
-
-                throw ex;
+                crearSedeFailure.Visible = true;
             }
 
+            ReloadSedes();
+
+        }
+
+        protected void ReloadSedes()
+        {
+            string script = $@"
+               setTimeout(function() {{
+            window.location.href = '/Pages/ListarSedes.aspx';
+               }},5000);";
+
+            ClientScript.RegisterStartupScript(this.GetType(), "DelayedRedirect", script, true);
+        }
+
+        protected void btnAtras_Click1(object sender, EventArgs e)
+        {
+
+            Session["IdDireccion"] = null;
+            Session["IdSede"] = null;
+            Session["NombreSede"] = null;
+
+            Response.Redirect("~/Pages/Home.aspx", false);
 
         }
     }

@@ -81,7 +81,6 @@
     <Content Include="ImagesFolder\edit.png" />
     <Content Include="ImagesFolder\github.png" />
     <Content Include="ImagesFolder\logo.png" />
-    <Content Include="Pages\CrearSede.aspx" />
     <Content Include="Pages\ConfirmarTurno.aspx" />
     <Content Include="Pages\CrearNuevoUsuario.aspx" />
     <Content Include="Pages\Home.aspx" />
@@ -105,13 +104,6 @@
   <ItemGroup>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\CrearSede.aspx.cs">
-      <DependentUpon>CrearSede.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\CrearSede.aspx.designer.cs">
-      <DependentUpon>CrearSede.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\ConfirmarTurno.aspx.cs">
       <DependentUpon>ConfirmarTurno.aspx</DependentUpon>

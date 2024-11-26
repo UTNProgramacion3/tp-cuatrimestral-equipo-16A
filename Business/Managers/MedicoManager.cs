@@ -125,5 +125,25 @@ namespace Business.Managers
             }
         }
 
+        public List<Especialidad> ObtenerTodasEspecialidades()
+        {
+            string query = "select * from Especialidades";
+
+            var res = _DBManager.ExecuteQuery(query);
+
+            List<Especialidad> especialidades = new List<Especialidad>();
+
+            foreach (DataRow row in res.Rows)
+            {
+                especialidades.Add(new Especialidad
+                {
+                    Id = Convert.ToInt32(row["Id"]),
+                    Nombre = row["Nombre"].ToString()
+                });
+            }
+
+            return especialidades;
+        }
+
     }
 }

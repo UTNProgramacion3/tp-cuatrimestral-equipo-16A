@@ -16,12 +16,14 @@ namespace TPCuatrimestral_equipo_16A.Pages
     {
         private IPacienteManager _pacienteManager;
         private IEmpleadoManager _empleadoManager;
+        private IMedicoManager _medicoManager;
 
         private void InitDependencies()
         {
             IUnityContainer unityContainer;
             _pacienteManager = (IPacienteManager)Global.Container.Resolve(typeof(IPacienteManager));
             _empleadoManager = (IEmpleadoManager)Global.Container.Resolve(typeof(IEmpleadoManager));
+            _medicoManager = (IMedicoManager)Global.Container.Resolve(typeof(IMedicoManager));
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -29,7 +31,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
             InitDependencies();
             if (!IsPostBack)
             {
-                ddlRol.Items.Clear(); // Limpia cualquier opción existente para evitar duplicados
+                ddlRol.Items.Clear(); 
 
                 ddlRol.Items.Add(new ListItem("Administrador", "1"));
                 ddlRol.Items.Add(new ListItem("Empleado", "2"));
@@ -143,11 +145,12 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
         private void CargarEspecialidades()
         {
-            // Cargar las especialidades (esto puede venir de una base de datos)
+            var especialides = _medicoManager.ObtenerTodasEspecialidades();
             ddlEspecialidad.Items.Clear();
-            ddlEspecialidad.Items.Add(new ListItem("Especialidad 1", "1"));
-            ddlEspecialidad.Items.Add(new ListItem("Especialidad 2", "2"));
-            ddlEspecialidad.Items.Add(new ListItem("Especialidad 3", "3"));
+            foreach (var especialidad in especialides)
+            {
+                ddlEspecialidad.Items.Add(new ListItem(especialidad.Nombre, especialidad.Id.ToString()));
+            }
         }
 
         private void CargarRoles()

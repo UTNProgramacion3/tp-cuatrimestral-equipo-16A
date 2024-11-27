@@ -135,12 +135,6 @@ namespace TPCuatrimestral_equipo_16A.Pages
             //string legajo = txtLegajo.Text.Trim();
             int posicion = int.Parse(posicionEmpleado.SelectedValue);
 
-            if (string.IsNullOrEmpty(nombre) || string.IsNullOrEmpty(apellido) || string.IsNullOrEmpty(documento))
-            {
-                Response.Write("<script>alert('Por favor, complete todos los campos obligatorios.');</script>");
-                return;
-            }
-
             Direccion direccion = new Direccion
             {
                 Calle = txtCalle.Text.Trim(),
@@ -154,6 +148,8 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
             switch (rol)
             {
+                case (int)RolesEnum.Administrador:
+                    break;
                 case (int)RolesEnum.Empleado:
                     NuevoEmpleadoDto nuevoEmpleado = new NuevoEmpleadoDto
                     {
@@ -176,7 +172,11 @@ namespace TPCuatrimestral_equipo_16A.Pages
                     }
                     else
                     {
-                        _empleadoManager.CrearNuevo(nuevoEmpleado);
+                        var res = _empleadoManager.CrearNuevo(nuevoEmpleado);
+                        if (res.Success)
+                        {
+                            Response.Redirect("AsignarJornadaLaboral.aspx?id=" + res.Data.Id);
+                        }
                     }
                     break;
 

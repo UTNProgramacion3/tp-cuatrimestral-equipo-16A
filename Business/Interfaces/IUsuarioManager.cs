@@ -3,6 +3,7 @@ using System;
 using Domain.Entities;
 using Domain.Response;
 using System.Collections.Generic;
+using Business.Dtos;
 
 namespace Business.Interfaces
 {
@@ -19,5 +20,6 @@ namespace Business.Interfaces
         Response<bool> CambiarPassword(string newPass, int userId);
         List<Rol> ObtenerAllRoles();
         Usuario ObtenerUsuarioById(int id);
+        List<UsuarioBasicoDto> ObtenerUsuariosDataBasica();
     }
 }

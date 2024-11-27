@@ -77,5 +77,34 @@ namespace TPCuatrimestral_equipo_16A.Pages
             var listado = _listadoUsuarios.Where(u => u.RolId == rolSeleccionado).ToList();
             return listado;
         }
+
+        protected void gvUsuarios_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            int userId = Convert.ToInt32(e.CommandArgument);
+
+            switch (e.CommandName)
+            {
+                case "Edit":
+                    Response.Redirect($"EditarUsuario.aspx?Id={userId}");
+                    break;
+
+                case "View":
+                    Response.Redirect($"VerUsuario.aspx?Id={userId}");
+                    break;
+
+                case "Delete":
+                    EliminarUsuario(userId);
+                    break;
+            }
+        }
+
+        private void EliminarUsuario(int userId)
+        {
+            //_usuarioManager.EliminarUsuario(userId);
+            CargarUsuarios(); 
+            gvUsuarios.DataSource = _listadoUsuarios;
+            gvUsuarios.DataBind();
+        }
+
     }
 }

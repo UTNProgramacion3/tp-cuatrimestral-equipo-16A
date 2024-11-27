@@ -90,6 +90,7 @@
     <Content Include="Pages\ListadoUsuarios.aspx" />
     <Content Include="Pages\ListarSedes.aspx" />
     <Content Include="Pages\Login.aspx" />
+    <Content Include="Pages\MisTurnos.aspx" />
     <Content Include="Pages\RegisterSuccess.aspx" />
     <Content Include="Pages\RolesPermisos.aspx" />
     <Content Include="Pages\SeleccionarMedico.aspx" />
@@ -173,6 +174,13 @@
     </Compile>
     <Compile Include="Pages\Login.aspx.designer.cs">
       <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\MisTurnos.aspx.cs">
+      <DependentUpon>MisTurnos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\MisTurnos.aspx.designer.cs">
+      <DependentUpon>MisTurnos.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\RegisterSuccess.aspx.cs">
       <DependentUpon>RegisterSuccess.aspx</DependentUpon>

@@ -109,10 +109,10 @@ namespace TPCuatrimestral_equipo_16A.Pages
                 }
                 else
                 {
-                    // Si el TextBox no está vacío, proceder a agregar el permiso
+
                     if (_seguridadService.AgregarPermiso(nuevoPermiso, moduloId))
                     {
-                        // Si el permiso se agrega correctamente, recargar el Repeater
+
                         CargarRepeater();
                     }
                 }

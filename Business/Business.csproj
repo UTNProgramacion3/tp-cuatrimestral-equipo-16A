@@ -49,6 +49,7 @@
     <Compile Include="Dtos\EmailValidationDto.cs" />
     <Compile Include="Dtos\MedicoDto.cs" />
     <Compile Include="Dtos\PersonaDto.cs" />
+    <Compile Include="Dtos\TurnoSimpleDTO.cs" />
     <Compile Include="Images\ICrudRepository.cs" />
     <Compile Include="Interfaces\IDireccionManager.cs" />
     <Compile Include="Interfaces\IEmailManager.cs" />

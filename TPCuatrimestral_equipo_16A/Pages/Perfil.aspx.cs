@@ -50,7 +50,7 @@ namespace TPCuatrimestral_equipo_16A.Views
         protected void Page_Load(object sender, EventArgs e)
         {
             InitDependencies();
-            _usuario = (Usuario)Session["UserLogueado"];
+            _usuario = Session["UserLogueado"] != null ? (Usuario)Session["UserLogueado"] : null;
             if(!IsPostBack)
             {
                 if (Session["UserLogueado"] != null)
@@ -148,7 +148,7 @@ namespace TPCuatrimestral_equipo_16A.Views
 
         protected void btnVerTurnos_Click(object sender, EventArgs e)
         {
-
+            Response.Redirect("~/Pages/MisTurnos.aspx");
         }
 
         protected void btnCambiarPass_Click(object sender, EventArgs e)

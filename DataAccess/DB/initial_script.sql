@@ -254,3 +254,64 @@ Returns varchar(100)
 
 	return @apellido
 	End
+
+--SP
+ GO
+
+ CREATE PROCEDURE sp_GetMedicoIdByUsuarioId
+    @UsuarioId INT
+AS
+BEGIN
+    -- Variable para almacenar el resultado
+    DECLARE @MedicoId INT;
+
+    -- Intentamos obtener el ID del médico
+    SELECT 
+        @MedicoId = M.Id
+    FROM 
+        Medicos M
+    INNER JOIN 
+        Empleados E ON M.EmpleadoId = E.Id
+    INNER JOIN 
+        Personas P ON E.PersonaId = P.Id
+    WHERE 
+        P.UsuarioId = @UsuarioId;
+
+    -- Si no se encuentra un médico, asignamos 0
+    IF @MedicoId IS NULL
+    BEGIN
+        SET @MedicoId = 0;
+    END
+
+    -- Retornamos el ID del médico (o 0 si no se encontró)
+    SELECT @MedicoId AS MedicoId;
+END
+
+GO
+
+CREATE PROCEDURE sp_GetPacienteIdByUsuarioId
+    @UsuarioId INT
+AS
+BEGIN
+    -- Variable para almacenar el resultado
+    DECLARE @PacienteId INT;
+
+    -- Intentamos obtener el ID del paciente
+    SELECT 
+        @PacienteId = P.Id
+    FROM 
+        Pacientes P
+    INNER JOIN 
+        Personas Per ON P.PersonaId = Per.Id
+    WHERE 
+        Per.UsuarioId = @UsuarioId;
+
+    -- Si no se encuentra un paciente, asignamos 0
+    IF @PacienteId IS NULL
+    BEGIN
+        SET @PacienteId = 0;
+    END
+
+    -- Retornamos el ID del paciente (o 0 si no se encontró)
+    SELECT @PacienteId AS PacienteId;
+END

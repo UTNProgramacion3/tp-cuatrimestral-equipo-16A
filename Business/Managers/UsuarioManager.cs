@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading;
 using System.Web.UI;
@@ -337,7 +338,8 @@ namespace Business.Managers
         public bool VerificarPassword(string password, string hashedpassword)
         {
             return PasswordHasher.VerifyPassword(password, hashedpassword);
-        }
+           
+        }  
 
         public bool ExisteMail(string email)
         {
@@ -400,11 +402,6 @@ namespace Business.Managers
                         new SqlParameter("@email", email),
                         new SqlParameter("@token", token)
                     };
-        
-
-        //public static bool ValidarToken(this string token, out string email)
-        //{
-        //    email = null;
 
                     var res = _dbManager.ExecuteQuery(query, parameters);
                     return res.GetEntity<Usuario>();
@@ -505,7 +502,67 @@ namespace Business.Managers
             return res.GetEntity<Usuario>();
         }
 
-       
+        public int ObtenerMedicoPorUsuario(int usuarioId)
+        {
+            string query = "sp_GetMedicoIdByUsuarioId";
+            int IdMedico;
+            SqlParameter[] parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@UsuarioId", usuarioId)
+                };
+
+            try
+            {
+                var res = _dbManager.ExecuteStoredProcedure(query, parameters);
+
+                if(res.Rows.Count == 0)
+                {
+                    return 0;
+                }
+
+                IdMedico =Convert.ToInt32(res.Rows[0]["MedicoId"]);
+
+
+            }
+            catch (Exception ex)
+            {
+                IdMedico = -1;
+            }
+
+            return IdMedico;
+        }
+
+        public int ObtenerPacientePorUsuario(int usuarioId)
+        {
+            string query = "sp_GetPacienteIdByUsuarioId";
+            int IdPaciente;
+            SqlParameter[] parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@UsuarioId", usuarioId)
+                };
+
+            try
+            {
+                var res = _dbManager.ExecuteStoredProcedure(query, parameters);
+
+                if (res.Rows.Count == 0)
+                {
+                    return 0;
+                }
+
+                IdPaciente = Convert.ToInt32(res.Rows[0]["PacienteId"]);
+
+
+            }
+            catch (Exception ex)
+            {
+                IdPaciente = -1;
+            }
+
+            return IdPaciente;
+        }
+
+
 
 
         #endregion

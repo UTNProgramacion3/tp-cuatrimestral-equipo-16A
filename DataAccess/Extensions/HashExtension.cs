@@ -8,13 +8,8 @@ namespace DataAccess.Extensions
     {
         public static string GenerarToken(this string email, DateTime expiration)
         {
-            string data = $"{email}|{Guid.NewGuid()}|{expiration}";
-            byte[] dataBytes = Encoding.UTF8.GetBytes(data);
-
-            using (var sha256 = SHA256.Create())
-            {
-                return Convert.ToBase64String(sha256.ComputeHash(dataBytes));
-            }
+            string data = $"{email}|{expiration:o}";
+            return Convert.ToBase64String(Encoding.UTF8.GetBytes(data));
         }
     }
 }

@@ -6,8 +6,10 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Business.Dtos;
 using Business.Interfaces;
 using DataAccess;
+using DataAccess.Extensions;
 using Domain.Entities;
 using Domain.Enums;
 using Domain.Response;
@@ -104,6 +106,18 @@ namespace Business.Services
             return _response;
         }
 
+        public void InhabilitarToken(string token)
+        {
+            string query = "UPDATE EmailValidaciones set Activo = 0 where Token = @token";
+
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@token", token)
+            };
+
+            var res = _dbManager.ExecuteQuery(query, parameters);
+        }
+
         public bool TienePermiso(int rolId, string permisoId)
         {
             string query = @"SELECT COUNT(*) 
@@ -118,6 +132,35 @@ namespace Business.Services
             var res = (_dbManager.ExecuteScalar(query,parameters));
 
             return Convert.ToInt32(res) > 0;
+        }
+
+        public void VerificarTokensVencidos()
+        {
+            //try
+            //{
+            //string query = "SELECT * FROM EmailValidaciones where TiempoExpiracion <= GETDATE() AND Activo = 1";
+            //var res = _dbManager.ExecuteQuery(query);
+            //string update = "UPDATE EmailValidaciones set Activo = 0 where token = @token";
+
+            //    var tokens = res.GetEntity<List<EmailValidationDto>>();
+            //    if (tokens.Any())
+            //    {
+            //        foreach (var token in tokens)
+            //        {
+            //            SqlParameter[] parameters = new SqlParameter[] {
+            //            new SqlParameter("@token", token.Token)
+            //            };
+
+            //            var result = _dbManager.ExecuteQuery(query, parameters);
+            //        }
+
+            //    }
+
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw ex;
+            //}
         }
     }
 }

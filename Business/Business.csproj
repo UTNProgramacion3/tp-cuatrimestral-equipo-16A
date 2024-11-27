@@ -62,6 +62,7 @@
     <Compile Include="Interfaces\ISeguridadService.cs" />
     <Compile Include="Interfaces\ITurnoManager.cs" />
     <Compile Include="Interfaces\IUsuarioManager.cs" />
+    <Compile Include="Jobs\ExpiredTokenService.cs" />
     <Compile Include="Managers\DireccionManager.cs" />
     <Compile Include="Managers\EmailManager.cs" />
     <Compile Include="Managers\EmpleadoManager.cs" />

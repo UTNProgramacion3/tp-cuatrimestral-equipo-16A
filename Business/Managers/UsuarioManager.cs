@@ -134,6 +134,26 @@ namespace Business.Managers
             _sessionManager.RemoveSessionValue("UserLogueado");
         }
 
+        public List<UsuarioBasicoDto> ObtenerUsuariosDataBasica()
+        {
+            string query = @"select Usuarios.*, PER.Nombre + ' ' + PER.Apellido NombreCompleto, R.Nombre Rol  from Usuarios
+            left join Personas PER on PER.UsuarioId = Usuarios.Id
+            left join Roles R ON R.Id = Usuarios.RolId";
+
+            var res = _dbManager.ExecuteQuery(query);
+
+            List<UsuarioBasicoDto> usuarios = new List<UsuarioBasicoDto>();
+
+            var userMapper = new Mapper<UsuarioBasicoDto>();
+            foreach (DataRow row in res.Rows)
+            {
+                var mappedUser = userMapper.MapFromRow(row);
+                usuarios.Add(mappedUser);
+            }
+
+            return usuarios;
+        }
+
         public Response<Usuario> ObtenerPorEmail(string email)
         {
             string query = @"Select 
@@ -485,25 +505,7 @@ namespace Business.Managers
             return res.GetEntity<Usuario>();
         }
 
-        public List<UsuarioBasicoDto> ObtenerUsuariosDataBasica()
-        {
-            string query = @"select Usuarios.*, PER.Nombre + PER.Apellido NombreCompleto, R.Nombre  from Usuarios
-            left join Personas PER on PER.UsuarioId = Usuarios.Id
-            left join Roles R ON R.Id = Usuarios.RolId";
-
-            var res = _dbManager.ExecuteQuery(query);
-
-            List<UsuarioBasicoDto> usuarios = new List<UsuarioBasicoDto>();
-
-            var userMapper = new Mapper<UsuarioBasicoDto>();
-            foreach(DataRow row in res.Rows)
-            {
-                var mappedUser = userMapper.MapFromRow(row);
-                usuarios.Add(mappedUser);
-            }
-
-            return usuarios;
-        }
+       
 
 
         #endregion

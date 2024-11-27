@@ -108,6 +108,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
                 if (_usuario.Rol.Id == (int)RolesEnum.Paciente)
                     txtComentario.Enabled = false;
+                    btnGuardarComentario.Enabled = false;
 
             }
         }

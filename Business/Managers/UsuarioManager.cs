@@ -1,4 +1,5 @@
-﻿using Business.Interfaces;
+﻿using Business.Dtos;
+using Business.Interfaces;
 using DataAccess;
 using DataAccess.Extensions;
 using Domain.Entities;
@@ -451,6 +452,38 @@ namespace Business.Managers
 
         }
 
+        public List<Rol> ObtenerAllRoles()
+        {
+            string query = "select * from Roles";
+            var res = _dbManager.ExecuteQuery(query);
+
+            List<Rol> roles = new List<Rol>();
+
+            foreach(DataRow row in res.Rows)
+            {
+                roles.Add(new Rol
+                {
+                    Id = Convert.ToInt32(row["Id"]),
+                    Nombre = row["Nombre"].ToString(),
+                });
+            }
+
+            return roles;
+        }
+
+        public Usuario ObtenerUsuarioById(int id)
+        {
+            string query = "select * from Usuarios where id = @id";
+
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@id", id)
+            };
+
+            var res = _dbManager.ExecuteQuery(query, parameters);
+
+            return res.GetEntity<Usuario>();
+        }
 
         #endregion
     }

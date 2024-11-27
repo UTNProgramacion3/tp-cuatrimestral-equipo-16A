@@ -16,20 +16,31 @@ namespace TPCuatrimestral_equipo_16A.Pages
     {
         private IPacienteManager _pacienteManager;
         private IEmpleadoManager _empleadoManager;
-
+        private IMedicoManager _medicoManager;
+        private IUsuarioManager _usuarioManager;
+        private IPersonaManager _personaManager;
+        private bool _isEditModeEnabled;
         private void InitDependencies()
         {
             IUnityContainer unityContainer;
             _pacienteManager = (IPacienteManager)Global.Container.Resolve(typeof(IPacienteManager));
             _empleadoManager = (IEmpleadoManager)Global.Container.Resolve(typeof(IEmpleadoManager));
+            _medicoManager = (IMedicoManager)Global.Container.Resolve(typeof(IMedicoManager));
+            _usuarioManager = (IUsuarioManager)Global.Container.Resolve(typeof(IUsuarioManager));
+            _personaManager = (IPersonaManager)Global.Container.Resolve(typeof(IPersonaManager));
+
+            string isEdit = Request.QueryString["mode"] ?? "";
+            _isEditModeEnabled = isEdit != "" && isEdit.ToLower() == "edit";
         }
 
         protected void Page_Load(object sender, EventArgs e)
         {
             InitDependencies();
+            
+
             if (!IsPostBack)
             {
-                ddlRol.Items.Clear(); // Limpia cualquier opción existente para evitar duplicados
+                ddlRol.Items.Clear(); 
 
                 ddlRol.Items.Add(new ListItem("Administrador", "1"));
                 ddlRol.Items.Add(new ListItem("Empleado", "2"));
@@ -37,6 +48,80 @@ namespace TPCuatrimestral_equipo_16A.Pages
                 CargarEspecialidades();
                 CargarRoles();
             }
+            else if(_isEditModeEnabled)
+            {
+                var user = _usuarioManager.ObtenerUsuarioById(int.Parse(Request.QueryString["id"]));
+                btnCrear.Text = "Editar";
+
+                switch (user.RolId)
+                {
+                    case (int)RolesEnum.Medico:
+                        var medico = _medicoManager.ObtenerMedicoByUserId(user.Id);
+                        cargarMedicoAEditar(medico);
+                        break;
+                    case (int)RolesEnum.Paciente:
+                        var paciente = _pacienteManager.ObtenerPacienteByUserId(user.Id);
+                        cargarPacienteAEditar(paciente);
+                        break;
+
+                }
+            }
+
+
+        }
+
+        private void cargarMedicoAEditar(Medico medico)
+        {
+            ddlRol.SelectedIndex = medico.RolId;
+            cargarDatosPersonaFormularioEditar((Persona)medico);
+            cargarDireccionFormularioEditar(medico.Direccion);
+           
+
+           
+            txtMatricula.Text = medico.Matricula.ToString();
+            ddlEspecialidad.SelectedValue = medico.EspecialidadId.ToString();
+        }
+
+
+        private void cargarPacienteAEditar(Paciente paciente)
+        {
+            txtNombre.Text = paciente.Nombre;
+            txtApellido.Text = paciente.Apellido;
+            txtEmailPersonal.Text = paciente.EmailPersonal;
+            txtFechaNacimiento.Text = paciente.FechaNacimiento.ToString("dd-MM-yyyy");
+        }
+
+        private void cargarDatosPersonaFormularioEditar(Persona persona)
+        {
+            txtNombre.Text = persona.Nombre;
+            txtApellido.Text = persona.Apellido;
+            txtEmailPersonal.Text = persona.EmailPersonal;
+            txtFechaNacimiento.Text = persona.FechaNacimiento.ToString("yyyy-MM-dd");
+            txtTelefono.Text = persona.Telefono;
+            txtDocumento.Text = persona.Documento.ToString();
+        }
+
+        private void cargarDireccionFormularioEditar(Direccion direccion)
+        {
+            txtCalle.Text = direccion.Calle;
+            txtNumero.Text = direccion.Numero.ToString();
+            txtLocalidad.Text = direccion.Localidad;
+            txtDepto.Text = direccion.Depto;
+            txtPiso.Text = direccion.Piso;
+            txtProvincia.Text = direccion.Provincia;
+            txtCodigoPostal.Text = direccion.CodigoPostal;
+        }
+
+        private void cargarDatosEmpleadoFormularioEditar(Empleado empleado)
+        {
+            txtLegajo.Text = empleado.Legajo.ToString();
+            posicionEmpleado.SelectedValue = empleado.Posicion.ToString();
+        }
+
+        private void cargarDatosMedicoFormularioEditar(Medico medico)
+        {
+            txtMatricula.Text = medico.Matricula.ToString();
+            ddlEspecialidad.SelectedValue = medico.EspecialidadId.ToString();
         }
 
         protected void btnCrear_Click(object sender, EventArgs e)
@@ -47,14 +132,8 @@ namespace TPCuatrimestral_equipo_16A.Pages
             string matricula = txtMatricula.Text.Trim();
             string especialidad = ddlEspecialidad.SelectedValue;
             int rol = int.Parse(ddlRol.SelectedValue);
-            string legajo = txtLegajo.Text.Trim();
+            //string legajo = txtLegajo.Text.Trim();
             int posicion = int.Parse(posicionEmpleado.SelectedValue);
-
-            if (string.IsNullOrEmpty(nombre) || string.IsNullOrEmpty(apellido) || string.IsNullOrEmpty(documento))
-            {
-                Response.Write("<script>alert('Por favor, complete todos los campos obligatorios.');</script>");
-                return;
-            }
 
             Direccion direccion = new Direccion
             {
@@ -69,6 +148,8 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
             switch (rol)
             {
+                case (int)RolesEnum.Administrador:
+                    break;
                 case (int)RolesEnum.Empleado:
                     NuevoEmpleadoDto nuevoEmpleado = new NuevoEmpleadoDto
                     {
@@ -76,19 +157,31 @@ namespace TPCuatrimestral_equipo_16A.Pages
                         Nombre = nombre,
                         Documento = int.Parse(documento),
                         Direccion = direccion,
-                        Legajo = int.Parse(legajo),
+                        //Legajo = int.Parse(legajo),
                         EmailPersonal = txtEmailPersonal.Text.Trim(),
                         Telefono = txtTelefono.Text.Trim(),
-                        FechaNacimiento = txtFechaNacimiento.SelectedDate,
+                        FechaNacimiento = DateTime.Parse(txtFechaNacimiento.Text),
                         Posicion = posicion,
                         Matricula = int.Parse(txtMatricula.Text),
                         EspecialidadId = int.Parse(ddlEspecialidad.SelectedValue),
                         RolId = (int)RolesEnum.Empleado
                     };
-                    _empleadoManager.CrearNuevo(nuevoEmpleado);
+                    if (_isEditModeEnabled)
+                    {
+
+                    }
+                    else
+                    {
+                        var res = _empleadoManager.CrearNuevo(nuevoEmpleado);
+                        if (res.Success)
+                        {
+                            Response.Redirect("AsignarJornadaLaboral.aspx?id=" + res.Data.Id);
+                        }
+                    }
                     break;
 
                 case (int)RolesEnum.Paciente:
+
                     Paciente nuevoPaciente = new Paciente
                     {
                         Apellido = apellido,
@@ -97,65 +190,48 @@ namespace TPCuatrimestral_equipo_16A.Pages
                         Direccion = direccion,
                         EmailPersonal = txtEmailPersonal.Text.Trim(),
                         Telefono = txtTelefono.Text.Trim(),
-                        FechaNacimiento = txtFechaNacimiento.SelectedDate,
+                        FechaNacimiento = DateTime.Parse(txtFechaNacimiento.Text),
                         RolId = (int)RolesEnum.Paciente
 
                     };
-                    _pacienteManager.Crear(nuevoPaciente);
+                    if (_isEditModeEnabled)
+                    {
+
+                    }
+                    else
+                    {
+                        _pacienteManager.Crear(nuevoPaciente);
+
+                    }
                     break;
             }
 
-            //// Lógica según el rol seleccionado
-            //if (rol == (int)RolesEnum.Empleado)
-            //{
-            //    // Validación para médico (Matricula y Especialidad deben ser completados)
-            //    if (string.IsNullOrEmpty(matricula) || string.IsNullOrEmpty(especialidad))
-            //    {
-            //        Response.Write("<script>alert('Por favor, complete los campos de Matrícula y Especialidad para el Médico.');</script>");
-            //        return;
-            //    }
+            string titulo = "Éxito";
+            string texto = "El registro se creó correctamente.";
 
-            //    // Aquí puedes agregar la lógica para crear un Médico y guardar en base de datos.
-            //    GuardarUsuario(nombre, apellido, documento, direccion, matricula, especialidad, rol);
-            //}
-            //else if (rol == (int)RolesEnum.Empleado)
-            //{
-            //    // Validación para Empleado (Legajo debe ser completado)
-            //    string legajo = "123345"
-            //    if (string.IsNullOrEmpty(legajo))
-            //    {
-            //        Response.Write("<script>alert('Por favor, complete el campo de Legajo para el Empleado.');</script>");
-            //        return;
-            //    }
-
-            //    // Aquí puedes agregar la lógica para crear un Empleado y guardar en base de datos.
-            //    GuardarUsuario(nombre, apellido, documento, direccion, legajo, string.Empty, rol);
-            //}
-            //else if (rol == (int)RolesEnum.Paciente)
-            //{
-            //    // Lógica para Paciente (sin campos adicionales)
-            //    GuardarUsuario(nombre, apellido, documento, direccion, string.Empty, string.Empty, rol);
-            //}
-
-            Response.Write("<script>alert('Usuario creado con éxito.');</script>");
+            string script = $"mostrarMensaje('{titulo}', '{texto}');";
+            ScriptManager.RegisterStartupScript(this, GetType(), "MostrarMensaje", script, true);
             LimpiarCampos();
         }
 
         private void CargarEspecialidades()
         {
-            // Cargar las especialidades (esto puede venir de una base de datos)
+            var especialides = _medicoManager.ObtenerTodasEspecialidades();
             ddlEspecialidad.Items.Clear();
-            ddlEspecialidad.Items.Add(new ListItem("Especialidad 1", "1"));
-            ddlEspecialidad.Items.Add(new ListItem("Especialidad 2", "2"));
-            ddlEspecialidad.Items.Add(new ListItem("Especialidad 3", "3"));
+            foreach (var especialidad in especialides)
+            {
+                ddlEspecialidad.Items.Add(new ListItem(especialidad.Nombre, especialidad.Id.ToString()));
+            }
         }
 
         private void CargarRoles()
         {
+            var roles = _usuarioManager.ObtenerAllRoles();
             ddlRol.Items.Clear();
-            ddlRol.Items.Add(new ListItem("Administrador", "1"));
-            ddlRol.Items.Add(new ListItem("Empleado", "4"));
-            ddlRol.Items.Add(new ListItem("Paciente", "5"));
+            foreach(var rol in roles)
+            {
+                ddlRol.Items.Add(new ListItem(rol.Nombre, rol.Id.ToString()));
+            }
         }
 
 
@@ -167,7 +243,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
             txtMatricula.Text = string.Empty;
             ddlEspecialidad.SelectedIndex = 0;
             ddlRol.SelectedIndex = 0;
-            txtLegajo.Text = string.Empty;
+            //txtLegajo.Text = string.Empty;
         }
 
         protected void ddlRol_SelectedIndexChanged(object sender, EventArgs e)

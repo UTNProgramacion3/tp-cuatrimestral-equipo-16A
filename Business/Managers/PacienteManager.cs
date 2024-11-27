@@ -163,38 +163,53 @@ namespace Business.Managers
         {
             throw new NotImplementedException();
         }
-        #endregion
 
-        #region Private methods
-        //private Response<HistoriaClinica> ObtenerHistoriaClinicaPorPacienteId(int pacienteId)
-        //{
-        //    string query = @"
-        //    SELECT 
-        //        hc.Id AS HistoriaClinicaId, hc.Detalle, hc.FechaCreacion, hc.PacienteId
-        //    FROM HistoriaClinica hc
-        //    WHERE hc.PacienteId = @PacienteId";
+        public Paciente ObtenerPacienteByUserId(int userId)
+        {
+            string query = @"SELECT * FROM Pacientes 
+            left join Personas on Pacientes.PersonaId = Personas.Id
+            WHERE UsuarioId = @UserId";
 
-        //    SqlParameter[] parameters = new SqlParameter[]
-        //    {
-        //        new SqlParameter("@PacienteId", pacienteId)
-        //    };
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@UserId", userId)
+            };
 
-        //    var response = new Response<HistoriaClinica>();
+            var res = _DBManager.ExecuteQuery(query, parameters);
+            return res.GetEntity<Paciente>();
+        }
+            #endregion
 
-        //    var res = _DBManager.ExecuteQuery(query, parameters);
+            #region Private methods
+            //private Response<HistoriaClinica> ObtenerHistoriaClinicaPorPacienteId(int pacienteId)
+            //{
+            //    string query = @"
+            //    SELECT 
+            //        hc.Id AS HistoriaClinicaId, hc.Detalle, hc.FechaCreacion, hc.PacienteId
+            //    FROM HistoriaClinica hc
+            //    WHERE hc.PacienteId = @PacienteId";
 
-        //    if (res.Rows.Count == 0)
-        //    {
-        //        response.NotOk("No se encontró una historia clínica para el paciente especificado.");
-        //        return response;
-        //    }
+            //    SqlParameter[] parameters = new SqlParameter[]
+            //    {
+            //        new SqlParameter("@PacienteId", pacienteId)
+            //    };
 
-        //    var historiaClinica = res.GetEntity<HistoriaClinica>();
+            //    var response = new Response<HistoriaClinica>();
 
-        //    response.Ok(historiaClinica);
-        //    return response;
-        //}
+            //    var res = _DBManager.ExecuteQuery(query, parameters);
 
-        #endregion
-    }
+            //    if (res.Rows.Count == 0)
+            //    {
+            //        response.NotOk("No se encontró una historia clínica para el paciente especificado.");
+            //        return response;
+            //    }
+
+            //    var historiaClinica = res.GetEntity<HistoriaClinica>();
+
+            //    response.Ok(historiaClinica);
+            //    return response;
+            //}
+
+            #endregion
+        }
 }

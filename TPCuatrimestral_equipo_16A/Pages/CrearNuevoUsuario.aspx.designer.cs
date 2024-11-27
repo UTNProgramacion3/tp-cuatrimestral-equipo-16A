@@ -93,7 +93,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Calendar txtFechaNacimiento;
+        protected global::System.Web.UI.WebControls.TextBox txtFechaNacimiento;
 
         /// <summary>
         /// txtDocumento control.

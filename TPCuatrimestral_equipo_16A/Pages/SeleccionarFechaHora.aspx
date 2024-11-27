@@ -8,16 +8,20 @@
         <div class="col-md-6">
             <div class="mb-3">
                 <label class="form-label fw-bold" runat="server">Seleccionar Fecha de Turno</label>
-                <asp:TextBox CssClass="form-control" TextMode="Date" runat="server" ID="txtBoxFechaTurno" />
+                <asp:TextBox CssClass="form-control" TextMode="Date" runat="server" ID="txtBoxFechaTurno" AutoPostBack="true" OnTextChanged="txtBoxFechaTurno_TextChanged" />
             </div>
             <div>
                <asp:GridView ID="dgvFechaHorario" runat="server" AutoGenerateColumns="false"
-                    CssClass="table table-hover table-striped table-bordered">
+                    CssClass="table table-hover table-striped table-bordered" OnSelectedIndexChanged="dgvFechaHorario_SelectedIndexChanged" >
                     <Columns>
                         <asp:BoundField DataField="Hora" HeaderText="Hora" />
                         <asp:CommandField ShowSelectButton="True" SelectText="Seleccionar" />
                     </Columns>
                </asp:GridView>
+                <div class="mb-3">
+                    <label class="form-label fw-bold" runat="server">Fecha y Hora del Turno Seleccionado: </label>
+                    <asp:TextBox Text="" runat="server" class="form-control" Disabled="True" ReadOnly="True" ID="txtBoxFechaHora" />
+                </div>
             </div>
             <div class="mb-3">
                 <asp:Button class="btn btn-dark" Text="Atrás" runat="server" ID="btnAtras" OnClick="btnAtras_Click" />

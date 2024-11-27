@@ -138,9 +138,9 @@ namespace Business.Services
         {
             try
             {
-            string query = "SELECT * FROM EmailValidaciones where TiempoExpiracion <= GETDATE() AND Activo = 1";
-            var res = _dbManager.ExecuteQuery(query);
-            string update = "UPDATE EmailValidaciones set Activo = 0 where token = @token";
+            //string query = "SELECT * FROM EmailValidaciones where TiempoExpiracion <= GETDATE() AND Activo = 1";
+            //var res = _dbManager.ExecuteQuery(query);
+            //string update = "UPDATE EmailValidaciones set Activo = 0 where token = @token";
 
             //var tokens = res.GetEntity<List<EmailValidationDto>>();
             //    if (tokens.Any())
@@ -158,7 +158,7 @@ namespace Business.Services
 
             }catch(Exception ex)
             {
-                throw ex;
+                //throw ex;
             }
         }
     }

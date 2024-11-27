@@ -12,7 +12,7 @@ namespace Business.Interfaces
         Response<Usuario> ObtenerPorEmail(string email);   
         bool VerificarPassword(string password, string hashedpassword);
         bool ExisteMail(string email);
-        Response<bool> LogIn(Usuario usuario);
+        Response<Usuario> LogIn(Usuario usuario);
         void LogOut(Usuario usuario);
         Usuario GenerarUsuario(Persona persona, int tipoUsuario);
         Usuario ValidarToken(string token);

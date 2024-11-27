@@ -36,11 +36,11 @@ namespace TPCuatrimestral_equipo_16A.Pages
         protected void Page_Load(object sender, EventArgs e)
         {
             InitDependencies();
-            
+
 
             if (!IsPostBack)
             {
-                ddlRol.Items.Clear(); 
+                ddlRol.Items.Clear();
 
                 ddlRol.Items.Add(new ListItem("Administrador", "1"));
                 ddlRol.Items.Add(new ListItem("Empleado", "2"));
@@ -48,7 +48,8 @@ namespace TPCuatrimestral_equipo_16A.Pages
                 CargarEspecialidades();
                 CargarRoles();
             }
-            else if(_isEditModeEnabled)
+
+            if (_isEditModeEnabled)
             {
                 var user = _usuarioManager.ObtenerUsuarioById(int.Parse(Request.QueryString["id"]));
                 btnCrear.Text = "Editar";
@@ -63,7 +64,6 @@ namespace TPCuatrimestral_equipo_16A.Pages
                         var paciente = _pacienteManager.ObtenerPacienteByUserId(user.Id);
                         cargarPacienteAEditar(paciente);
                         break;
-
                 }
             }
 

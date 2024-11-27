@@ -9,6 +9,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using static TPCuatrimestral_equipo_16A.Global;
 
 namespace TPCuatrimestral_equipo_16A.Pages
 {
@@ -16,6 +17,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            GlobalData.UsuarioLogueado = null;
             if (!IsPostBack)
             {
                 if (Session["UserLogueado"] != null)
@@ -36,7 +38,8 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
                 if (response.Success)
                 {
-                    Response.Redirect("Home.aspx", false);
+                GlobalData.UsuarioLogueado = response.Data;
+                Response.Redirect("Home.aspx", false);
 
                 }
                 else

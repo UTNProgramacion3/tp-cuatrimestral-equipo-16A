@@ -95,22 +95,22 @@ namespace Business.Managers
         }
 
 
-        public Response<bool> LogIn(Usuario usuario)
+        public Response<Usuario> LogIn(Usuario usuario)
         {
-            Response<bool> response = new Response<bool>();
+            Response<Usuario> response = new Response<Usuario>();
 
             try
             {
 
                 _response = ObtenerPorEmail(usuario.Email);
-
-                if (_response.Success)
+              
+                if (true)
                 {
                     var res = VerificarPassword(usuario.Passwordhash, _response.Data.Passwordhash);
                     if (res == true)
                     {
                         _sessionManager.SetSessionValue("UserLogueado", _response.Data);
-                        response.Ok(true, "Usuario logeado correctamente.");
+                        response.Ok(_response.Data, "Usuario logeado correctamente.");
                     }
                     else
                     {

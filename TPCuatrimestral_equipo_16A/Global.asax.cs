@@ -23,7 +23,12 @@ namespace TPCuatrimestral_equipo_16A
         public static IUnityContainer Container { get; private set; }
         private static ExpiredTokenService _expiredTokenService;
 
-        protected void Application_Start(object sender, EventArgs e)
+        public static class GlobalData
+        {
+            public static Usuario UsuarioLogueado { get; set; }
+        }
+
+            protected void Application_Start(object sender, EventArgs e)
         {
             Environment.SetEnvironmentVariable("SMTP_SERVER", ConfigurationManager.AppSettings["SMTP_SERVER"]);
             Environment.SetEnvironmentVariable("SMTP_PORT", ConfigurationManager.AppSettings["SMTP_PORT"]);

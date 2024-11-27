@@ -8,7 +8,6 @@
                 <h1>Lista de Usuarios</h1>
                 <h3>Filtrar usuarios por rol</h3>
 
-                <!-- Desplegable para seleccionar rol -->
                 <div class="form-group">
                     <label for="ddlRoles">Seleccione un Rol:</label>
                     <asp:DropDownList ID="ddlRoles" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlRoles_SelectedIndexChanged" class="form-control">

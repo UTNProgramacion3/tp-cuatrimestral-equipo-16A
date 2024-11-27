@@ -136,7 +136,7 @@ namespace Business.Managers
 
         public List<UsuarioBasicoDto> ObtenerUsuariosDataBasica()
         {
-            string query = @"select Usuarios.*, PER.Nombre + ' ' + PER.Apellido NombreCompleto, R.Nombre Rol  from Usuarios
+            string query = @"select Usuarios.*, PER.Nombre + ' ' + PER.Apellido NombreCompleto, R.Nombre Rol, R.Id RolId from Usuarios
             left join Personas PER on PER.UsuarioId = Usuarios.Id
             left join Roles R ON R.Id = Usuarios.RolId";
 

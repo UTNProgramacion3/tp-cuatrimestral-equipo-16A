@@ -14,7 +14,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
     public partial class ListadoUsuarios : System.Web.UI.Page
     {
         private IUsuarioManager _usuarioManager;
-        private List<UsuarioBasicoDto> _listadoUsuarios;
+        private List<UsuarioBasicoDto> _listadoUsuarios = new List<UsuarioBasicoDto>();
         private List<UsuarioBasicoDto> _usuarios;
 
         public void InitDependencies()
@@ -23,7 +23,9 @@ namespace TPCuatrimestral_equipo_16A.Pages
             _usuarioManager = (IUsuarioManager)Global.Container.Resolve(typeof(IUsuarioManager));
 
             CargarUsuarios();
-            _usuarios = _listadoUsuarios;
+            CargarRoles();
+            Session["ListadoUsuarios"] = _listadoUsuarios;
+            Session["Usuarios"] = _listadoUsuarios;
             gvUsuarios.DataSource = _usuarios;
             gvUsuarios.DataBind();
         }
@@ -32,7 +34,14 @@ namespace TPCuatrimestral_equipo_16A.Pages
         {
             if (!IsPostBack)
             {
-                InitDependencies();
+            InitDependencies();
+            }
+            else
+            {
+                _listadoUsuarios = (List<UsuarioBasicoDto>)Session["ListadoUsuarios"];
+                _usuarios = (List<UsuarioBasicoDto>)Session["Usuarios"];
+                gvUsuarios.DataSource = _usuarios;
+                gvUsuarios.DataBind();
             }
         }
 
@@ -40,7 +49,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
         {
             int rolSeleccionado = int.Parse(ddlRoles.SelectedValue);
             _usuarios = FiltrarUsuarios(rolSeleccionado);
-
+            Session["Usuarios"] = _usuarios;
             gvUsuarios.DataSource = _usuarios;
             gvUsuarios.DataBind();
         }
@@ -48,7 +57,6 @@ namespace TPCuatrimestral_equipo_16A.Pages
         private void CargarRoles()
         {
             var roles = _usuarioManager.ObtenerAllRoles();
-            ddlRoles.Items.Clear();
             foreach (var rol in roles)
             {
                 ddlRoles.Items.Add(new ListItem(rol.Nombre, rol.Id.ToString()));
@@ -66,8 +74,8 @@ namespace TPCuatrimestral_equipo_16A.Pages
             {
                 return _listadoUsuarios;
             }
-
-            return _listadoUsuarios.Where(u => u.RolId == rolSeleccionado).ToList();
+            var listado = _listadoUsuarios.Where(u => u.RolId == rolSeleccionado).ToList();
+            return listado;
         }
     }
 }

@@ -81,6 +81,7 @@
     <Content Include="ImagesFolder\edit.png" />
     <Content Include="ImagesFolder\github.png" />
     <Content Include="ImagesFolder\logo.png" />
+    <Content Include="Pages\AdmPermisos.aspx" />
     <Content Include="Pages\CambioPassword.aspx" />
     <Content Include="Pages\ConfirmarTurno.aspx" />
     <Content Include="Pages\CrearNuevoUsuario.aspx" />
@@ -90,6 +91,7 @@
     <Content Include="Pages\ListarSedes.aspx" />
     <Content Include="Pages\Login.aspx" />
     <Content Include="Pages\RegisterSuccess.aspx" />
+    <Content Include="Pages\RolesPermisos.aspx" />
     <Content Include="Pages\SeleccionarMedico.aspx" />
     <Content Include="Pages\SeleccionarPaciente.aspx" />
     <Content Include="Pages\ListadoTurnos.aspx" />
@@ -108,6 +110,13 @@
   <ItemGroup>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\AdmPermisos.aspx.cs">
+      <DependentUpon>AdmPermisos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\AdmPermisos.aspx.designer.cs">
+      <DependentUpon>AdmPermisos.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\CambioPassword.aspx.cs">
       <DependentUpon>CambioPassword.aspx</DependentUpon>
@@ -171,6 +180,13 @@
     </Compile>
     <Compile Include="Pages\RegisterSuccess.aspx.designer.cs">
       <DependentUpon>RegisterSuccess.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\RolesPermisos.aspx.cs">
+      <DependentUpon>RolesPermisos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\RolesPermisos.aspx.designer.cs">
+      <DependentUpon>RolesPermisos.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\SeleccionarMedico.aspx.cs">
       <DependentUpon>SeleccionarMedico.aspx</DependentUpon>

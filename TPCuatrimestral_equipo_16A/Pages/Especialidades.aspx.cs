@@ -37,13 +37,13 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            Usuario usuario = new Usuario();
-            usuario.Id = 99;
-            usuario.Rol.Nombre = "Paciente";
+            //Usuario usuario = new Usuario();
+            //usuario.Id = 99;
+            //usuario.Rol.Nombre = "Paciente";
 
-            Session["UserLogueado"] = usuario;
+            //Session["UserLogueado"] = usuario;
 
-            Global.GlobalData.UsuarioLogueado = usuario;
+            //Global.GlobalData.UsuarioLogueado = usuario;
 
 
             InitDependencies();
@@ -51,10 +51,10 @@ namespace TPCuatrimestral_equipo_16A.Pages
             if (!IsPostBack)
             {
                 CargarEspecialidades();
-                if (usuario.Rol.Nombre != "Admin")
-                {
-                    Response.Redirect("~/Pages/Home.aspx", false);
-                }
+                //if (usuario.Rol.Nombre != "Admin")
+                //{
+                //    Response.Redirect("~/Pages/Home.aspx", false);
+                //}
             }
         }
 

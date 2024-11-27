@@ -5,11 +5,11 @@ using System.Threading;
 public class TurnosJobService
 {
 	private Timer _timer;
-	private readonly _INTERVALO_JOB;
+	//private readonly _INTERVALO_JOB;
 
 	public TurnosJobService()
 	{
-		_INTERVALO_JOB = intervaloJob;
+		//_INTERVALO_JOB = intervaloJob;
 	}
 
 	public void Start()

@@ -1,4 +1,5 @@
-﻿using Business.Interfaces;
+﻿using Business.Dtos;
+using Business.Interfaces;
 using DataAccess;
 using DataAccess.Extensions;
 using Domain.Entities;
@@ -277,18 +278,16 @@ namespace Business.Managers
             string query = @"Update USUARIOS
                             Set   Email = @email,
 	                              PasswordHash = @passwordhash,
-	                              RolId = @idrol,
 	                              ImagenPerfil = @img_perfil,
+                                    Activo = @activo
                             Where Id = @id";
-            //Hasheamos la password antes de guardarla
-            entity.Passwordhash = PasswordHasher.HashPassword(entity.Passwordhash);
             SqlParameter[] parameters = new SqlParameter[]
                 {
                     new SqlParameter("@email", entity.Email),
                     new SqlParameter("@passwordhash", entity.Passwordhash),
-                    new SqlParameter("@idrol", entity.Rol.Id),
-                    new SqlParameter("@img_perfil", string.IsNullOrEmpty(entity.ImagenPerfil) ? null : entity.ImagenPerfil),
-                    new SqlParameter("@id", entity.Id)
+                    new SqlParameter("@img_perfil", entity.ImagenPerfil ?? ""),
+                    new SqlParameter("@id", entity.Id),
+                    new SqlParameter("@activo", entity.Activo)
                 };
 
             Response<bool> response = new Response<bool>();
@@ -318,7 +317,6 @@ namespace Business.Managers
         public bool VerificarPassword(string password, string hashedpassword)
         {
             return PasswordHasher.VerifyPassword(password, hashedpassword);
-            
         }
 
         public bool ExisteMail(string email)
@@ -350,38 +348,98 @@ namespace Business.Managers
             Usuario usuario = new Usuario
             {
                 Email = email,
-                Passwordhash = "123456",
+                Passwordhash = persona.Documento.ToString(),
                 FechaCreacion = DateTime.Now,
                 Rol = AsignarRol(persona, tipoUsuario),
                 ImagenPerfil = "",
-                Activo = true,
+                Activo = false,
             };
 
             return usuario;
         }
 
+        public Usuario ValidarToken(string token)
+        {
+            try
+            {
+                string decodedToken = Encoding.UTF8.GetString(Convert.FromBase64String(token));
+                var parts = decodedToken.Split('|');
+
+                if (parts.Length == 2 && DateTime.TryParse(parts[1], out DateTime expirationDate) && expirationDate > DateTime.Now)
+                {
+                    var email = parts[0];
+
+                    string query = @"
+                        SELECT U.* FROM Personas P
+                        LEFT JOIN Usuarios U on P.UsuarioId = U.Id
+                        LEFT JOIN Emailvalidaciones VAL on VAL.UsuarioId = U.Id
+                        where P.EmailPersonal = 'escuderopablo.m@gmail.com' and VAL.TiempoExpiracion >= GETDATE() AND VAL.Token = @token and VAL.Activo = 1";
+
+                    SqlParameter[] parameters = new SqlParameter[]
+                    {
+                        new SqlParameter("@email", email),
+                        new SqlParameter("@token", token)
+                    };
+        
+
         //public static bool ValidarToken(this string token, out string email)
         //{
         //    email = null;
 
-        //    try
-        //    {
-        //        string decodedToken = Encoding.UTF8.GetString(Convert.FromBase64String(token));
-        //        var parts = decodedToken.Split('|');
+                    var res = _dbManager.ExecuteQuery(query, parameters);
+                    return res.GetEntity<Usuario>();
+                }
+                return new Usuario();
+            }
+            catch (FormatException)
+            {
+                return new Usuario();
+            }
+        }
 
-        //        if (parts.Length == 3 && DateTime.TryParse(parts[2], out DateTime expirationDate) && expirationDate > DateTime.UtcNow)
-        //        {
-        //            email = parts[0];
-        //            return true;
-        //        }
-        //    }
-        //    catch (FormatException)
-        //    {
-        //        return false;
-        //    }
+        public Usuario ActivarUsuario(Usuario usuario, string password)
+        {
+            usuario.Activo = true;
+            usuario.Passwordhash = password;
 
-        //    return false;
-        //}
+            return usuario;
+        }
+
+        public Response<bool> CambiarPassword(string newPass, int userId)
+        {
+            string query = @"Update USUARIOS
+                            Set   PasswordHash = @newPass
+                            Where Id = @id";
+            string hashedPass = PasswordHasher.HashPassword(newPass);
+            SqlParameter[] parameters = new SqlParameter[]
+                {
+                    new SqlParameter ("@newPass", hashedPass),
+                    new SqlParameter ("@id", userId)
+                };
+
+            Response<bool> response = new Response<bool>();
+
+            try
+            {
+                var res = Convert.ToBoolean(_dbManager.ExecuteNonQuery(query, parameters));
+
+                if (res == false)
+                {
+                    response.NotOk("No se pudo editar La contraseña");
+                }
+                else
+                {
+                    response.Ok(res, "Contraseña editada.");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                response.NotOk(ex.Message);
+            }
+
+            return response;
+        }
 
         #region Private methods
         private Rol AsignarRol(Persona persona, int tipoUsuario)
@@ -393,6 +451,40 @@ namespace Business.Managers
             return res.GetEntity<Rol>();
 
         }
+
+        public List<Rol> ObtenerAllRoles()
+        {
+            string query = "select * from Roles";
+            var res = _dbManager.ExecuteQuery(query);
+
+            List<Rol> roles = new List<Rol>();
+
+            foreach(DataRow row in res.Rows)
+            {
+                roles.Add(new Rol
+                {
+                    Id = Convert.ToInt32(row["Id"]),
+                    Nombre = row["Nombre"].ToString(),
+                });
+            }
+
+            return roles;
+        }
+
+        public Usuario ObtenerUsuarioById(int id)
+        {
+            string query = "select * from Usuarios where id = @id";
+
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@id", id)
+            };
+
+            var res = _dbManager.ExecuteQuery(query, parameters);
+
+            return res.GetEntity<Usuario>();
+        }
+
         #endregion
     }
 }

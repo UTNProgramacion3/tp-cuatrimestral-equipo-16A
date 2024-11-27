@@ -10,5 +10,6 @@ namespace Business.Interfaces
 {
     public interface IPacienteManager : ICrudRepository<Paciente>
     {
+        Paciente ObtenerPacienteByUserId(int userId);
     }
 }

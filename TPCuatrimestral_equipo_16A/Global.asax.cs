@@ -1,5 +1,6 @@
 ﻿using Business.Interfaces;
 using Business.Managers;
+using Business.Services;
 using DataAccess;
 using Domain.Entities;
 using Domain.Response;
@@ -13,12 +14,15 @@ using System.Web.Security;
 using System.Web.SessionState;
 using System.Xml.Linq;
 using Unity;
+using Business.Services;
 
 namespace TPCuatrimestral_equipo_16A
 {
     public class Global : System.Web.HttpApplication
     {
         public static IUnityContainer Container { get; private set; }
+        private static ExpiredTokenService _expiredTokenService;
+
         protected void Application_Start(object sender, EventArgs e)
         {
             Environment.SetEnvironmentVariable("SMTP_SERVER", ConfigurationManager.AppSettings["SMTP_SERVER"]);
@@ -32,6 +36,9 @@ namespace TPCuatrimestral_equipo_16A
             {
                 throw new Exception("No se ha configurado usuario / contraseña para envío de mails");
             }
+            _expiredTokenService = new ExpiredTokenService();
+            _expiredTokenService.Start();
+
             Container = new UnityContainer();
 
             Container.RegisterType<IEmpleadoManager, EmpleadoManager>();
@@ -44,6 +51,13 @@ namespace TPCuatrimestral_equipo_16A
             Container.RegisterType<ISedeManager, SedeManager>();
             Container.RegisterType<IEspecialidadManager, EspecialidadManager>();
             Container.RegisterType<IEmailManager, EmailManager>();
+            Container.RegisterType<ISeguridadService, SeguridadService>();
         }
+
+        protected void Application_End(object sender, EventArgs e)
+        {
+            _expiredTokenService.Stop();
+        }
+
     }
 }

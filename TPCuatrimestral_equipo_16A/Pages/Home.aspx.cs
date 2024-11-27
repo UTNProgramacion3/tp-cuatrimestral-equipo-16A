@@ -29,7 +29,25 @@ namespace TPCuatrimestral_equipo_16A.Pages
         protected void Page_Load(object sender, EventArgs e)
 		{
             InitDependencies();
-		}
+
+            if (!IsPostBack)
+            {
+                var tarjetas = new List<dynamic>
+        {
+            new { Titulo = "Agendar Turno", Descripcion = "Agenda un nuevo turno", Url = "/Pages/SeleccionarPaciente.aspx" },
+            new { Titulo = "Turnos", Descripcion = "Consulta los Turnos.", Url = "/Pages/ListadoTurnos.aspx" },
+            new { Titulo = "Perfil", Descripcion = "Gestiona tu perfil.", Url = "/Pages/Perfil.aspx" },
+            new { Titulo = "Sedes", Descripcion = "Administrar las Sedes.", Url = "/Pages/ListarSedes.aspx" },
+            new { Titulo = "Especialidades", Descripcion = "Administrar las Especialidades.", Url = "/Pages/Especialidades.aspx" },
+            new { Titulo = "Pacientes", Descripcion = "Administrar los datos de pacientes.", Url = "#" },
+            new { Titulo = "Medicos", Descripcion = "Administrar los datos de medicos.", Url = "#" },
+            new { Titulo = "Usuarios", Descripcion = "Administrar los datos de usuarios.", Url = "#" }
+        };
+
+                rptTarjetas.DataSource = tarjetas;
+                rptTarjetas.DataBind();
+            }
+        }
 
         protected void Button1_Click(object sender, EventArgs e)
         {

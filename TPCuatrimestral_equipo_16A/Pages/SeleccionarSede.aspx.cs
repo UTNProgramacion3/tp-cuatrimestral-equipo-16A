@@ -58,11 +58,16 @@ namespace TPCuatrimestral_equipo_16A.Pages
             {
                 string cellValue = selectedRow.Cells[0].Text;
                 string cellNombre = HttpUtility.HtmlDecode(selectedRow.Cells[1].Text);
+                string cellCalle = HttpUtility.HtmlDecode(selectedRow.Cells[2].Text);
+                string cellAltura = HttpUtility.HtmlDecode(selectedRow.Cells[3].Text);
+                string cellProvincia = HttpUtility.HtmlDecode(selectedRow.Cells[4].Text);
 
                 if (!string.IsNullOrEmpty(cellNombre))
                 {
                     txtbSedeSeleccionada.Text = cellNombre;
                     Session["NombreSede"] = cellNombre;
+                    Session["DireccionSede"] = cellCalle + " - " + cellAltura + " - " + cellProvincia; 
+
                 }
 
                 if (!string.IsNullOrEmpty(cellValue) && int.TryParse(cellValue.Trim(), out int idSede))

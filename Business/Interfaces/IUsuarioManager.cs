@@ -20,6 +20,5 @@ namespace Business.Interfaces
         Response<bool> CambiarPassword(string newPass, int userId);
         List<Rol> ObtenerAllRoles();
         Usuario ObtenerUsuarioById(int id);
-        List<UsuarioBasicoDto> ObtenerUsuariosDataBasica();
     }
 }

@@ -11,6 +11,10 @@ using System.Threading.Tasks;
 using Utils.Interfaces;
 using Utils;
 using System.Data;
+using System.Data.SqlClient;
+using System.Security.Cryptography;
+using DataAccess.Extensions;
+
 
 namespace Business.Managers
 {
@@ -24,10 +28,39 @@ namespace Business.Managers
         {
             _dbManager = new DBManager();
             _mapper = new Mapper<SedeDto>();
+            _response = new Response<SedeDto>();
         }
-        public Response<Sede> Crear(Sede entity)
+        public Response<SedeDto> Crear(SedeDto entity)
         {
-            throw new NotImplementedException();
+            string query = @"Insert into Sedes (Nombre, DireccionId)
+                           VALUES (@Nombre, @IdDireccion)";
+
+            SqlParameter[]parameters = new SqlParameter[]
+            {
+               new SqlParameter(@"Nombre", entity.Sede.Nombre),
+               new SqlParameter(@"IdDireccion", entity.Direccion.Id)
+            };
+
+            try
+            {
+                var res = _dbManager.ExecuteNonQuery(query, parameters);
+
+                if(res == 0)
+                {
+                    return new Response<SedeDto>();
+                }
+                else
+                {
+                    _response.Ok(entity);
+                    return _response;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
         }
 
         public Response<bool> Eliminar(int id)
@@ -35,9 +68,33 @@ namespace Business.Managers
             throw new NotImplementedException();
         }
 
-        public Response<Sede> ObtenerPorId(int id)
+        public Response<Sede> ObeterSedeById(int id)
         {
-            throw new NotImplementedException();
+
+            Response<Sede> response = new Response<Sede>();
+            
+            string query = @"
+                SELECT Nombre, DireccionId
+                FROM Sedes SE
+                WHERE SE.Id = @Id";
+
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@Id", id)
+            };
+
+            var res = _dbManager.ExecuteQuery(query, parameters);
+
+            if (res == null)
+            {
+                throw new Exception("No se encontró la sede con el ID proporcionado");
+            }
+
+            var sede = res.GetEntity<Sede>();
+
+            response.Ok(sede);
+
+            return response;
         }
 
 
@@ -46,13 +103,13 @@ namespace Business.Managers
             string query = @"
                             SELECT
                             SE.Id AS Sede_Id,
-	                        SE.Nombre AS Sede_Nombre,
-	                        DI.Calle AS Direccion_Calle,
-	                        DI.Numero AS Direccion_Numero,
-	                        DI.Localidad AS Direccion_Localidad
+                            SE.Nombre AS Sede_Nombre,
+                            DI.Calle AS Direccion_Calle,
+                            DI.Numero AS Direccion_Numero,
+                            DI.Localidad AS Direccion_Localidad
                             FROM Sedes SE
-                            INNER JOIN Direcciones DI ON SE.DireccionId = SE.Id
-                            Where SE.DireccionId = DI.Id";
+                            LEFT JOIN Direcciones DI ON SE.DireccionId = DI.Id
+                            WHERE SE.DireccionId = DI.Id;";
 
             try
             {
@@ -80,9 +137,40 @@ namespace Business.Managers
 
         }
 
-        public Response<bool> Update(Sede entity)
+        public Sede Update(Sede entity)
         {
-            throw new NotImplementedException();
+            string query = @"
+                            UPDATE Sedes
+                            Set Nombre = @Nombre,
+                                DireccionId = @IdDireccion
+                            Where Id = @Id
+                            ";
+
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+               new SqlParameter("@Nombre", entity.Nombre),
+               new SqlParameter("@IdDireccion", entity.DireccionId),
+               new SqlParameter("@Id", entity.Id)
+            };
+
+            try
+            {
+
+                var res = _dbManager.ExecuteNonQuery(query, parameters);
+
+                if (res == 0)
+                {
+                    return new Sede();
+                }
+
+                return entity;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
         }
     }
 }

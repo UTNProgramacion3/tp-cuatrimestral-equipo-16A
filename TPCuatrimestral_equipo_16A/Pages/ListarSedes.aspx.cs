@@ -39,12 +39,18 @@ namespace TPCuatrimestral_equipo_16A.Pages
             dbManager = new DBManager();
             sedeManager = new SedeManager();
 
+            var user = Global.GlobalData.UsuarioLogueado;
+
             InitDependencies();
 
             //txtbSedeSeleccionada.Text = (string)Session["NombreSede"];
 
             if (!IsPostBack)
-            {
+            {   
+                if(user.Rol.Nombre != "Admin")
+                {
+                    Response.Redirect("~/Pages/Home.aspx", false);
+                }
                 CargarSedes();
             }
 

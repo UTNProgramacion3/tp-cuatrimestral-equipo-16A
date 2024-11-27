@@ -59,5 +59,11 @@ namespace TPCuatrimestral_equipo_16A
             _expiredTokenService.Stop();
         }
 
+
+        public static class GlobalData
+        {
+            public static Usuario UsuarioLogueado { get; set; }
+        }
+
     }
 }

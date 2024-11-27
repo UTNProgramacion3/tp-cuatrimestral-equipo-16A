@@ -11,6 +11,7 @@ using Business.Dtos;
 using DataAccess;
 using Business.Managers;
 using Domain.Enums;
+using Domain.Entities;
 
 namespace TPCuatrimestral_equipo_16A.Pages
 {
@@ -72,7 +73,6 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
             CrearTurno();
 
-            Session.Clear();
             RedirectHome();
 
         }
@@ -98,7 +98,6 @@ namespace TPCuatrimestral_equipo_16A.Pages
             btnCancelar.Enabled = false;
             turnoCancelado.Visible = true;
 
-            Session.Clear();
             RedirectHome();
         }
 
@@ -110,6 +109,21 @@ namespace TPCuatrimestral_equipo_16A.Pages
                }},5000);";
 
             ClientScript.RegisterStartupScript(this.GetType(), "DelayedRedirect", script, true);
+
+            Session["NombrePaciente"] = null;
+            Session["ApellidoPaciente"] = null;
+            Session["NombreMedico"] = null;
+            Session["ApellidoMedico"] = null;
+            Session["Especialidad"] = null;
+            Session["NombreSede"] = null;
+            Session["DireccionSede"] = null;
+            Session["FechaTurno"] = null;
+            Session["HoraTurno"] = null;
+            Session["IdPaciente"] = null;
+            Session["IdMedico"] = null;
+            Session["IdSede"] = null;
+            Session["IdEstadoTurno"] = null;
+            Session["Observaciones"] = null;
         }
 
 

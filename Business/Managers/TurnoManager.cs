@@ -88,6 +88,55 @@ namespace Business.Managers
                 throw ex;
             }
         }
+        
+        public List<TurnoDTO> ObtenerTurnosPorPacientes(int IdPaciente)
+        {         
+            string query = @"SELECT   
+                                T.Id,
+                                T.IdMedico,
+                                T.IdPaciente,
+                                T.Fecha,
+                                T.Hora,
+                                T.IdEstadoTurno,
+                                ET.Estado,
+                                T.Fecha,
+                                T.Hora,
+                                T.Observaciones,
+                                T.IdEstadoTurno
+                            From Turnos T
+                            LEFT JOIN Medicos M ON T.IdMedico = T.Id
+                            LEFT JOIN Pacientes P ON T.IdPaciente = P.Id
+                            LEFT JOIN EstadoTurnos ET ON T.IdEstadoTurno = ET.Id
+                            Where T.IdPaciente = @IdPaciente";
+
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@IdPaciente", IdPaciente)
+            };
+
+            try
+            {
+                DataTable res = _dbManager.ExecuteQuery(query, parameters);
+                
+                if(res.Rows.Count==0)
+                {
+                    return new List<TurnoDTO>();
+                }
+
+
+                var listaTurnos = _mapper.ListMapFromRow(res);
+
+                return listaTurnos;
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+        }
         /*public TurnoDTO ObtenerPorId(int id)
         {
             string query = @"Select 
@@ -127,9 +176,9 @@ namespace Business.Managers
             {
                 throw ex;
             }
-
-
         }*/
+
+
 
         public List <TurnoDTO> ObtenerTodos()
         {

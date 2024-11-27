@@ -470,6 +470,20 @@ namespace Business.Managers
             return roles;
         }
 
+        public Usuario ObtenerUsuarioById(int id)
+        {
+            string query = "select * from Usuarios where id = @id";
+
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@id", id)
+            };
+
+            var res = _dbManager.ExecuteQuery(query, parameters);
+
+            return res.GetEntity<Usuario>();
+        }
+
 
         #endregion
     }

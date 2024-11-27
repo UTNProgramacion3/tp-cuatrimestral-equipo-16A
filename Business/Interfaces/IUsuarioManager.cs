@@ -18,5 +18,6 @@ namespace Business.Interfaces
         Usuario ActivarUsuario(Usuario usuario, string password);
         Response<bool> CambiarPassword(string newPass, int userId);
         List<Rol> ObtenerAllRoles();
+        Usuario ObtenerUsuarioById(int id);
     }
 }

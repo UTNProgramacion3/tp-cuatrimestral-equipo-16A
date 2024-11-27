@@ -18,6 +18,8 @@ namespace TPCuatrimestral_equipo_16A.Pages
         private IEmpleadoManager _empleadoManager;
         private IMedicoManager _medicoManager;
         private IUsuarioManager _usuarioManager;
+        private IPersonaManager _personaManager;
+        private bool _isEditModeEnabled;
         private void InitDependencies()
         {
             IUnityContainer unityContainer;
@@ -25,11 +27,17 @@ namespace TPCuatrimestral_equipo_16A.Pages
             _empleadoManager = (IEmpleadoManager)Global.Container.Resolve(typeof(IEmpleadoManager));
             _medicoManager = (IMedicoManager)Global.Container.Resolve(typeof(IMedicoManager));
             _usuarioManager = (IUsuarioManager)Global.Container.Resolve(typeof(IUsuarioManager));
+            _personaManager = (IPersonaManager)Global.Container.Resolve(typeof(IPersonaManager));
+
+            string isEdit = Request.QueryString["mode"] ?? "";
+            _isEditModeEnabled = isEdit != "" && isEdit.ToLower() == "edit";
         }
 
         protected void Page_Load(object sender, EventArgs e)
         {
             InitDependencies();
+            
+
             if (!IsPostBack)
             {
                 ddlRol.Items.Clear(); 
@@ -40,6 +48,80 @@ namespace TPCuatrimestral_equipo_16A.Pages
                 CargarEspecialidades();
                 CargarRoles();
             }
+            else if(_isEditModeEnabled)
+            {
+                var user = _usuarioManager.ObtenerUsuarioById(int.Parse(Request.QueryString["id"]));
+                btnCrear.Text = "Editar";
+
+                switch (user.RolId)
+                {
+                    case (int)RolesEnum.Medico:
+                        var medico = _medicoManager.ObtenerMedicoByUserId(user.Id);
+                        cargarMedicoAEditar(medico);
+                        break;
+                    case (int)RolesEnum.Paciente:
+                        var paciente = _pacienteManager.ObtenerPacienteByUserId(user.Id);
+                        cargarPacienteAEditar(paciente);
+                        break;
+
+                }
+            }
+
+
+        }
+
+        private void cargarMedicoAEditar(Medico medico)
+        {
+            ddlRol.SelectedIndex = medico.RolId;
+            cargarDatosPersonaFormularioEditar((Persona)medico);
+            cargarDireccionFormularioEditar(medico.Direccion);
+           
+
+           
+            txtMatricula.Text = medico.Matricula.ToString();
+            ddlEspecialidad.SelectedValue = medico.EspecialidadId.ToString();
+        }
+
+
+        private void cargarPacienteAEditar(Paciente paciente)
+        {
+            txtNombre.Text = paciente.Nombre;
+            txtApellido.Text = paciente.Apellido;
+            txtEmailPersonal.Text = paciente.EmailPersonal;
+            txtFechaNacimiento.Text = paciente.FechaNacimiento.ToString("dd-MM-yyyy");
+        }
+
+        private void cargarDatosPersonaFormularioEditar(Persona persona)
+        {
+            txtNombre.Text = persona.Nombre;
+            txtApellido.Text = persona.Apellido;
+            txtEmailPersonal.Text = persona.EmailPersonal;
+            txtFechaNacimiento.Text = persona.FechaNacimiento.ToString("yyyy-MM-dd");
+            txtTelefono.Text = persona.Telefono;
+            txtDocumento.Text = persona.Documento.ToString();
+        }
+
+        private void cargarDireccionFormularioEditar(Direccion direccion)
+        {
+            txtCalle.Text = direccion.Calle;
+            txtNumero.Text = direccion.Numero.ToString();
+            txtLocalidad.Text = direccion.Localidad;
+            txtDepto.Text = direccion.Depto;
+            txtPiso.Text = direccion.Piso;
+            txtProvincia.Text = direccion.Provincia;
+            txtCodigoPostal.Text = direccion.CodigoPostal;
+        }
+
+        private void cargarDatosEmpleadoFormularioEditar(Empleado empleado)
+        {
+            txtLegajo.Text = empleado.Legajo.ToString();
+            posicionEmpleado.SelectedValue = empleado.Posicion.ToString();
+        }
+
+        private void cargarDatosMedicoFormularioEditar(Medico medico)
+        {
+            txtMatricula.Text = medico.Matricula.ToString();
+            ddlEspecialidad.SelectedValue = medico.EspecialidadId.ToString();
         }
 
         protected void btnCrear_Click(object sender, EventArgs e)
@@ -88,10 +170,18 @@ namespace TPCuatrimestral_equipo_16A.Pages
                         EspecialidadId = int.Parse(ddlEspecialidad.SelectedValue),
                         RolId = (int)RolesEnum.Empleado
                     };
-                    _empleadoManager.CrearNuevo(nuevoEmpleado);
+                    if (_isEditModeEnabled)
+                    {
+
+                    }
+                    else
+                    {
+                        _empleadoManager.CrearNuevo(nuevoEmpleado);
+                    }
                     break;
 
                 case (int)RolesEnum.Paciente:
+
                     Paciente nuevoPaciente = new Paciente
                     {
                         Apellido = apellido,
@@ -104,11 +194,23 @@ namespace TPCuatrimestral_equipo_16A.Pages
                         RolId = (int)RolesEnum.Paciente
 
                     };
-                    _pacienteManager.Crear(nuevoPaciente);
+                    if (_isEditModeEnabled)
+                    {
+
+                    }
+                    else
+                    {
+                        _pacienteManager.Crear(nuevoPaciente);
+
+                    }
                     break;
             }
 
-            Response.Write("<script>alert('Usuario creado con éxito.');</script>");
+            string titulo = "Éxito";
+            string texto = "El registro se creó correctamente.";
+
+            string script = $"mostrarMensaje('{titulo}', '{texto}');";
+            ScriptManager.RegisterStartupScript(this, GetType(), "MostrarMensaje", script, true);
             LimpiarCampos();
         }
 

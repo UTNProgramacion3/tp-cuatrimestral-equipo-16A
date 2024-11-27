@@ -145,5 +145,52 @@ namespace Business.Managers
             return especialidades;
         }
 
+        public Medico ObtenerMedicoByUserId(int userId)
+        {
+            string query = @"SELECT  
+            EMP.*,
+            P.*,
+            MED.*,
+            DIR.*
+        FROM 
+            Medicos MED
+        LEFT JOIN 
+            Empleados EMP ON MED.EmpleadoId = EMP.Id
+        LEFT JOIN 
+            Personas P ON P.Id = EMP.PersonaId
+        LEFT JOIN 
+            JornadasTrabajo JT ON JT.Id = EMP.JornadaTrabajoId
+        LEFT JOIN 
+            DiasLaborales DL ON DL.JornadaTrabajoId = JT.Id
+        LEFT JOIN 
+            Direcciones DIR ON DIR.Id = P.DireccionId
+        WHERE 
+            P.UsuarioId = @UserId;
+            ";
+
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@UserId", userId)
+            };
+
+            var res = _DBManager.ExecuteQuery(query, parameters);
+
+            if (res.Rows.Count == 0)
+            {
+                return null;
+            }
+            var medico = res.GetEntity<Medico>();
+            var direccion = new Direccion
+            {
+                Id = Convert.ToInt32(res.Rows[0]["Id"]),
+                Calle = res.Rows[0]["Calle"].ToString(),
+                Numero = (int)res.Rows[0]["Numero"],
+                Localidad = res.Rows[0]["Localidad"].ToString(),
+                Provincia = res.Rows[0]["Provincia"].ToString(),
+                CodigoPostal = res.Rows[0]["CodigoPostal"].ToString()
+            };
+            medico.Direccion = direccion;
+            return medico;
+        }
     }
 }

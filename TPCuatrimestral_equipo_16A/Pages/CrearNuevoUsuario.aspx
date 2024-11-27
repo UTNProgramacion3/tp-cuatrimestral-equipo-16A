@@ -179,11 +179,30 @@
                     </div>
                 </asp:Panel>
             </div>
-            <asp:Button ID="btnCrear" runat="server" Text="Crear Usuario" CssClass="btn btn-primary" OnClientClick="return validarFormulario(event);" />
+            <asp:Button ID="btnCrear" runat="server" Text="Crear Usuario" CssClass="btn btn-primary" OnClick="btnCrear_Click" />
         </asp:Panel>
     </div>
 
     <script type="text/javascript">
+
+        function mostrarMensaje(titulo, texto) {
+            const mensajeDiv = document.getElementById("mensaje");
+            const mensajeTitulo = document.getElementById("mensajeTitulo");
+            const mensajeTexto = document.getElementById("mensajeTexto");
+
+            mensajeTitulo.textContent = titulo;
+            mensajeTexto.textContent = texto;
+
+            mensajeDiv.style.display = "block";
+
+            setTimeout(() => {
+                mensajeDiv.style.display = "none";
+            }, 3000);
+        }
+
+        function cerrarMensaje() {
+            document.getElementById("mensaje").style.display = "none";
+        }
 
         function validarFormulario(event) {
             debugger
@@ -260,7 +279,7 @@
             if (!documento.value) {
                 errorDni.textContent = "El documento es obligatorio.";
                 esValido = false;
-            } else if (documento.length != 8) {
+            } else if (documento.value.length != 8) {
                 errorDni.textContent = "El documento debe contener 8 dígitos.";
                 esValido = false;
             }
@@ -323,11 +342,11 @@
             }
 
             if (!esValido) {
-                mostrarMensaje(mensajeError, "Error en el formulario");
+                return esValido
             }
-
-            // Retorna si el formulario es válido
+            __doPostBack('<%= btnCrear.ClientID%>', '');
             return esValido;
+
         }
 
         function mostrarMensaje(mensaje, titulo) {

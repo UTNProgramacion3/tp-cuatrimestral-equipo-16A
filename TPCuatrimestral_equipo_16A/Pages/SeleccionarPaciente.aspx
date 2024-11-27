@@ -5,7 +5,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
 
-    <div class="row g-4 m-5 d-flex justify-content-center">
+    <div class="row g-4 m-2 d-flex justify-content-center">
         <div class="col-md-6">
             <div class="col">
                 <label class="mb-2 fw-bold" runat="server">Filtrar por DNI</label>

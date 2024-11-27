@@ -83,6 +83,7 @@
     <Content Include="ImagesFolder\logo.png" />
     <Content Include="Pages\ConfirmarTurno.aspx" />
     <Content Include="Pages\CrearNuevoUsuario.aspx" />
+    <Content Include="Pages\Especialidades.aspx" />
     <Content Include="Pages\Home.aspx" />
     <Content Include="Pages\ListarSedes.aspx" />
     <Content Include="Pages\Login.aspx" />
@@ -96,6 +97,7 @@
     <Content Include="Pages\SeleccionarFechaHora.aspx" />
     <Content Include="Pages\ValidarEmail.aspx" />
     <Content Include="Scripts\Login.js" />
+    <Content Include="Stylesheets\Home.css" />
     <Content Include="Stylesheets\Login.css" />
     <Content Include="Stylesheets\Master.css" />
     <Content Include="Stylesheets\Listado.css" />
@@ -118,6 +120,13 @@
     </Compile>
     <Compile Include="Pages\CrearNuevoUsuario.aspx.designer.cs">
       <DependentUpon>CrearNuevoUsuario.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Especialidades.aspx.cs">
+      <DependentUpon>Especialidades.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Especialidades.aspx.designer.cs">
+      <DependentUpon>Especialidades.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\Home.aspx.cs">
       <DependentUpon>Home.aspx</DependentUpon>

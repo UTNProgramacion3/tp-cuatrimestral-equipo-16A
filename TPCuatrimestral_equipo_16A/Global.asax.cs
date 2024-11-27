@@ -21,7 +21,7 @@ namespace TPCuatrimestral_equipo_16A
     public class Global : System.Web.HttpApplication
     {
         public static IUnityContainer Container { get; private set; }
-        private static ExpiredTokenService _expiredTokenService;
+        //private static ExpiredTokenService _expiredTokenService;
 
         public static class GlobalData
         {
@@ -41,8 +41,8 @@ namespace TPCuatrimestral_equipo_16A
             {
                 throw new Exception("No se ha configurado usuario / contraseña para envío de mails");
             }
-            _expiredTokenService = new ExpiredTokenService();
-            _expiredTokenService.Start();
+            //_expiredTokenService = new ExpiredTokenService();
+            //_expiredTokenService.Start();
 
             Container = new UnityContainer();
 
@@ -57,11 +57,12 @@ namespace TPCuatrimestral_equipo_16A
             Container.RegisterType<IEspecialidadManager, EspecialidadManager>();
             Container.RegisterType<IEmailManager, EmailManager>();
             Container.RegisterType<ISeguridadService, SeguridadService>();
+            Container.RegisterType<ITurnoManager, TurnoManager>();
         }
 
         protected void Application_End(object sender, EventArgs e)
         {
-            _expiredTokenService.Stop();
+            //_expiredTokenService.Stop();
         }
 
     }

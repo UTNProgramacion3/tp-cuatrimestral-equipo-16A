@@ -87,6 +87,7 @@
     <Content Include="Pages\Home.aspx" />
     <Content Include="Pages\Login.aspx" />
     <Content Include="Pages\RegisterSuccess.aspx" />
+    <Content Include="Pages\RolesPermisos.aspx" />
     <Content Include="Pages\SeleccionarMedico.aspx" />
     <Content Include="Pages\SeleccionarPaciente.aspx" />
     <Content Include="Pages\ListadoTurnos.aspx" />
@@ -154,6 +155,13 @@
     </Compile>
     <Compile Include="Pages\RegisterSuccess.aspx.designer.cs">
       <DependentUpon>RegisterSuccess.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\RolesPermisos.aspx.cs">
+      <DependentUpon>RolesPermisos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\RolesPermisos.aspx.designer.cs">
+      <DependentUpon>RolesPermisos.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\SeleccionarMedico.aspx.cs">
       <DependentUpon>SeleccionarMedico.aspx</DependentUpon>

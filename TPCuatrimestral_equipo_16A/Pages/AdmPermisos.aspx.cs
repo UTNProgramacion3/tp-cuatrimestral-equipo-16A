@@ -12,6 +12,8 @@ using Business.Interfaces;
 using Business.Managers;
 using Unity;
 using System.Runtime.CompilerServices;
+using System.Data.SqlClient;
+using System.Web.UI.HtmlControls;
 
 namespace TPCuatrimestral_equipo_16A.Pages
 {
@@ -89,14 +91,28 @@ namespace TPCuatrimestral_equipo_16A.Pages
             TextBox txtNuevoPermiso = (TextBox)item.FindControl("txtNuevoPermiso");
             Button btnAgregarPermiso = (Button)item.FindControl("btnAgregarPermiso");
 
-            if(pnlAgregarPermiso != null && txtNuevoPermiso != null && btnAgregarPermiso != null)
+            if (pnlAgregarPermiso != null && txtNuevoPermiso != null && btnAgregarPermiso != null)
             {
                 string nuevoPermiso = txtNuevoPermiso.Text;
                 int moduloId = Convert.ToInt32(btnAgregarPermiso.CommandArgument);
-                if (!string.IsNullOrEmpty(nuevoPermiso))
+
+                if (string.IsNullOrWhiteSpace(nuevoPermiso))
                 {
-                    if(_seguridadService.AgregarPermiso(nuevoPermiso,moduloId))
+                    txtNuevoPermiso.BorderColor = System.Drawing.Color.Red;
+
+                    Label lblError = (Label)item.FindControl("lblError");
+                    if (lblError != null)
                     {
+                        lblError.Text = "Debes ponerle un nombre al permiso";
+                        lblError.ForeColor = System.Drawing.Color.Red;
+                    }
+                }
+                else
+                {
+                    // Si el TextBox no está vacío, proceder a agregar el permiso
+                    if (_seguridadService.AgregarPermiso(nuevoPermiso, moduloId))
+                    {
+                        // Si el permiso se agrega correctamente, recargar el Repeater
                         CargarRepeater();
                     }
                 }
@@ -136,7 +152,99 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
         protected void btnPermisosPorRol_Click(object sender, EventArgs e)
         {
-            Response.Redirect("PermisosPorRol.aspx");
+            Response.Redirect("RolesPermisos.aspx");
+        }
+
+        protected void rptPermisos_ItemCommand(object source, RepeaterCommandEventArgs e)
+        {
+            if (e.CommandName == "Editar")
+            {
+                var lblPermiso = (Label)e.Item.FindControl("lblPermiso");
+                var txtPermiso = (TextBox)e.Item.FindControl("txtPermiso");
+                var btnEditar = (Button)e.Item.FindControl("btnEditar");
+                var btnCancelar = (Button)e.Item.FindControl("btnCancelar");
+
+                lblPermiso.Visible = false;
+                txtPermiso.Visible = true;
+                txtPermiso.Text = lblPermiso.Text;
+                btnEditar.Text = "Listo";
+                btnEditar.CommandName = "Guardar";
+                btnCancelar.Visible = true;
+                txtPermiso.BorderColor = System.Drawing.Color.Blue;
+            }
+            else if (e.CommandName == "Guardar")
+            {
+                var txtPermiso = (TextBox)e.Item.FindControl("txtPermiso");
+                var lblPermiso = (Label)e.Item.FindControl("lblPermiso");
+                var btnEditar = (Button)e.Item.FindControl("btnEditar");
+                var btnCancelar = (Button)e.Item.FindControl("btnCancelar");
+                var permisoId = Convert.ToInt32(e.CommandArgument);
+                var nuevoNombre = txtPermiso.Text;
+
+                if (string.IsNullOrWhiteSpace(nuevoNombre))
+                {
+                    txtPermiso.BorderColor = System.Drawing.Color.Red;
+
+                    Label lblError = (Label)e.Item.FindControl("lblError");
+                    if (lblError != null)
+                    {
+                        lblError.Text = "Debes poner un nombre para el permiso";
+                        lblError.ForeColor = System.Drawing.Color.Red;
+                        lblError.Visible = true;
+                    }
+
+                    return; 
+                }
+                else
+                {
+                    _seguridadService.EditarPermiso(permisoId, nuevoNombre);
+
+                    lblPermiso.Text = nuevoNombre;
+                    lblPermiso.Visible = true;
+                    txtPermiso.Visible = false;
+
+                    btnEditar.Text = "Editar";
+                    btnEditar.CommandName = "Editar";
+
+                    btnCancelar.Visible = false;
+
+                    Label lblError = (Label)e.Item.FindControl("lblError");
+                    if (lblError != null)
+                    {
+                        lblError.Visible = false;
+                    }
+                }
+            }
+            else if (e.CommandName == "Cancelar")
+            {
+                var lblPermiso = (Label)e.Item.FindControl("lblPermiso");
+                var txtPermiso = (TextBox)e.Item.FindControl("txtPermiso");
+                var btnEditar = (Button)e.Item.FindControl("btnEditar");
+                var btnCancelar = (Button)e.Item.FindControl("btnCancelar");
+
+                lblPermiso.Visible = true;
+                txtPermiso.Visible = false;
+                btnEditar.Text = "Editar";
+                btnEditar.CommandName = "Editar";
+                btnCancelar.Visible = false;
+            }
+        }
+
+
+        protected void btnTogglePermisos_Click(object sender, EventArgs e)
+        {
+            Button btn = (Button)sender;
+            string moduloId = btn.CommandArgument;
+
+            RepeaterItem item = (RepeaterItem)btn.NamingContainer;
+            Panel permisosPanel = (Panel)item.FindControl("pnlPermisos");
+
+            if (permisosPanel != null)
+            {
+                
+                permisosPanel.Visible = !permisosPanel.Visible;
+                btn.Text = permisosPanel.Visible ? "Ocultar Permisos" : "Mostrar Permisos";
+            }
         }
     }
 }

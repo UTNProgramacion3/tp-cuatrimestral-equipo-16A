@@ -226,6 +226,153 @@ namespace Business.Services
 
         }
 
+        public bool EditarPermiso(int permisoId, string nombre)
+        {
+            string query = @"UPDATE Permisos
+                            SET Nombre = @nombre
+                            WHERE Id = @PermisoId;";
+
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@nombre", nombre),
+                new SqlParameter("@permisoId", permisoId)
+            };
+
+            try
+            {
+                var res = _dbManager.ExecuteNonQuery(query, parameters);
+                return res > 0;
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public Response<List<Rol>> GetRolesConPermisos()
+        {
+            string query = @"Select * From Roles";
+            Response<List<Rol>> response = new Response<List<Rol>>();
+            List<Rol> roles = new List<Rol>();
+            Mapper<Rol> mapper = new Mapper<Rol>();
+
+            try
+            {
+                var dt = _dbManager.ExecuteQuery(query);
+
+                if (dt.Rows.Count == 0)
+                {
+                    response.NotOk("Error al traer roles.");
+                    return response;
+                }
+
+                roles = mapper.ListMapFromRow(dt);
+
+                if(roles.Count == 0)
+                {
+                    response.NotOk("Error al mapear roles");
+                }
+
+                foreach(Rol rol in roles)
+                {
+                    var res = GetPermisosPorRol(rol.Id);
+
+                    if(res.Success)
+                    {
+                        rol.Permisos = res.Data;
+                    }
+                }
+                response.Ok(roles);
+
+            }catch (Exception ex)
+            {
+                response.NotOk(ex.Message);
+                return response;
+            }
+
+            return response;
+        }
+
+        public Response<List<Permiso>> GetPermisos()
+        {
+            string query = "Select * From Permisos";
+            try
+            {
+                var res = _dbManager.ExecuteQuery(query);
+
+                if(res.Rows.Count == 0)
+                {
+                    _response.NotOk("Error al traer permisos.");
+
+                    return _response;
+                }
+
+                var permisos = _mapper.ListMapFromRow(res);
+
+                if(permisos.Count == 0)
+                {
+                    _response.NotOk("Error al mapear");
+                    return _response;
+                }
+
+                _response.Ok(permisos);
+            }
+            catch (Exception ex)
+            {
+                _response.NotOk(ex.Message);
+                return _response;
+            }
+
+            return _response;
+
+        }
+
+        public bool AsignarPermisoARol(int permisoId, int rolId)
+        {
+            string query = @"Insert Into PermisosRoles (PermisoId, RolId) Values (@permisoId, @rolId)";
+
+            SqlParameter[] parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@permisoId", permisoId),
+                    new SqlParameter("@rolId", rolId)
+                };
+
+            try
+            {
+                var res = _dbManager.ExecuteNonQuery(query, parameters);
+
+                return res > 0;
+
+            }catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public bool EliminarPermisoDeRol(int permisoId, int rolId)
+        {
+            string query = @"DELETE FROM PermisosRoles
+                             WHERE PermisoId = @permisoId AND RolId = @rolId";
+
+            SqlParameter[] parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@permisoId", permisoId),
+                    new SqlParameter("@rolId", rolId)
+                };
+
+            try
+            {
+                var res = _dbManager.ExecuteNonQuery(query, parameters);
+
+                return res > 0; 
+
+            }catch (Exception ex)
+            {
+                return false;
+            }
+                
+        }
+
         //public void VerificarTokensVencidos()
         //{
         //    try

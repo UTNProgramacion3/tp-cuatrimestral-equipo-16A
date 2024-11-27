@@ -30,7 +30,7 @@ namespace Business.Managers
 
         public Response<Especialidad> Crear(Especialidad entity)
         {
-            string query = @"Insert into Especilidades VALUES (@Nombre)";
+            string query = @"Insert into Especialidades VALUES (@Nombre)";
 
             SqlParameter[] parameters = new SqlParameter[]
             {
@@ -54,7 +54,7 @@ namespace Business.Managers
         public Response<Especialidad> ObtenerPorId(int id)
         {
 
-            string query = "Select * From Especilidades Where Id = @Id";
+            string query = "Select Id, Nombre From Especialidades Where Id = @Id";
 
             SqlParameter[] parameters = new SqlParameter[]
             {
@@ -72,7 +72,7 @@ namespace Business.Managers
 
         public Response<List<Especialidad>> ObtenerTodos()
         {
-            string query = "Select * From Especialidades";
+            string query = "Select Id, Nombre From Especialidades";
 
           
             DataTable table = _DBManager.ExecuteQuery(query);
@@ -88,7 +88,35 @@ namespace Business.Managers
 
         public Response<bool> Update(Especialidad entity)
         {
-            throw new NotImplementedException();
+
+            string query = @"UPDATE Especialidades
+                             SET
+                             Nombre = @Nombre
+                             Where Id = @Id";
+
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter(@"Id", entity.Id),
+                new SqlParameter(@"Nombre", entity.Nombre)
+            };
+
+            try
+            {
+                var res = _DBManager.ExecuteNonQuery(query, parameters);
+
+                if (res == 0)
+                {
+                    return new Response<bool>();
+                }
+
+                return new Response<bool>();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
         }
 
     }

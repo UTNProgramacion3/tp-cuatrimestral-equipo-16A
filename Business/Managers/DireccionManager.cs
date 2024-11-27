@@ -71,7 +71,52 @@ namespace Business.Managers
 
         public Response<bool> Update(Direccion entity)
         {
-            throw new NotImplementedException();
+
+            Response<bool> response = new Response<bool>();
+            
+            string query = @"UPDATE Direcciones
+                            Set Calle = @Calle,
+                                Numero = @Numero,
+                                Piso = @Piso,
+                                Depto = @Depto,
+                                Localidad = @Localidad,
+                                Provincia = @Provincia,
+                                CodigoPostal = @CodigoPostal
+                            Where Id = @Id
+                            ";
+
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+               new SqlParameter("@Calle", entity.Calle),
+               new SqlParameter("@Numero", entity.Numero),
+               new SqlParameter("@Piso", entity.Piso),
+               new SqlParameter("@Depto", entity.Depto),
+               new SqlParameter("@Localidad", entity.Localidad),
+               new SqlParameter("@Provincia", entity.Provincia),
+               new SqlParameter("@CodigoPostal", entity.CodigoPostal),
+               new SqlParameter("@Id", entity.Id)
+            };
+
+            try
+            {
+
+                var res = _DBManager.ExecuteNonQuery(query, parameters);
+
+                if(res > 0)
+                {
+                    response.Ok(true, "Operación exitosa");
+                    return response;
+                }
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+
         }
     }
 }

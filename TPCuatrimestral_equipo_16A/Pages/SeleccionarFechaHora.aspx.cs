@@ -27,7 +27,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
 			{
 				if(!IsPostBack)
 				{
-					ObtenerTurnosDisponibles();
+                    CompletarFechaHora();
 				}
 			}
 			catch (Exception ex)
@@ -37,7 +37,15 @@ namespace TPCuatrimestral_equipo_16A.Pages
 			}
         }
 
-		private void ObtenerTurnosDisponibles()
+
+        protected void txtBoxFechaTurno_TextChanged(object sender, EventArgs e)
+        {
+            ObtenerTurnosDisponibles();
+        }
+
+
+
+        private void ObtenerTurnosDisponibles()
 		{
 			int idMedico = (int)Session["IdMedico"];
 
@@ -45,8 +53,6 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
             string fecha = (string)Session["DiaTurno"];
 
-			
-			
 			
 			DataTable table = new DataTable();
 
@@ -57,6 +63,42 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
         }
 
+        protected void dgvFechaHorario_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
+            CapturarDatosTurno();
+            CompletarFechaHora();
+
+        }
+
+
+
+        private void CapturarDatosTurno()
+        {
+            GridViewRow selectedRow = dgvFechaHorario.SelectedRow;
+
+            if(selectedRow != null)
+            {
+                Session["FechaTurno"] = txtBoxFechaTurno.Text;
+                Session["HoraTurno"] = dgvFechaHorario.SelectedRow.Cells[0].Text;
+            }
+
+        }
+
+
+        protected void CompletarFechaHora()
+        {
+            
+            if(Session["FechaTurno"] != null && Session["HoraTurno"] != null)
+            {
+                string fecha = (string)Session["FechaTurno"];
+                string hora = (string)Session["HoraTurno"];
+
+                txtBoxFechaHora.Text = "Fecha Turno: " + fecha + " - Hora: " + hora;
+            }
+        }
+
+
         protected void btnAtras_Click(object sender, EventArgs e)
         {
             Response.Redirect("~/Pages/SeleccionarMedico.aspx", false);
@@ -64,7 +106,12 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
         protected void btnSiguiente_Click(object sender, EventArgs e)
         {
+
+
+
             Response.Redirect("~/Pages/ConfirmarTurno.aspx", false);
         }
+
+
     }
 }

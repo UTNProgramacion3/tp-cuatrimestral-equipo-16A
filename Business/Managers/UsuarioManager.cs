@@ -1,4 +1,5 @@
-﻿using Business.Interfaces;
+﻿using Business.Dtos;
+using Business.Interfaces;
 using DataAccess;
 using DataAccess.Extensions;
 using Domain.Entities;
@@ -131,6 +132,26 @@ namespace Business.Managers
         public void LogOut(Usuario usuario)
         {
             _sessionManager.RemoveSessionValue("UserLogueado");
+        }
+
+        public List<UsuarioBasicoDto> ObtenerUsuariosDataBasica()
+        {
+            string query = @"select Usuarios.*, PER.Nombre + ' ' + PER.Apellido NombreCompleto, R.Nombre Rol, R.Id RolId from Usuarios
+            left join Personas PER on PER.UsuarioId = Usuarios.Id
+            left join Roles R ON R.Id = Usuarios.RolId";
+
+            var res = _dbManager.ExecuteQuery(query);
+
+            List<UsuarioBasicoDto> usuarios = new List<UsuarioBasicoDto>();
+
+            var userMapper = new Mapper<UsuarioBasicoDto>();
+            foreach (DataRow row in res.Rows)
+            {
+                var mappedUser = userMapper.MapFromRow(row);
+                usuarios.Add(mappedUser);
+            }
+
+            return usuarios;
         }
 
         public Response<Usuario> ObtenerPorEmail(string email)
@@ -450,6 +471,41 @@ namespace Business.Managers
             return res.GetEntity<Rol>();
 
         }
+
+        public List<Rol> ObtenerAllRoles()
+        {
+            string query = "select * from Roles";
+            var res = _dbManager.ExecuteQuery(query);
+
+            List<Rol> roles = new List<Rol>();
+
+            foreach(DataRow row in res.Rows)
+            {
+                roles.Add(new Rol
+                {
+                    Id = Convert.ToInt32(row["Id"]),
+                    Nombre = row["Nombre"].ToString(),
+                });
+            }
+
+            return roles;
+        }
+
+        public Usuario ObtenerUsuarioById(int id)
+        {
+            string query = "select * from Usuarios where id = @id";
+
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@id", id)
+            };
+
+            var res = _dbManager.ExecuteQuery(query, parameters);
+
+            return res.GetEntity<Usuario>();
+        }
+
+       
 
 
         #endregion

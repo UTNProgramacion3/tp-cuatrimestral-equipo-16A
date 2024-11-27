@@ -125,5 +125,117 @@ namespace Business.Managers
             }
         }
 
+        public List<Especialidad> ObtenerTodasEspecialidades()
+        {
+            string query = "select * from Especialidades";
+
+            var res = _DBManager.ExecuteQuery(query);
+
+            List<Especialidad> especialidades = new List<Especialidad>();
+
+            foreach (DataRow row in res.Rows)
+            {
+                especialidades.Add(new Especialidad
+                {
+                    Id = Convert.ToInt32(row["Id"]),
+                    Nombre = row["Nombre"].ToString()
+                });
+            }
+
+            return especialidades;
+        }
+
+        public Medico ObtenerMedicoByUserId(int userId)
+        {
+            string query = @"SELECT  
+            EMP.*,
+            P.*,
+            MED.*,
+            DIR.*
+        FROM 
+            Medicos MED
+        LEFT JOIN 
+            Empleados EMP ON MED.EmpleadoId = EMP.Id
+        LEFT JOIN 
+            Personas P ON P.Id = EMP.PersonaId
+        LEFT JOIN 
+            JornadasTrabajo JT ON JT.Id = EMP.JornadaTrabajoId
+        LEFT JOIN 
+            DiasLaborales DL ON DL.JornadaTrabajoId = JT.Id
+        LEFT JOIN 
+            Direcciones DIR ON DIR.Id = P.DireccionId
+        WHERE 
+            P.UsuarioId = @UserId;
+            ";
+
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@UserId", userId)
+            };
+
+            var res = _DBManager.ExecuteQuery(query, parameters);
+
+            if (res.Rows.Count == 0)
+            {
+                return null;
+            }
+            var medico = res.GetEntity<Medico>();
+            var direccion = new Direccion
+            {
+                Id = Convert.ToInt32(res.Rows[0]["Id"]),
+                Calle = res.Rows[0]["Calle"].ToString(),
+                Numero = (int)res.Rows[0]["Numero"],
+                Localidad = res.Rows[0]["Localidad"].ToString(),
+                Provincia = res.Rows[0]["Provincia"].ToString(),
+                CodigoPostal = res.Rows[0]["CodigoPostal"].ToString()
+            };
+            medico.Direccion = direccion;
+            return medico;
+        }
+        public Response<List<MedicoDto>> ObtenerTodosBySede(int IdSede)
+        {
+            string query = @"
+                Select
+                M.Id AS Medico_Id,
+                PE.Apellido AS Persona_Apellido,
+                PE.Nombre AS Persona_Nombre,
+                ES.Nombre AS Especialidad_Nombre
+                From Medicos M
+                Inner Join Especialidades ES ON M.EspecialidadId = ES.Id
+                Inner Join Empleados EM ON M.EmpleadoId = EM.Id
+                Inner Join Personas PE ON EM.PersonaId = PE.Id
+                Inner Join JornadasTrabajo JT ON EM.JornadaTrabajoId = EM.JornadaTrabajoId
+                Where JT.SedeId = @IdSede";
+
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@IdSede", IdSede)
+            };
+
+            DataTable res = new DataTable();
+
+            try
+            {
+                res = _DBManager.ExecuteQuery(query, parameters);
+                int rows = res.Rows.Count;
+
+                if (rows == 0)
+                {
+                    return new Response<List<MedicoDto>>();
+                }
+
+                Response<List<MedicoDto>> response = new Response<List<MedicoDto>>();
+
+                response.Data = _mapper.ListMapFromRow(res);
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
     }
 }

@@ -2,6 +2,8 @@
 using System;
 using Domain.Entities;
 using Domain.Response;
+using System.Collections.Generic;
+using Business.Dtos;
 
 namespace Business.Interfaces
 {
@@ -16,5 +18,8 @@ namespace Business.Interfaces
         Usuario ValidarToken(string token);
         Usuario ActivarUsuario(Usuario usuario, string password);
         Response<bool> CambiarPassword(string newPass, int userId);
+        List<Rol> ObtenerAllRoles();
+        Usuario ObtenerUsuarioById(int id);
+        List<UsuarioBasicoDto> ObtenerUsuariosDataBasica();
     }
 }

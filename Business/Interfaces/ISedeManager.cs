@@ -13,5 +13,11 @@ namespace Business.Interfaces
     public interface ISedeManager
     {
         Response<List<SedeDto>> ObtenerTodos();
+
+        Response<SedeDto> Crear(SedeDto entity);
+
+        Sede Update(Sede entity);
+
+        Response<Sede> ObeterSedeById(int id);
     }
 }

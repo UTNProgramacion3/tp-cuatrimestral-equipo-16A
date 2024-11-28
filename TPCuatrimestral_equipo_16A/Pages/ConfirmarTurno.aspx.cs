@@ -281,6 +281,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
             Session["IdEstadoTurno"] = null;
             Session["IdTurnoAreprogramar"] = null;
             Session["CancelarTurno"] = null;
+            Session["DiaTurno"] = null;
         }
 
 

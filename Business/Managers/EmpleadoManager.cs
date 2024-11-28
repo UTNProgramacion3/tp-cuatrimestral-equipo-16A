@@ -56,6 +56,7 @@ namespace Business.Managers
 
 
 
+        #endregion
         #region Public methods
         public Response<Empleado> CrearNuevo(NuevoEmpleadoDto entity)
         {
@@ -256,7 +257,6 @@ namespace Business.Managers
         {
             throw new NotImplementedException();
         }
-        #endregion
         #endregion
 
         #region Private methods

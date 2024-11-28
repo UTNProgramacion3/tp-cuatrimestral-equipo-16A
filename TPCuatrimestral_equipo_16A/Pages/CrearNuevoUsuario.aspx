@@ -59,7 +59,7 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div id="mensaje" class="card-popup" style="display: none;">
-        <div class="card-popup-header">
+        <div class="card-popup-header bg-primary text-white">
             <span id="mensajeTitulo"></span>
             <button onclick="cerrarMensaje()" class="close-button">&times;</button>
         </div>
@@ -67,122 +67,126 @@
             <p id="mensajeTexto"></p>
         </div>
     </div>
+
     <div class="container mt-5">
-        <h2>Crear Usuario</h2>
-        <asp:Panel ID="PanelCrearUsuario" runat="server">
-            <div class="mb-3">
-                <label for="ddlRol" class="form-label">Rol</label>
-                <asp:DropDownList ID="ddlRol" runat="server" CssClass="form-select" OnSelectedIndexChanged="ddlRol_SelectedIndexChanged" AutoPostBack="true">
-                    <asp:ListItem Value="1" Text="Administrador"></asp:ListItem>
-                    <asp:ListItem Value="2" Text="Empleado"></asp:ListItem>
-                    <asp:ListItem Value="3" Text="Paciente"></asp:ListItem>
-                </asp:DropDownList>
-                <span class="text-danger" id="errorDdlRol"></span>
+        <div class="card shadow">
+            <div class="card-header bg-secondary text-white">
+                <h2>Crear Usuario</h2>
             </div>
-          <%--  <div class="mb-3" id="posicion">
-                <div>
-                    <label for="posicionEmpleado" class="form-label">Posición empleado</label>
-                    <asp:DropDownList ID="posicionEmpleado" runat="server" CssClass="form-select">
-                        <asp:ListItem Value="1">Médico</asp:ListItem>
-                        <asp:ListItem Value="2">Recepcionista</asp:ListItem>
-                        <asp:ListItem Value="2">Supervisor</asp:ListItem>
-                    </asp:DropDownList>
-                    <span class="text-danger" id="errorPosicion"></span>
-
-                </div>--%>
-
-                <!-- Campos de Médico y Empleado -->
-                <div class="mb-3" id="legajoDiv" style="display: none;">
-                    <label for="txtLegajo" class="form-label">Legajo</label>
-                    <asp:TextBox ID="txtLegajo" runat="server" CssClass="form-control" />
-                    <span class="text-danger" id="errorLegajo"></span>
-
-                </div>
-                <div class="mb-3" id="matriculaDiv" style="display: none;">
-                    <label for="txtMatricula" class="form-label">Matrícula</label>
-                    <asp:TextBox ID="txtMatricula" runat="server" CssClass="form-control" />
-                    <span class="text-danger" id="errorMatricula"></span>
-
-                </div>
-                <div class="mb-3" id="especialidadDiv" style="display: none;">
-                    <label for="ddlEspecialidad" class="form-label">Especialidad</label>
-                    <asp:DropDownList ID="ddlEspecialidad" runat="server" CssClass="form-select">
-                        <asp:ListItem Value="1">Especialidad 1</asp:ListItem>
-                        <asp:ListItem Value="2">Especialidad 2</asp:ListItem>
-                        <asp:ListItem Value="3">Especialidad 3</asp:ListItem>
-                    </asp:DropDownList>
-                    <span class="text-danger" id="errorEspecialidad"></span>
-                </div>
-            </div>
-            <div class="mb-3" id="contenedor-datos-personales">
-                <label for="txtNombre" class="form-label">Nombre</label>
-                <asp:TextBox ID="txtNombre" runat="server" CssClass="form-control" />
-                <span class="text-danger" id="errorNombre"></span>
-
-            </div>
-            <div class="mb-3">
-                <label for="txtApellido" class="form-label">Apellido</label>
-                <asp:TextBox ID="txtApellido" runat="server" CssClass="form-control" />
-                <span class="text-danger" id="errorApellido"></span>
-
-            </div>
-            <div class="mb-3">
-                <label for="txtFechaNacimiento" class="form-label">Fecha Nacimiento</label>
-                <asp:TextBox ID="txtFechaNacimiento" runat="server" CssClass="form-control" TextMode="Date" />
-                <span class="text-danger" id="errorFechaNac"></span>
-            </div>
-            <div class="mb-3">
-                <label for="txtDocumento" class="form-label">Documento</label>
-                <asp:TextBox ID="txtDocumento" runat="server" CssClass="form-control" />
-                <span class="text-danger" id="errorDni"></span>
-            </div>
-            <div class="mb-3">
-                <label for="txtEmailPersonal" class="form-label">Email Personal</label>
-                <asp:TextBox ID="txtEmailPersonal" runat="server" CssClass="form-control" />
-                <span class="text-danger" id="errorEmail"></span>
-            </div>
-            <div class="mb-3">
-                <label for="txtTelefono" class="form-label">Telefono</label>
-                <asp:TextBox ID="txtTelefono" runat="server" CssClass="form-control" />
-
-            </div>
-            <div class="container mt-5">
-                <h2>Domicilio</h2>
-                <asp:Panel ID="Panel1" runat="server">
+            <div class="card-body">
+                <asp:Panel ID="PanelCrearUsuario" runat="server">
                     <div class="mb-3">
-                        <label for="txtCalle" class="form-label">Calle</label>
-                        <asp:TextBox ID="txtCalle" runat="server" CssClass="form-control" />
+                        <label for="ddlRol" class="form-label">Rol</label>
+                        <asp:DropDownList ID="ddlRol" runat="server" CssClass="form-select" 
+                                          OnSelectedIndexChanged="ddlRol_SelectedIndexChanged" AutoPostBack="true">
+                            <asp:ListItem Value="1" Text="Administrador"></asp:ListItem>
+                            <asp:ListItem Value="2" Text="Empleado"></asp:ListItem>
+                            <asp:ListItem Value="3" Text="Paciente"></asp:ListItem>
+                        </asp:DropDownList>
+                        <span class="text-danger" id="errorDdlRol"></span>
                     </div>
-                    <div class="mb-3">
-                        <label for="txtNumero" class="form-label">Número</label>
-                        <asp:TextBox ID="txtNumero" runat="server" CssClass="form-control" />
+
+                    <!-- Campos dinámicos según el Rol -->
+                    <div id="legajoDiv" class="mb-3" style="display: none;">
+                        <label for="txtLegajo" class="form-label">Legajo</label>
+                        <asp:TextBox ID="txtLegajo" runat="server" CssClass="form-control" />
+                        <span class="text-danger" id="errorLegajo"></span>
                     </div>
-                    <div class="mb-3">
-                        <label for="txtPiso" class="form-label">Piso</label>
-                        <asp:TextBox ID="txtPiso" runat="server" CssClass="form-control" />
+
+                    <div id="matriculaDiv" class="mb-3" style="display: none;">
+                        <label for="txtMatricula" class="form-label">Matrícula</label>
+                        <asp:TextBox ID="txtMatricula" runat="server" CssClass="form-control" />
+                        <span class="text-danger" id="errorMatricula"></span>
                     </div>
-                    <div class="mb-3">
-                        <label for="txtDepto" class="form-label">Depto</label>
-                        <asp:TextBox ID="txtDepto" runat="server" CssClass="form-control" />
+
+                    <div id="especialidadDiv" class="mb-3" style="display: none;">
+                        <label for="ddlEspecialidad" class="form-label">Especialidad</label>
+                        <asp:DropDownList ID="ddlEspecialidad" runat="server" CssClass="form-select">
+                            <asp:ListItem Value="1">Especialidad 1</asp:ListItem>
+                            <asp:ListItem Value="2">Especialidad 2</asp:ListItem>
+                            <asp:ListItem Value="3">Especialidad 3</asp:ListItem>
+                        </asp:DropDownList>
+                        <span class="text-danger" id="errorEspecialidad"></span>
                     </div>
+
+                    <!-- Información personal -->
                     <div class="mb-3">
-                        <label for="txtLocalidad" class="form-label">Localidad</label>
-                        <asp:TextBox ID="txtLocalidad" runat="server" CssClass="form-control" />
+                        <label for="txtNombre" class="form-label">Nombre</label>
+                        <asp:TextBox ID="txtNombre" runat="server" CssClass="form-control" />
+                        <span class="text-danger" id="errorNombre"></span>
                     </div>
+
                     <div class="mb-3">
-                        <label for="txtProvincia" class="form-label">Provincia</label>
-                        <asp:TextBox ID="txtProvincia" runat="server" CssClass="form-control" />
+                        <label for="txtApellido" class="form-label">Apellido</label>
+                        <asp:TextBox ID="txtApellido" runat="server" CssClass="form-control" />
+                        <span class="text-danger" id="errorApellido"></span>
                     </div>
+
                     <div class="mb-3">
-                        <label for="txtCodigoPostal" class="form-label">Código Postal</label>
-                        <asp:TextBox ID="txtCodigoPostal" runat="server" CssClass="form-control" />
+                        <label for="txtFechaNacimiento" class="form-label">Fecha Nacimiento</label>
+                        <asp:TextBox ID="txtFechaNacimiento" runat="server" CssClass="form-control" TextMode="Date" />
+                        <span class="text-danger" id="errorFechaNac"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="txtDocumento" class="form-label">Documento</label>
+                        <asp:TextBox ID="txtDocumento" runat="server" CssClass="form-control" />
+                        <span class="text-danger" id="errorDni"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="txtEmailPersonal" class="form-label">Email Personal</label>
+                        <asp:TextBox ID="txtEmailPersonal" runat="server" CssClass="form-control" />
+                        <span class="text-danger" id="errorEmail"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="txtTelefono" class="form-label">Teléfono</label>
+                        <asp:TextBox ID="txtTelefono" runat="server" CssClass="form-control" />
+                    </div>
+
+                    <!-- Sección de Domicilio -->
+                    <div class="border-top mt-4 pt-3">
+                        <h4 class="mb-3">Domicilio</h4>
+                        <div class="mb-3">
+                            <label for="txtCalle" class="form-label">Calle</label>
+                            <asp:TextBox ID="txtCalle" runat="server" CssClass="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="txtNumero" class="form-label">Número</label>
+                            <asp:TextBox ID="txtNumero" runat="server" CssClass="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="txtPiso" class="form-label">Piso</label>
+                            <asp:TextBox ID="txtPiso" runat="server" CssClass="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="txtDepto" class="form-label">Depto</label>
+                            <asp:TextBox ID="txtDepto" runat="server" CssClass="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="txtLocalidad" class="form-label">Localidad</label>
+                            <asp:TextBox ID="txtLocalidad" runat="server" CssClass="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="txtProvincia" class="form-label">Provincia</label>
+                            <asp:TextBox ID="txtProvincia" runat="server" CssClass="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="txtCodigoPostal" class="form-label">Código Postal</label>
+                            <asp:TextBox ID="txtCodigoPostal" runat="server" CssClass="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="mt-4 text-center">
+                        <asp:Button ID="btnCrear" runat="server" Text="Crear Usuario" CssClass="btn btn-primary btn-lg" 
+                                    OnClientClick="return validarFormulario(event);" OnClick="btnCrear_Click" />
                     </div>
                 </asp:Panel>
             </div>
-            <asp:Button ID="btnCrear" runat="server" Text="Crear Usuario" CssClass="btn btn-primary" OnClientClick="return validarFormulario(event);" OnClick="btnCrear_Click" />
-
-        </asp:Panel>
+        </div>
     </div>
+
 
     <script type="text/javascript">
 

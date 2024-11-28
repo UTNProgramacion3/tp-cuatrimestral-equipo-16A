@@ -53,6 +53,8 @@ namespace TPCuatrimestral_equipo_16A.Pages
             {
                 var user = _usuarioManager.ObtenerUsuarioById(int.Parse(Request.QueryString["id"]));
                 btnCrear.Text = "Editar";
+                ddlRol.Enabled = false;
+                txtMatricula.Enabled = false;
 
                 switch (user.RolId)
                 {
@@ -69,6 +71,8 @@ namespace TPCuatrimestral_equipo_16A.Pages
                     case (int)RolesEnum.Paciente:
                         var paciente = _pacienteManager.ObtenerPacienteByUserId(user.Id);
                         cargarPacienteAEditar(paciente);
+                        cargarDatosPersonaFormularioEditar((Persona)paciente);
+                        cargarDireccionFormularioEditar(paciente.Direccion);
                         break;
                 }
             }

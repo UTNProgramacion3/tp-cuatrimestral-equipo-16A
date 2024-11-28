@@ -86,11 +86,15 @@
     <Content Include="Pages\CancelarTurno.aspx" />
     <Content Include="Pages\ConfirmarTurno.aspx" />
     <Content Include="Pages\CrearNuevoUsuario.aspx" />
+    <Content Include="Pages\EdicionPaciente.aspx" />
     <Content Include="Pages\Especialidades.aspx" />
     <Content Include="Pages\Home.aspx" />
+    <Content Include="Pages\ListadoMedicos.aspx" />
+    <Content Include="Pages\ListadoPacientes.aspx" />
     <Content Include="Pages\ListadoUsuarios.aspx" />
     <Content Include="Pages\ListarSedes.aspx" />
     <Content Include="Pages\Login.aspx" />
+    <Content Include="Pages\MenuUsuario.aspx" />
     <Content Include="Pages\MisTurnos.aspx" />
     <Content Include="Pages\RegisterSuccess.aspx" />
     <Content Include="Pages\RolesPermisos.aspx" />
@@ -102,6 +106,7 @@
     <Content Include="Pages\UserRegister.aspx" />
     <Content Include="Pages\SeleccionarFechaHora.aspx" />
     <Content Include="Pages\ValidarEmail.aspx" />
+    <Content Include="Pages\VerUsuario.aspx" />
     <Content Include="Scripts\Login.js" />
     <Content Include="Stylesheets\Home.css" />
     <Content Include="Stylesheets\Login.css" />
@@ -148,6 +153,13 @@
     <Compile Include="Pages\CrearNuevoUsuario.aspx.designer.cs">
       <DependentUpon>CrearNuevoUsuario.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Pages\EdicionPaciente.aspx.cs">
+      <DependentUpon>EdicionPaciente.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\EdicionPaciente.aspx.designer.cs">
+      <DependentUpon>EdicionPaciente.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Especialidades.aspx.cs">
       <DependentUpon>Especialidades.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -161,6 +173,20 @@
     </Compile>
     <Compile Include="Pages\Home.aspx.designer.cs">
       <DependentUpon>Home.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ListadoMedicos.aspx.cs">
+      <DependentUpon>ListadoMedicos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\ListadoMedicos.aspx.designer.cs">
+      <DependentUpon>ListadoMedicos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ListadoPacientes.aspx.cs">
+      <DependentUpon>ListadoPacientes.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\ListadoPacientes.aspx.designer.cs">
+      <DependentUpon>ListadoPacientes.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\ListadoUsuarios.aspx.cs">
       <DependentUpon>ListadoUsuarios.aspx</DependentUpon>
@@ -182,6 +208,13 @@
     </Compile>
     <Compile Include="Pages\Login.aspx.designer.cs">
       <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\MenuUsuario.aspx.cs">
+      <DependentUpon>MenuUsuario.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\MenuUsuario.aspx.designer.cs">
+      <DependentUpon>MenuUsuario.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\MisTurnos.aspx.cs">
       <DependentUpon>MisTurnos.aspx</DependentUpon>
@@ -239,6 +272,13 @@
     <Compile Include="Pages\ValidarEmail.aspx.designer.cs">
       <DependentUpon>ValidarEmail.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Pages\VerUsuario.aspx.cs">
+      <DependentUpon>VerUsuario.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\VerUsuario.aspx.designer.cs">
+      <DependentUpon>VerUsuario.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Pages\Main.Master.cs">
       <DependentUpon>Main.Master</DependentUpon>
@@ -273,7 +313,6 @@
     <None Include="packages.config" />
     <Content Include="Pages\Main.Master" />
     <Content Include="Web.config" />
-    <Content Include="Web.config.sample" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

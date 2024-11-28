@@ -10,6 +10,7 @@ namespace Business.Dtos
 {
     public class NuevoEmpleadoDto : Persona
     {
+        public int MedicoId { get; set; }
         public int Legajo { get; set; }
         public string EmailCorporativo { get; set; }
         public int Posicion { get; set; }

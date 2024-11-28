@@ -50,29 +50,6 @@
             <nav>
                 <ul class="nav-links">
                     <li><a href="<%= ResolveUrl("~/Pages/Home.aspx") %>">Home</a></li>
-                    <%if (Usuario.Rol.Id == 1)
-                        { %>
-                    <li><a href="#">Adm Cuentas</a></li>
-                    <li><a href="#">Adm Turnos</a></li>
-                    <li><a href="#">Adm Roles</a></li>
-                    <li><a href="#">Adm Medicos</a></li>
-                    <% }
-                        else if (Usuario.Rol.Id == 2)
-                        {
-                    %>
-                    <li><a href="#">Sucursales</a></li>
-                    <li><a href="#">Turnos</a></li>
-                    <li><a href="#">Pedir Turno</a></li>
-                    <%}
-                        else
-                        {
-                    %>
-                    <li><a href="#">Medicos</a></li>
-                    <li><a href="#">Pacientes</a></li>
-                    <li><a href="<%= ResolveUrl("~/Pages/ListadoTurnos.aspx") %>">Turnos</a></li>
-                    <%} %>
-
-
                 </ul>
             </nav>
             <asp:Panel ID="pnlLoginRegister" runat="server">

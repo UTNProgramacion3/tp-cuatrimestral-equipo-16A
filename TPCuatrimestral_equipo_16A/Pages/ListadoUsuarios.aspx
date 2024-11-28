@@ -17,32 +17,34 @@
                 </div>
 
                 <div class="form-group">
-                    <asp:GridView ID="gvUsuarios" runat="server" AutoGenerateColumns="false" class="table table-striped">
+                    <asp:GridView ID="gvUsuarios" runat="server" AutoGenerateColumns="false" class="table table-striped"
+                        OnRowCommand="gvUsuarios_RowCommand">
                         <Columns>
                             <asp:BoundField DataField="Id" HeaderText="ID" SortExpression="Id" />
                             <asp:BoundField DataField="NombreCompleto" HeaderText="Nombre completo" SortExpression="Nombre" />
                             <asp:BoundField DataField="Email" HeaderText="Email" SortExpression="Email" />
                             <asp:BoundField DataField="Rol" HeaderText="Rol" SortExpression="Rol" />
-                            <asp:TemplateField HeaderText="Acciones">
-                                <ItemTemplate>
+                            <%--<asp:TemplateField HeaderText="Acciones">--%>
+                              <%--  <ItemTemplate>
                                     <!-- Botón de editar -->
                                     <asp:LinkButton ID="lnkEdit" runat="server" CommandName="Edit" CommandArgument='<%# Eval("Id") %>'>
-                        <img src="https://img.icons8.com/ios/50/000000/edit.png" alt="Editar" style="width: 20px; height: 20px; margin-right: 10px;" />
-                    </asp:LinkButton>
+                    <img src="https://img.icons8.com/ios/50/000000/edit.png" alt="Editar" style="width: 20px; height: 20px; margin-right: 10px;" />
+                                    </asp:LinkButton>
 
                                     <!-- Botón de visualizar -->
                                     <asp:LinkButton ID="lnkView" runat="server" CommandName="View" CommandArgument='<%# Eval("Id") %>'>
-                        <img src="https://img.icons8.com/ios/50/000000/visible.png" alt="Ver" style="width: 20px; height: 20px; margin-right: 10px;" />
-                    </asp:LinkButton>
+                    <img src="https://img.icons8.com/ios/50/000000/visible.png" alt="Ver" style="width: 20px; height: 20px; margin-right: 10px;" />
+                                    </asp:LinkButton>
 
                                     <!-- Botón de eliminar -->
                                     <asp:LinkButton ID="lnkDelete" runat="server" CommandName="Delete" CommandArgument='<%# Eval("Id") %>' OnClientClick="return confirm('¿Está seguro de que desea eliminar este registro?');">
-                        <img src="https://img.icons8.com/ios/50/000000/trash.png" alt="Eliminar" style="width: 20px; height: 20px;" />
-                    </asp:LinkButton>
-                                </ItemTemplate>
-                            </asp:TemplateField>
+                    <img src="https://img.icons8.com/ios/50/000000/trash.png" alt="Eliminar" style="width: 20px; height: 20px;" />
+                                    </asp:LinkButton>
+                                </ItemTemplate>--%>
+                            <%--</asp:TemplateField>--%>
                         </Columns>
                     </asp:GridView>
+
                 </div>
             </div>
         </form>

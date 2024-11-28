@@ -54,7 +54,7 @@ namespace Business.Managers
 
             Empleado empleado = res.GetEntity<Empleado>();
 
-            if(empleado.Posicion == (int)PosicionEnum.Medico)
+            if(empleado.RolId == (int)RolesEnum.Medico)
             {
                 // Necesitamos traernos la última fecha donde el empleado tiene un turno, para poder cambiar la jornada a partir de esa fecha (Y no afectar los turnos ya asignados).
             }

@@ -27,6 +27,11 @@ namespace TPCuatrimestral_equipo_16A.Pages
 			{
 				if(!IsPostBack)
 				{
+                    if(Session["ReprogramarTurno"] != null)
+                    {
+                        btnAtras.Visible = false;
+                    }
+
                     CompletarFechaHora();
 				}
 			}
@@ -53,7 +58,19 @@ namespace TPCuatrimestral_equipo_16A.Pages
                                 
                 int idMedicoReprogramar = int.Parse(Session["IdMedico"].ToString());
 
+                string chequeoFecha = Session["DiaTurno"].ToString();
+
                 Session["DiaTurno"] = txtBoxFechaTurno.Text;
+
+                if(DateTime.Parse(chequeoFecha) >= DateTime.Now.Date && DateTime.Parse(txtBoxFechaTurno.Text) >= DateTime.Now.Date)
+                {
+                    Session["DiaTurno"] = txtBoxFechaTurno.Text;
+                }
+                else
+                {
+                    Session["DiaTurno"] = chequeoFecha;
+                    return;
+                }
 
                 string fechaReprogramar = (string)Session["DiaTurno"];
 
@@ -70,18 +87,29 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
                 Session["DiaTurno"] = txtBoxFechaTurno.Text;
 
-                string fecha = (string)Session["DiaTurno"];
+                string chequeoFecha = txtBoxFechaTurno.Text;
+
+                if (DateTime.Parse(chequeoFecha) < DateTime.Now.Date)
+                {
+                    
+                    return;
+                }
+                
+                else
+
+                {
+                    string fecha = (string)Session["DiaTurno"];
 
 
-                DataTable table = new DataTable();
+                    DataTable table = new DataTable();
 
-                table = turnoManager.ObtenerTurnosDisponibles(idMedico, fecha);
+                    table = turnoManager.ObtenerTurnosDisponibles(idMedico, fecha);
 
-                dgvFechaHorario.DataSource = table;
-                dgvFechaHorario.DataBind();
+                    dgvFechaHorario.DataSource = table;
+                    dgvFechaHorario.DataBind();
+                }
+
             }
-            
-            
 
         }
 

@@ -28,7 +28,24 @@ namespace TPCuatrimestral_equipo_16A
             public static Usuario UsuarioLogueado { get; set; }
         }
 
-            protected void Application_Start(object sender, EventArgs e)
+        protected void Application_BeginRequest(object sender, EventArgs e)
+        {
+            string currentUrl = HttpContext.Current.Request.Url.AbsolutePath.ToLower();
+
+            string[] rutasExcluidas = {"/login.aspx" };
+
+            if (!rutasExcluidas.Any(path => currentUrl.EndsWith(path)) && !UserIsLogged())
+            {
+                HttpContext.Current.Response.Redirect("~/Pages/Login.aspx");
+            }
+        }
+
+        private bool UserIsLogged()
+        {
+            return GlobalData.UsuarioLogueado != null;
+        }
+
+        protected void Application_Start(object sender, EventArgs e)
         {
             Environment.SetEnvironmentVariable("SMTP_SERVER", ConfigurationManager.AppSettings["SMTP_SERVER"]);
             Environment.SetEnvironmentVariable("SMTP_PORT", ConfigurationManager.AppSettings["SMTP_PORT"]);
@@ -37,7 +54,7 @@ namespace TPCuatrimestral_equipo_16A
             Environment.SetEnvironmentVariable("BASE_URL", ConfigurationManager.AppSettings["BASE_URL"]);
             Environment.SetEnvironmentVariable("APP_NAME", ConfigurationManager.AppSettings["APP_NAME"]);
             Environment.SetEnvironmentVariable("MAIL_VALIDATION", ConfigurationManager.AppSettings["MAIL_VALIDATION"]);
-            if (Environment.GetEnvironmentVariable("SMTP_USER")== null ||
+            if (Environment.GetEnvironmentVariable("SMTP_USER") == null ||
                 Environment.GetEnvironmentVariable("SMTP_PASSWORD") == null)
             {
                 throw new Exception("No se ha configurado usuario / contraseña para envío de mails");

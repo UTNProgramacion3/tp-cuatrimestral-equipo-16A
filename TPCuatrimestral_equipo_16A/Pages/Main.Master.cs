@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using static TPCuatrimestral_equipo_16A.Global;
 
 namespace TPCuatrimestral_equipo_16A.Views
 {
@@ -34,8 +35,9 @@ namespace TPCuatrimestral_equipo_16A.Views
         protected void btnLogout_Click(object sender, EventArgs e)
         {
             Session["UserLogueado"] = null;
+            GlobalData.UsuarioLogueado = null;
 
-            Response.Redirect("~/Pages/Home.aspx");
+            Response.Redirect("~/Pages/Login.aspx");
         }
     }
 }

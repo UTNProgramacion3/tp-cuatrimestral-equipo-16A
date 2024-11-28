@@ -212,7 +212,8 @@ namespace Business.Managers
             EMP.*,
             P.*,
             MED.*,
-            DIR.*
+            DIR.*,
+            U.RolId
         FROM 
             Medicos MED
         LEFT JOIN 
@@ -225,6 +226,7 @@ namespace Business.Managers
             DiasLaborales DL ON DL.JornadaTrabajoId = JT.Id
         LEFT JOIN 
             Direcciones DIR ON DIR.Id = P.DireccionId
+        LEFT JOIN Usuarios U ON U.Id = P.UsuarioId
         WHERE 
             P.UsuarioId = @UserId;
             ";
@@ -251,6 +253,7 @@ namespace Business.Managers
                 CodigoPostal = res.Rows[0]["CodigoPostal"].ToString()
             };
             medico.Direccion = direccion;
+            //medico.RolId = res.Rows[0]["RolId"].ToString();
             return medico;
         }
         public Response<List<MedicoDto>> ObtenerTodosBySede(int IdSede)

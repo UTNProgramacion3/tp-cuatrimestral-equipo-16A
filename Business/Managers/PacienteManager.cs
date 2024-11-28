@@ -20,7 +20,11 @@ namespace Business.Managers
         private readonly Response<Paciente> _response;
         private readonly IDireccionManager _direccionManager;
         private readonly IPersonaManager _personaManager;
+        private readonly IUsuarioManager _usuarioManager;
+        private readonly IEmailManager _emailManager;
         private readonly IMapper<Paciente> _mapper;
+        private readonly string _VALIDAR_CON_EMAIL;
+
         #endregion
 
         #region Builder
@@ -28,7 +32,9 @@ namespace Business.Managers
             DBManager manager,
             Response<Paciente> response,
             IDireccionManager direccionManager,
-            IPersonaManager personaManager
+            IPersonaManager personaManager,
+            IUsuarioManager usuarioManager,
+            IEmailManager emailManager
             )
             
         {
@@ -36,7 +42,11 @@ namespace Business.Managers
             _response = response;
             _direccionManager = direccionManager;
             _personaManager = personaManager;
+            _usuarioManager = usuarioManager;
+            _emailManager = emailManager;
             _mapper = new Mapper<Paciente>();
+            _VALIDAR_CON_EMAIL = Environment.GetEnvironmentVariable("VALIDAR_CON_EMAIL");
+
         }
         #endregion
 
@@ -45,6 +55,21 @@ namespace Business.Managers
         {
             try
             {
+                bool validarConEmail = _VALIDAR_CON_EMAIL == "true";
+                var user = _usuarioManager.GenerarUsuario((Persona)entity, entity.RolId);
+                user.Activo = !validarConEmail;
+                var usuarioCreado = _usuarioManager.Crear(user);
+                var nombreUsuario = $"{entity.Apellido}, {entity.Nombre}";
+
+                if (validarConEmail)
+                {
+                    _emailManager.EnviarMailValidacionNuevaCuenta(entity.EmailPersonal, usuarioCreado.Data.Id, nombreUsuario);
+                }
+
+                if (!usuarioCreado.Success)
+                {
+                    throw new Exception("Error al crear el usuario");
+                }
                 var direccionCreada = _direccionManager.Crear(entity.Direccion);
 
                 if (!direccionCreada.Success)
@@ -60,7 +85,8 @@ namespace Business.Managers
                     EmailPersonal = entity.EmailPersonal,
                     FechaNacimiento = entity.FechaNacimiento,
                     Telefono = entity.Telefono,
-                    Direccion = direccionCreada.Data
+                    DireccionId = direccionCreada.Data.Id,
+                    UsuarioId = usuarioCreado.Data.Id
                 };
 
                 var personaCreada = _personaManager.Crear(persona);
@@ -74,8 +100,8 @@ namespace Business.Managers
                 SqlParameter[] parameters = new SqlParameter[]
                 {
                     new SqlParameter("@PersonaId", personaCreada.Data.Id),
-                    new SqlParameter("@ObraSocial", entity.ObraSocial),
-                    new SqlParameter("@NroAfiliado", entity.NroAfiliado),
+                    new SqlParameter("@ObraSocial", entity.ObraSocial ?? ""),
+                    new SqlParameter("@NroAfiliado", entity.NroAfiliado ?? ""),
                 };
 
                 var res = _DBManager.ExecuteQuery(query, parameters);
@@ -177,9 +203,20 @@ namespace Business.Managers
 
         public Paciente ObtenerPacienteByUserId(int userId)
         {
-            string query = @"SELECT * FROM Pacientes 
-            left join Personas on Pacientes.PersonaId = Personas.Id
-            WHERE UsuarioId = @UserId";
+            string query = @"
+            SELECT 
+                PAC.*,           
+                PER.*,          
+                DIR.*            
+            FROM 
+                Pacientes PAC
+            LEFT JOIN 
+                Personas PER ON PAC.PersonaId = PER.Id
+            LEFT JOIN 
+                Direcciones DIR ON DIR.Id = PER.DireccionId
+            WHERE 
+                PER.UsuarioId = @UserId";
+
 
             SqlParameter[] parameters = new SqlParameter[]
             {

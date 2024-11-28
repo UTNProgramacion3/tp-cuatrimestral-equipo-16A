@@ -144,22 +144,19 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
                 bool canEdit = userRole == RolesEnum.Recepcionista || userRole == RolesEnum.Administrador;
 
-                // Si estamos en modo edición, ocultamos el LinkButton de editar y mostramos los botones de guardar y cancelar
                 if (gvMedicos.EditIndex == e.Row.RowIndex)
                 {
-                    if (editButton != null) editButton.Visible = false; // Ocultar el LinkButton de editar
-                    if (saveButton != null) saveButton.Visible = true; // Mostrar el botón de guardar
-                    if (cancelButton != null) cancelButton.Visible = true; // Mostrar el botón de cancelar
+                    if (editButton != null) editButton.Visible = false; 
+                    if (saveButton != null) saveButton.Visible = true; 
+                    if (cancelButton != null) cancelButton.Visible = true;
                 }
                 else
                 {
-                    // Si no estamos en modo edición, mostramos el botón de editar solo si el usuario tiene permisos
                     if (editButton != null) editButton.Visible = canEdit;
                     if (saveButton != null) saveButton.Visible = false;
                     if (cancelButton != null) cancelButton.Visible = false;
                 }
 
-                // Aquí puedes cargar las especialidades en el DropDownList, si es necesario.
                 if (gvMedicos.EditIndex == e.Row.RowIndex)
                 {
                     DropDownList ddlEspecialidad = (DropDownList)e.Row.FindControl("ddlEspecialidad");

@@ -9,6 +9,7 @@ namespace Business.Dtos
 {
     public class MedicoDto
     {
+        public int Id { get; set; }
         public int Matricula { get; set; }
         public int EspecialidadId { get; set; }
         public int EmpleadoId { get; set; }

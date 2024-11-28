@@ -74,7 +74,7 @@ namespace Business.Managers
             Response<Sede> response = new Response<Sede>();
             
             string query = @"
-                SELECT Nombre, DireccionId
+                SELECT Id, Nombre, DireccionId
                 FROM Sedes SE
                 WHERE SE.Id = @Id";
 

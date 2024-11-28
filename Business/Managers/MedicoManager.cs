@@ -76,18 +76,58 @@ namespace Business.Managers
             }
         }
 
+        public Response<Medico> ActualizarMedico(MedicoDto entity)
+        {
+            try
+            {
+                string query = @"
+                UPDATE Medicos
+                SET Matricula = @Matricula,
+                EspecialidadId = @EspecialidadId,
+                WHERE EmpleadoId = @EmpleadoId;
+                ";
+
+                string retrieveData = "SELECT * FROM Medicos WHERE Id = @Id";
+
+                SqlParameter[] parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@Matricula", entity.Matricula),
+                    new SqlParameter("@EspecialidadId", entity.EspecialidadId),
+                    new SqlParameter("@EmpleadoId", entity.EmpleadoId),
+                };
+
+                var res = _DBManager.ExecuteNonQueryAndGetData(query, parameters, retrieveData);
+
+                if (res == null)
+                {
+                    throw new Exception("Error al actualizar el médico.");
+                }
+
+                var medicoActualizado = res.GetEntity<Medico>();
+                _response.Ok(medicoActualizado);
+
+                return _response;
+            }
+            catch (Exception ex)
+            {
+                _response.NotOk($"Error al actualizar el médico: {ex.Message}");
+                return _response;
+            }
+        }
+
+
         public Response<Medico> ObtenerMedicoById(int id)
         {
             string query = @"
-                SELECT 
-                    m.Id AS MedicoId, m.Matricula, m.EspecialidadId,
-                    e.Id AS EmpleadoId, e.Legajo, e.EmailCorporativo, e.Posicion, e.JornadaTrabajoId,
-                    p.Id AS PersonaId, p.Nombre, p.Apellido, p.Documento, p.Telefono, 
-                    p.FechaNacimiento, p.EmailPersonal, p.DireccionId, p.UsuarioId
-                FROM Medico m
-                INNER JOIN Empleados e ON m.EmpleadoId = e.Id
-                INNER JOIN Personas p ON e.PersonaId = p.Id
-                WHERE m.Id = @Id";
+                            SELECT 
+                                m.Id AS Id, m.Matricula, m.EspecialidadId,
+                                e.Id AS EmpleadoId, e.Legajo, e.EmailCorporativo, e.JornadaTrabajoId,
+                                p.Id AS PersonaId, p.Nombre, p.Apellido, p.Documento, p.Telefono, 
+                                p.FechaNacimiento, p.EmailPersonal, p.DireccionId, p.UsuarioId
+                            FROM Medicos m
+                            INNER JOIN Empleados e ON m.EmpleadoId = e.Id
+                            INNER JOIN Personas p ON e.PersonaId = p.Id
+                            WHERE m.Id = @Id";
 
             SqlParameter[] parameters = new SqlParameter[]
             {

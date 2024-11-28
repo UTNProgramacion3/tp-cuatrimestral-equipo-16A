@@ -56,6 +56,12 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
                 switch (user.RolId)
                 {
+                    //case (int)RolesEnum.Administrador:
+                    //    var admin = _usuarioManager.ObtenerAdminByUserId(user.Id);
+                    //    cargarDatosPersonaFormularioEditar((Persona)admin);
+                    //    cargarDireccionFormularioEditar(admin.Direccion);
+                    //    break;
+                    case (int)RolesEnum.Empleado:
                     case (int)RolesEnum.Medico:
                         var medico = _medicoManager.ObtenerMedicoByUserId(user.Id);
                         cargarMedicoAEditar(medico);
@@ -69,15 +75,20 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
 
         }
+        //private void cargarAdminAEditar(NuevoAdminDto admin)
+        //{
+        //    ddlRol.SelectedIndex = admin.RolId;
+        //    cargarDatosPersonaFormularioEditar((Persona)admin);
+        //    cargarDireccionFormularioEditar(admin.Direccion);
+        //}
 
         private void cargarMedicoAEditar(Medico medico)
         {
             ddlRol.SelectedIndex = medico.RolId;
             cargarDatosPersonaFormularioEditar((Persona)medico);
             cargarDireccionFormularioEditar(medico.Direccion);
-           
+            cargarDatosEmpleadoFormularioEditar((Empleado)medico);
 
-           
             txtMatricula.Text = medico.Matricula.ToString();
             ddlEspecialidad.SelectedValue = medico.EspecialidadId.ToString();
         }
@@ -115,6 +126,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
         private void cargarDatosEmpleadoFormularioEditar(Empleado empleado)
         {
             txtLegajo.Text = empleado.Legajo.ToString();
+            ddlRol.SelectedValue = empleado.RolId.ToString();
             //posicionEmpleado.SelectedValue = empleado.Posicion.ToString();
         }
 
@@ -180,7 +192,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
                         Posicion = posicion,
                         Matricula = int.Parse(txtMatricula.Text),
                         EspecialidadId = int.Parse(ddlEspecialidad.SelectedValue),
-                        RolId = (int)RolesEnum.Empleado
+                        RolId = rol
                     };
                     if (_isEditModeEnabled)
                     {

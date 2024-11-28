@@ -47,19 +47,41 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
         private void ObtenerTurnosDisponibles()
 		{
-			int idMedico = (int)Session["IdMedico"];
-
-            Session["DiaTurno"] = txtBoxFechaTurno.Text;
-
-            string fecha = (string)Session["DiaTurno"];
-
 			
-			DataTable table = new DataTable();
+            if(Session["ReprogramarTurno"] != null)
+            {
+                                
+                int idMedicoReprogramar = int.Parse(Session["IdMedico"].ToString());
 
-			table = turnoManager.ObtenerTurnosDisponibles(idMedico, fecha);
+                Session["DiaTurno"] = txtBoxFechaTurno.Text;
 
-            dgvFechaHorario.DataSource = table;
-			dgvFechaHorario.DataBind();
+                string fechaReprogramar = (string)Session["DiaTurno"];
+
+                DataTable tableReprogramar = new DataTable();
+
+                tableReprogramar = turnoManager.ObtenerTurnosDisponibles(idMedicoReprogramar, fechaReprogramar);
+
+                dgvFechaHorario.DataSource = tableReprogramar;
+                dgvFechaHorario.DataBind();
+            }
+            else
+            {
+                int idMedico = (int)Session["IdMedico"];
+
+                Session["DiaTurno"] = txtBoxFechaTurno.Text;
+
+                string fecha = (string)Session["DiaTurno"];
+
+
+                DataTable table = new DataTable();
+
+                table = turnoManager.ObtenerTurnosDisponibles(idMedico, fecha);
+
+                dgvFechaHorario.DataSource = table;
+                dgvFechaHorario.DataBind();
+            }
+            
+            
 
         }
 

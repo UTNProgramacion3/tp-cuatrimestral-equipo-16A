@@ -12,6 +12,6 @@ namespace Business.Interfaces
 {
     public interface IEmpleadoManager : ICrudRepository<Empleado>
     {
-        Response<Empleado> CrearNuevo(NuevoEmpleadoDto entity, List<DiaLaboral> jornada);
+        Response<Empleado> CrearNuevo(NuevoEmpleadoDto entity, List<DiaLaboral> jornada, int sede);
     }
 }

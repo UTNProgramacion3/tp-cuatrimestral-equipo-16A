@@ -255,7 +255,8 @@ namespace TPCuatrimestral_equipo_16A.Pages
                         JornadaTrabajo jornadaGenerica = new JornadaTrabajo();
                         //var jornadaLaboral = chkSwitch.Checked ?  ObtenerJornadasDesdeFormulario() : jornadaGenerica.Jornada ;
                         var jornadaLaboral = rol == (int)RolesEnum.Medico ? ObtenerJornadasDesdeFormulario() : jornadaGenerica.Jornada;
-                        var res = _empleadoManager.CrearNuevo(nuevoEmpleado, jornadaLaboral);
+                        var sede = int.Parse(ddlSede.SelectedValue);
+                        var res = _empleadoManager.CrearNuevo(nuevoEmpleado, jornadaLaboral,sede );
                     }
                     break;
 

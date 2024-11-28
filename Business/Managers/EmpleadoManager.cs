@@ -58,7 +58,7 @@ namespace Business.Managers
 
         #endregion
         #region Public methods
-        public Response<Empleado> CrearNuevo(NuevoEmpleadoDto entity, List<DiaLaboral> jornadaLaboral)
+        public Response<Empleado> CrearNuevo(NuevoEmpleadoDto entity, List<DiaLaboral> jornadaLaboral, int sede = 1)
         {
             try
             {
@@ -99,6 +99,7 @@ namespace Business.Managers
                 }
 
                 JornadaTrabajo jornadaEmpleado = new JornadaTrabajo();
+                jornadaEmpleado.SedeId = sede;
                 jornadaEmpleado.Jornada = jornadaLaboral;
                 var jornada = _jornadaManager.Crear(jornadaEmpleado);
 

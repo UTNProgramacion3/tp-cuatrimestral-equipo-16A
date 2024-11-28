@@ -12,6 +12,7 @@ using System.IO;
 using System.Data.SqlClient;
 using Business.Dtos;
 using DataAccess.Extensions;
+using Domain.Entities;
 
 namespace Business.Managers
 {
@@ -26,6 +27,7 @@ namespace Business.Managers
         private readonly string _APP_NAME;
         private readonly string _BASE_URL;
         private readonly string _validacionMailTemplate;
+        private readonly string _estadoTurnoMailTemplate;
         private SmtpClient _SmtpClient;
         #endregion
 
@@ -40,6 +42,7 @@ namespace Business.Managers
             _BASE_URL = Environment.GetEnvironmentVariable("BASE_URL");
             string basePath = AppDomain.CurrentDomain.BaseDirectory;
             _validacionMailTemplate = Path.Combine(basePath, "..", "Business", "Templates", "ValidacionEmailTemplate.html");
+            _estadoTurnoMailTemplate = Path.Combine(basePath, "..", "Business", "Templates", "EstadoTurnoEmailTemplate.html");
 
 
             _SmtpClient = new SmtpClient(_SMTP_SERVER, _SMTP_PORT)
@@ -159,6 +162,47 @@ namespace Business.Managers
             mail.IsBodyHtml = true;
 
             return mail;
+        }
+
+        public async Task EnviarEstadoTurno(TurnoDTO turno, Paciente paciente)
+        {
+            var query = "SELECT * FROM Turnos WHERE TurnoId = @TurnoId";
+            SqlParameter[] param = new SqlParameter[] { new SqlParameter("@TurnoId", turno.Turno.Id) };
+
+            if (turno == null)
+            {
+                throw new Exception("El turno no se encuentra en la base de datos.");
+            }
+
+            var mailTemplate = _estadoTurnoMailTemplate;
+            string htmlBody;
+
+            using (StreamReader reader = new StreamReader(mailTemplate))
+            {
+                htmlBody = await reader.ReadToEndAsync();
+            }
+
+            htmlBody = htmlBody.Replace("{{NombrePaciente}}", paciente.Nombre)
+                               .Replace("{{FechaTurno}}", turno.Turno.Fecha.ToString("dd/MM/yyyy"))
+                               .Replace("{{EstadoTurno}}", turno.Turno.EstadoTurno)
+                               .Replace("{{APP_NAME}}", _APP_NAME)
+                               .Replace("{{BASE_URL}}", _BASE_URL);
+
+            var mail = GenerarNuevoEmail("escuderopablo.m@gmail.com", $"Estado del turno - {_APP_NAME}", htmlBody);
+
+            try
+            {
+                await _SmtpClient.SendMailAsync(mail);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                mail.Dispose();
+                _SmtpClient.Dispose();
+            }
         }
 
         #endregion

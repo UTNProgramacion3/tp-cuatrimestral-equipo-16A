@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estado del Turno Médico</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            color: #333;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #1d1e2c;
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #1d1e2c;
+        }
+
+        .value {
+            color: #59656f;
+        }
+
+        .status {
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .confirmed {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .cancelled {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .pending {
+            background-color: #ff9800;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Estado del Turno Médico</h1>
+
+        <div class="section">
+            <p><span class="label">Paciente:</span> <span class="value">{{PacienteNombre}}</span></p>
+            <p><span class="label">Médico:</span> <span class="value">{{MedicoNombre}}</span></p>
+        </div>
+
+        <div class="section">
+            <p><span class="label">Fecha y Hora del Turno:</span> <span class="value">{{FechaHoraTurno}}</span></p>
+        </div>
+
+        <div class="section">
+            <p>
+                <span class="label">Estado del Turno:</span>
+                <span class="status {{EstadoTurnoClass}}">{{EstadoTurno}}</span>
+            </p>
+        </div>
+
+        <div class="section">
+            <p><span class="label">Detalles adicionales:</span> <span class="value">{{DetallesAdicionales}}</span></p>
+        </div>
+    </div>
+
+</body>
+</html>

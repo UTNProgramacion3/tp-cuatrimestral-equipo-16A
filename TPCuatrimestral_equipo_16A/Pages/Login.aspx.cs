@@ -18,20 +18,12 @@ namespace TPCuatrimestral_equipo_16A.Pages
     public partial class Login : System.Web.UI.Page
     {
 
-        private IPacienteManager _pacienteManager;
-        private IEmpleadoManager _empleadoManager;
-        private IMedicoManager _medicoManager;
         private IUsuarioManager _usuarioManager;
-        private IPersonaManager _personaManager;
         private bool _isEditModeEnabled;
         private void InitDependencies()
         {
             IUnityContainer unityContainer;
-            _pacienteManager = (IPacienteManager)Global.Container.Resolve(typeof(IPacienteManager));
-            _empleadoManager = (IEmpleadoManager)Global.Container.Resolve(typeof(IEmpleadoManager));
-            _medicoManager = (IMedicoManager)Global.Container.Resolve(typeof(IMedicoManager));
             _usuarioManager = (IUsuarioManager)Global.Container.Resolve(typeof(IUsuarioManager));
-            _personaManager = (IPersonaManager)Global.Container.Resolve(typeof(IPersonaManager));
 
             string isEdit = Request.QueryString["mode"] ?? "";
             _isEditModeEnabled = isEdit != "" && isEdit.ToLower() == "edit";

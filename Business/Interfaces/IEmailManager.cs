@@ -1,5 +1,7 @@
-﻿using Business.Managers;
+﻿using Business.Dtos;
+using Business.Managers;
 using DataAccess;
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +14,6 @@ namespace Business.Interfaces
     {
         Task EnviarEmail(string destinatario, string subject, string body);
         Task EnviarMailValidacionNuevaCuenta(string destinatario, int usuarioId, string nombreUsuario);
+        Task EnviarEstadoTurno(TurnoDTO turno, Paciente paciente);
     }
 }

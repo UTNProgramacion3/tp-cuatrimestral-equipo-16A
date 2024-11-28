@@ -29,6 +29,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
         private ISedeManager _sedeManager;
         private IMedicoManager _medicoManager;
         private IEspecialidadManager _especialidadManager;
+        private IEmailManager _emailManager;
 
         private void InitDependencies()
         {
@@ -38,6 +39,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
             _sedeManager = (ISedeManager)Global.Container.Resolve(typeof(ISedeManager));
             _medicoManager = (IMedicoManager)Global.Container.Resolve(typeof(IMedicoManager));
             _especialidadManager = (IEspecialidadManager)Global.Container.Resolve(typeof(IEspecialidadManager));
+            _emailManager = (IEmailManager)Global.Container.Resolve(typeof(IEmailManager));
 
         }
         protected void Page_Load(object sender, EventArgs e)
@@ -128,6 +130,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
             int idReprogramar = (int)EstadosEnum.Reprogramado;
             int idTurnoAreprogramar = (int)Session["IdTurnoAreprogramar"];
             turnoManager.ReprogramarTurno(idReprogramar, idTurnoAreprogramar);
+            _emailManager.EnviarEstadoTurno(turno, new Paciente());
 
         }
 

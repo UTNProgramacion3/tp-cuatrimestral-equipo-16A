@@ -16,19 +16,14 @@ namespace TPCuatrimestral_equipo_16A.Pages
 	public partial class Home : System.Web.UI.Page
 	{
 
-        private IEmailManager _emailManager;
-        private IPacienteManager _pacienteManager;
 
-        private void InitDependencies()
-        {
-            IUnityContainer unityContainer;
-            _emailManager = (IEmailManager)Global.Container.Resolve(typeof(IEmailManager));
-            _pacienteManager = (IPacienteManager)Global.Container.Resolve(typeof(IPacienteManager));
-        }
+        //private void InitDependencies()
+        //{
+        //}
 
         protected void Page_Load(object sender, EventArgs e)
 		{
-            InitDependencies();
+            //InitDependencies();
 
             if (!IsPostBack)
             {

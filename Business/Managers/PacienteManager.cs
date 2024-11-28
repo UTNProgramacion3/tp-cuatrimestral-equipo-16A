@@ -102,13 +102,13 @@ namespace Business.Managers
                             INNER JOIN Personas per ON p.PersonaId = per.Id
                             WHERE p.Id = @Id";
 
-            SELECT 
-                p.Id AS Id, p.ObraSocial, p.NroAfiliado, p.PersonaId,
-                per.Id AS PersonaId, per.Nombre, per.Apellido, per.Documento, 
-                per.Telefono, per.FechaNacimiento, per.EmailPersonal, per.DireccionId, per.UsuarioId
-            FROM Pacientes p
-            INNER JOIN Personas per ON p.PersonaId = per.Id
-            WHERE p.Id = @Id";
+            //SELECT 
+            //    p.Id AS Id, p.ObraSocial, p.NroAfiliado, p.PersonaId,
+            //    per.Id AS PersonaId, per.Nombre, per.Apellido, per.Documento, 
+            //    per.Telefono, per.FechaNacimiento, per.EmailPersonal, per.DireccionId, per.UsuarioId
+            //FROM Pacientes p
+            //INNER JOIN Personas per ON p.PersonaId = per.Id
+            //WHERE p.Id = @Id";
 
 
             SqlParameter[] parameters = new SqlParameter[]

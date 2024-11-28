@@ -24,8 +24,8 @@
                             <asp:BoundField DataField="NombreCompleto" HeaderText="Nombre completo" SortExpression="Nombre" />
                             <asp:BoundField DataField="Email" HeaderText="Email" SortExpression="Email" />
                             <asp:BoundField DataField="Rol" HeaderText="Rol" SortExpression="Rol" />
-                            <asp:TemplateField HeaderText="Acciones">
-                                <ItemTemplate>
+                            <%--<asp:TemplateField HeaderText="Acciones">--%>
+                              <%--  <ItemTemplate>
                                     <!-- Botón de editar -->
                                     <asp:LinkButton ID="lnkEdit" runat="server" CommandName="Edit" CommandArgument='<%# Eval("Id") %>'>
                     <img src="https://img.icons8.com/ios/50/000000/edit.png" alt="Editar" style="width: 20px; height: 20px; margin-right: 10px;" />
@@ -40,8 +40,8 @@
                                     <asp:LinkButton ID="lnkDelete" runat="server" CommandName="Delete" CommandArgument='<%# Eval("Id") %>' OnClientClick="return confirm('¿Está seguro de que desea eliminar este registro?');">
                     <img src="https://img.icons8.com/ios/50/000000/trash.png" alt="Eliminar" style="width: 20px; height: 20px;" />
                                     </asp:LinkButton>
-                                </ItemTemplate>
-                            </asp:TemplateField>
+                                </ItemTemplate>--%>
+                            <%--</asp:TemplateField>--%>
                         </Columns>
                     </asp:GridView>
 

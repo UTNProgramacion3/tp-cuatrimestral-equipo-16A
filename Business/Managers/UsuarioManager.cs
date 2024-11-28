@@ -414,7 +414,9 @@ namespace Business.Managers
         }
         public Usuario GenerarUsuario(Persona persona, int tipoUsuario)
         {
-            var email = tipoUsuario == (int)RolesEnum.Empleado ? persona.CrearEmailCorporativo() : persona.EmailPersonal; //Añadir validación mail existente.
+            var email = (tipoUsuario == (int)RolesEnum.Empleado ||
+                tipoUsuario == (int)RolesEnum.Medico ||
+                tipoUsuario == (int)RolesEnum.Recepcionista) ? persona.CrearEmailCorporativo() : persona.EmailPersonal;
 
             Usuario usuario = new Usuario
             {

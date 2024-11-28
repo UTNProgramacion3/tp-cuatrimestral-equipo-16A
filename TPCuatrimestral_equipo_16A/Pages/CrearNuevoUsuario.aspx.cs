@@ -215,21 +215,25 @@ namespace TPCuatrimestral_equipo_16A.Pages
                     break;
                 case (int)RolesEnum.Empleado:
                 case (int)RolesEnum.Medico:
+                case (int)RolesEnum.Recepcionista:
                     NuevoEmpleadoDto nuevoEmpleado = new NuevoEmpleadoDto
                     {
                         Apellido = apellido,
                         Nombre = nombre,
                         Documento = int.Parse(documento),
                         Direccion = direccion,
-                        //Legajo = int.Parse(legajo),
                         EmailPersonal = txtEmailPersonal.Text.Trim(),
                         Telefono = txtTelefono.Text.Trim(),
                         FechaNacimiento = DateTime.Parse(txtFechaNacimiento.Text),
                         Posicion = posicion,
-                        Matricula = int.Parse(txtMatricula.Text),
-                        EspecialidadId = int.Parse(ddlEspecialidad.SelectedValue),
                         RolId = rol
                     };
+
+                    if(rol == (int)RolesEnum.Medico)
+                    {
+                        nuevoEmpleado.Matricula = int.Parse(txtMatricula.Text);
+                        nuevoEmpleado.EspecialidadId = int.Parse(ddlEspecialidad.SelectedValue);
+                    }
                     if (_isEditModeEnabled)
                     {
                         if(rol == (int)RolesEnum.Medico)
@@ -250,7 +254,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
                     {
                         JornadaTrabajo jornadaGenerica = new JornadaTrabajo();
                         //var jornadaLaboral = chkSwitch.Checked ?  ObtenerJornadasDesdeFormulario() : jornadaGenerica.Jornada ;
-                        var jornadaLaboral = ObtenerJornadasDesdeFormulario();
+                        var jornadaLaboral = rol == (int)RolesEnum.Medico ? ObtenerJornadasDesdeFormulario() : jornadaGenerica.Jornada;
                         var res = _empleadoManager.CrearNuevo(nuevoEmpleado, jornadaLaboral);
                     }
                     break;

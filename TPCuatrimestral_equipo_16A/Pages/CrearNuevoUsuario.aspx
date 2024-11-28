@@ -281,7 +281,7 @@
                     </div>
 
                     <!-- Sección de Domicilio -->
-                    <div class="border-top mt-4 pt-3">
+                    <div class="border-top mt-4 pt-3" id="seccionDomicilio"  style="display: none;">
                         <h4 class="mb-3">Domicilio</h4>
                         <div class="mb-3">
                             <label for="txtCalle" class="form-label">Calle</label>
@@ -493,6 +493,7 @@
             if (role == "5") { //5 es paciente
                 document.getElementById('obraSocialDiv').style.display = 'block';
                 document.getElementById('nroAfiliadoDiv').style.display = 'block';
+                document.getElementById('seccionDomicilio').style.display = 'block';
             }
         }
 

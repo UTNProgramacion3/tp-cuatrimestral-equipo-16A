@@ -112,7 +112,7 @@ namespace Business.Managers
                 {
                     new SqlParameter("@Legajo", legajo),
                     new SqlParameter("@EmailCorporativo", usuarioCreado.Data.Email),
-                    new SqlParameter("@CargoId", entity.Posicion),
+                    new SqlParameter("@CargoId", 1),
                     new SqlParameter("@JornadaTrabajoId", jornada.Data.Id),
                     new SqlParameter("@PersonaId", personaCreada.Data.Id),
                 };

@@ -12,6 +12,9 @@ using DataAccess;
 using Business.Managers;
 using Domain.Enums;
 using Domain.Entities;
+using Domain.Response;
+using Business.Interfaces;
+using Unity;
 
 namespace TPCuatrimestral_equipo_16A.Pages
 {
@@ -20,9 +23,26 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
         DBManager dbManager;
         TurnoManager turnoManager;
+
+        private IDireccionManager _direccionManager;
+        private IPacienteManager _pacienteManager;
+        private ISedeManager _sedeManager;
+        private IMedicoManager _medicoManager;
+        private IEspecialidadManager _especialidadManager;
+
+        private void InitDependencies()
+        {
+            IUnityContainer unityContainer;
+            _direccionManager = (IDireccionManager)Global.Container.Resolve(typeof(IDireccionManager));
+            _pacienteManager = (IPacienteManager)Global.Container.Resolve(typeof(IPacienteManager));
+            _sedeManager = (ISedeManager)Global.Container.Resolve(typeof(ISedeManager));
+            _medicoManager = (IMedicoManager)Global.Container.Resolve(typeof(IMedicoManager));
+            _especialidadManager = (IEspecialidadManager)Global.Container.Resolve(typeof(IEspecialidadManager));
+
+        }
         protected void Page_Load(object sender, EventArgs e)
         {
-            
+            InitDependencies();
             
             dbManager = new DBManager();
             turnoManager = new TurnoManager();
@@ -35,16 +55,62 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
         protected void ObtenerTurno()
         {
-            lblNombrePaciente.Text = (string)Session["NombrePaciente"];
-            lblApellidoPaciente.Text = (string)Session["ApellidoPaciente"];
-            lblNombreMedico.Text = (string)Session["NombreMedico"];
-            lblApellidoMedico.Text = (string)Session["ApellidoMedico"];
-            lblEspecialidad.Text = (string)Session["Especialidad"];
-            lblNombreSede.Text = (string)Session["NombreSede"];
-            lblDireccionSede.Text = (string)Session["DireccionSede"];
-            lblFecha.Text = (string)Session["FechaTurno"];
-            lblHora.Text = (string)Session["HoraTurno"];
+            TurnoDTO turnoReprogramar = new TurnoDTO();
+            turnoReprogramar = (TurnoDTO)Session["TurnoDto"];
+            
+            if(Session["ReprogramarTurno"] != null)
+            {
 
+                try
+                {
+                    Response<Paciente> pacienteReprogramar = _pacienteManager.ObtenerPorId(turnoReprogramar.Paciente.Id);
+                    Response<Medico> medicoReprogramar = _medicoManager.ObtenerMedicoById(turnoReprogramar.Medico.Id);
+                    Response<Especialidad> especialidadReprogramar = _especialidadManager.ObtenerPorId(medicoReprogramar.Data.EspecialidadId);
+                    Response<Sede> sedeReprogramar = _sedeManager.ObeterSedeById(turnoReprogramar.Sede.Id);
+                    Response<Direccion> direccionReprogramar = _direccionManager.ObtenerPorId(sedeReprogramar.Data.DireccionId);
+
+                    string direccionReprogramarString = direccionReprogramar.Data.Calle.ToString() + " " + direccionReprogramar.Data.Numero.ToString() + " " + direccionReprogramar.Data.Provincia.ToString();
+
+                    lblNombrePaciente.Text = pacienteReprogramar.Data.Nombre.ToString();
+                    lblApellidoPaciente.Text = pacienteReprogramar.Data.Apellido.ToString();
+                    lblNombreMedico.Text = medicoReprogramar.Data.Nombre.ToString();
+                    lblApellidoMedico.Text = medicoReprogramar.Data.Apellido.ToString();
+                    lblEspecialidad.Text = especialidadReprogramar.Data.Nombre.ToString();
+                    lblNombreSede.Text = sedeReprogramar.Data.Nombre.ToString();
+                    lblDireccionSede.Text = direccionReprogramarString;
+                    lblFecha.Text = (string)Session["FechaTurno"].ToString();
+                    lblHora.Text = (string)Session["HoraTurno"].ToString();
+                    txtbObservaciones.InnerText = turnoReprogramar.Turno.Observaciones.ToString();
+
+                    Session["IdPaciente"] = pacienteReprogramar.Data.Id;
+                    Session["IdMedico"] = medicoReprogramar.Data.Id;
+                    Session["IdSede"] = sedeReprogramar.Data.Id;
+                    Session["IdEstadoTurno"] = (int)EstadosEnum.Confirmado;
+
+                }
+                catch (Exception ex)
+                {
+
+                    throw ex;
+                }
+                
+
+
+
+
+            }
+            else
+            {
+                lblNombrePaciente.Text = (string)Session["NombrePaciente"];
+                lblApellidoPaciente.Text = (string)Session["ApellidoPaciente"];
+                lblNombreMedico.Text = (string)Session["NombreMedico"];
+                lblApellidoMedico.Text = (string)Session["ApellidoMedico"];
+                lblEspecialidad.Text = (string)Session["Especialidad"];
+                lblNombreSede.Text = (string)Session["NombreSede"];
+                lblDireccionSede.Text = (string)Session["DireccionSede"];
+                lblFecha.Text = (string)Session["FechaTurno"];
+                lblHora.Text = (string)Session["HoraTurno"];
+            }
         }
 
         protected void CrearTurno()

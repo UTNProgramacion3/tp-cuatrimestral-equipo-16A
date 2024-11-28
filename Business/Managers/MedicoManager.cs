@@ -17,7 +17,7 @@ namespace Business.Managers
     {
         private readonly DBManager _DBManager;
         private readonly Response<Medico> _response;
-        private readonly Mapper <MedicoDto> _mapper;
+        private readonly Mapper<MedicoDto> _mapper;
 
         public MedicoManager(DBManager dbManager, Response<Medico> response, Mapper<MedicoDto> mapper)
         {
@@ -46,13 +46,34 @@ namespace Business.Managers
 
             medico.Id = res.GetId();
 
-            if(res == null)
+            if (res == null)
             {
                 throw new Exception("Hubo un error al crear el medico");
             }
             _response.Ok(medico);
 
             return _response;
+        }
+
+        public bool ActualizarEspecialidad(int matricula, int nuevaEspecialidadId)
+        {
+            string query = "UPDATE Medicos SET EspecialidadId = @EspecialidadId WHERE Matricula = @Matricula";
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@EspecialidadId", nuevaEspecialidadId),
+                new SqlParameter("@Matricula", matricula)
+            };
+
+
+            try
+            {
+               var res = _DBManager.ExecuteNonQuery(query, parameters);
+
+                return res > 0;
+            }catch (Exception ex)
+            {
+                return false;
+            }
         }
 
         public Response<Medico> ObtenerMedicoById(int id)
@@ -112,7 +133,7 @@ namespace Business.Managers
                     return new Response<List<MedicoDto>>();
                 }
 
-                Response <List<MedicoDto>> response = new Response<List<MedicoDto>>();  
+                Response<List<MedicoDto>> response = new Response<List<MedicoDto>>();
 
                 response.Data = _mapper.ListMapFromRow(res);
 
@@ -237,5 +258,127 @@ namespace Business.Managers
             }
         }
 
+        public Response<List<MedicoDto>> ObtenerTodosConFiltro(string nombre, string matricula, int especialidadId)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+
+            string query = @"
+                            Select
+                            M.Id AS Medico_Id,
+                            M.Matricula,
+                            PE.Apellido AS Persona_Apellido,
+                            PE.Nombre AS Persona_Nombre,
+                            ES.Nombre AS Especialidad_Nombre,
+                            ES.Id AS EspecialidadId
+                            From Medicos M
+                            Inner Join Especialidades ES ON M.EspecialidadId = ES.Id
+                            Inner Join Empleados EM ON M.EmpleadoId = EM.Id
+                            Inner Join Personas PE ON EM.PersonaId = PE.Id
+                            WHERE 1=1";
+
+  
+            if (!string.IsNullOrEmpty(nombre))
+            {
+                query += " AND (PE.Nombre LIKE @Nombre OR PE.Apellido LIKE @Nombre)";
+                parameters.Add(new SqlParameter("@Nombre", "%" + nombre + "%"));
+            }
+
+            if (!string.IsNullOrEmpty(matricula))
+            {
+                query += " AND M.Matricula LIKE @Matricula";
+                parameters.Add(new SqlParameter("@Matricula", "%" + matricula + "%"));
+            }
+
+            if (especialidadId > 0)
+            {
+                query += " AND M.EspecialidadId = @EspecialidadId";
+                parameters.Add(new SqlParameter("@EspecialidadId", especialidadId));
+            }
+            DataTable res = _DBManager.ExecuteQuery(query, parameters.ToArray());
+
+            Response<List<MedicoDto>> response = new Response<List<MedicoDto>>();
+            response.Data = _mapper.ListMapFromRow(res);
+
+            return response;
+        }
+
+        List<MedicoSimpleDto> IMedicoManager.ObtenerTodosConFiltro(string nombre, string apellido, string matricula, int? especialidadId)
+        {
+            string query = @"
+                            SELECT
+                                M.Matricula,
+                                M.EspecialidadId,
+                                ES.Nombre AS EspecialidadNombre,
+                                M.EmpleadoId,
+                                PE.Nombre AS PersonaNombre,
+                                PE.Apellido AS PersonaApellido
+                            FROM Medicos M
+                            INNER JOIN Especialidades ES ON M.EspecialidadId = ES.Id
+                            INNER JOIN Empleados EM ON M.EmpleadoId = EM.Id
+                            INNER JOIN Personas PE ON EM.PersonaId = PE.Id
+                            WHERE 1=1";
+
+            if (!string.IsNullOrEmpty(nombre))
+            {
+                query += " AND PE.Nombre LIKE @Nombre";
+            }
+
+            if (!string.IsNullOrEmpty(apellido))
+            {
+                query += " AND PE.Apellido LIKE @Apellido";
+            }
+
+            if (!string.IsNullOrEmpty(matricula))
+            {
+                query += " AND M.Matricula LIKE @Matricula";
+            }
+
+            if (especialidadId > 0)
+            {
+                query += " AND M.EspecialidadId = @EspecialidadId";
+            }
+
+            var parameters = new List<SqlParameter>();
+
+            if (!string.IsNullOrEmpty(nombre))
+            {
+                parameters.Add(new SqlParameter("@Nombre", "%" + nombre + "%"));
+            }
+
+            if (!string.IsNullOrEmpty(apellido))
+            {
+                parameters.Add(new SqlParameter("@Apellido", "%" + apellido + "%"));
+            }
+
+            if (!string.IsNullOrEmpty(matricula))
+            {
+                parameters.Add(new SqlParameter("@Matricula", "%" + matricula + "%"));
+            }
+
+            if (especialidadId > 0)
+            {
+                parameters.Add(new SqlParameter("@EspecialidadId", especialidadId));
+            }
+            var result = _DBManager.ExecuteQuery(query, parameters.ToArray());
+
+            List<MedicoSimpleDto> medicos = new List<MedicoSimpleDto>();
+
+            foreach (DataRow row in result.Rows)
+            {
+                medicos.Add(new MedicoSimpleDto
+                {
+                    Matricula = Convert.ToInt32(row["Matricula"]),
+                    EspecialidadId = Convert.ToInt32(row["EspecialidadId"]),
+                    EspecialidadNombre = row["EspecialidadNombre"].ToString(),
+                    EmpleadoId = Convert.ToInt32(row["EmpleadoId"]),
+                    PersonaNombre = row["PersonaNombre"].ToString(),
+                    PersonaApellido = row["PersonaApellido"].ToString()
+                });
+            }
+
+            return medicos;
+        }
+
+      
     }
 }

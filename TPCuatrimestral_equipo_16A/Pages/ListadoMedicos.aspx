@@ -32,8 +32,6 @@
         <div class="col-md-3">
             <asp:Button ID="btnLimpiarFiltros" runat="server" Text="Limpiar Filtros" CssClass="btn btn-secondary" OnClick="btnLimpiarFiltros_Click" />
         </div>
-
-        <!-- Botón de Filtro -->
         <div class="row mb-4">
             <div class="col-md-12 text-end">
                 <asp:Button ID="btnFiltrar" runat="server" Text="Filtrar" OnClick="btnFiltrar_Click" CssClass="btn btn-primary" />
@@ -78,7 +76,13 @@
                     </EditItemTemplate>
                 </asp:TemplateField>
 
-                <asp:CommandField ShowEditButton="True" />
+                 <asp:TemplateField HeaderText="Acciones">
+            <ItemTemplate>
+                <asp:LinkButton ID="EditButton" runat="server" CommandName="Edit" Text="Editar" CssClass="btn btn-primary" Visible="false" />
+                <asp:Button ID="SaveButton" runat="server" CommandName="Update" Text="Guardar" CssClass="btn btn-success" Visible="false" />
+                <asp:Button ID="CancelButton" runat="server" CommandName="Cancel" Text="Cancelar" CssClass="btn btn-danger" Visible="false" />
+            </ItemTemplate>
+        </asp:TemplateField>
             </Columns>
         </asp:GridView>
 </asp:Content>

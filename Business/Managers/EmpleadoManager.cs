@@ -58,7 +58,7 @@ namespace Business.Managers
 
         #endregion
         #region Public methods
-        public Response<Empleado> CrearNuevo(NuevoEmpleadoDto entity)
+        public Response<Empleado> CrearNuevo(NuevoEmpleadoDto entity, List<DiaLaboral> jornadaLaboral)
         {
             try
             {
@@ -99,15 +99,18 @@ namespace Business.Managers
                 }
 
                 JornadaTrabajo jornadaEmpleado = new JornadaTrabajo();
+                jornadaEmpleado.Jornada = jornadaLaboral;
                 var jornada = _jornadaManager.Crear(jornadaEmpleado);
 
                 var query = "Insert into Empleados(Legajo, EmailCorporativo, CargoId, JornadaTrabajoId,PersonaId) values(@Legajo ,@EmailCorporativo,  @CargoId,@JornadaTrabajoId, @PersonaId )";
 
                 string retrieveData = "select * from Empleados where Legajo = @Legajo";
-
+                Random random = new Random();
+                var legajo = random.Next(10000000, 100000000);
+                
                 var parameters = new SqlParameter[]
                 {
-                    new SqlParameter("@Legajo", entity.Legajo),
+                    new SqlParameter("@Legajo", legajo),
                     new SqlParameter("@EmailCorporativo", usuarioCreado.Data.Email),
                     new SqlParameter("@CargoId", entity.Posicion),
                     new SqlParameter("@JornadaTrabajoId", jornada.Data.Id),

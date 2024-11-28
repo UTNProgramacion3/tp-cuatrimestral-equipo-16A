@@ -204,18 +204,37 @@ namespace Business.Managers
         public Paciente ObtenerPacienteByUserId(int userId)
         {
             string query = @"
-            SELECT 
-                PAC.*,           
-                PER.*,          
-                DIR.*            
-            FROM 
-                Pacientes PAC
-            LEFT JOIN 
-                Personas PER ON PAC.PersonaId = PER.Id
-            LEFT JOIN 
-                Direcciones DIR ON DIR.Id = PER.DireccionId
-            WHERE 
-                PER.UsuarioId = @UserId";
+           SELECT 
+    PAC.Id AS PacienteId,
+    PAC.PersonaId,
+    PAC.ObraSocial,
+    PAC.NroAfiliado,
+    PER.Id AS PersonaId,
+    PER.Nombre,
+    PER.Apellido,
+    PER.Documento,
+    PER.EmailPersonal,
+    PER.FechaNacimiento,
+    PER.Telefono,
+    DIR.Id AS DireccionId,
+    DIR.Calle,
+    DIR.Numero,
+    DIR.Piso,
+    DIR.Depto,
+    DIR.Localidad,
+    DIR.Provincia,
+    DIR.CodigoPostal,
+u.RolId
+    
+FROM 
+    Pacientes PAC
+LEFT JOIN 
+    Personas PER ON PAC.PersonaId = PER.Id
+LEFT JOIN 
+    Direcciones DIR ON DIR.Id = PER.DireccionId
+   left join Usuarios u on u.Id = per.UsuarioId
+WHERE 
+    PER.UsuarioId = @UserId";
 
 
             SqlParameter[] parameters = new SqlParameter[]
@@ -303,6 +322,61 @@ namespace Business.Managers
                 return false;
             }
         }
+
+        public Response<Paciente> Actualizar(Paciente entity)
+        {
+            try
+            {
+                // Actualizar la dirección
+                var direccionActualizada = _direccionManager.Actualizar(entity.Direccion);
+
+                if (!direccionActualizada.Success)
+                {
+                    throw new Exception("Error al actualizar la dirección");
+                }
+
+                // Actualizar los datos de la persona
+                string query = @"
+            UPDATE Personas
+            SET 
+                Apellido = @Apellido,
+                Nombre = @Nombre,
+                Documento = @Documento,
+                EmailPersonal = @EmailPersonal,
+                FechaNacimiento = @FechaNacimiento,
+                Telefono = @Telefono,
+                DireccionId = @DireccionId
+            WHERE Id = @Id";
+
+                SqlParameter[] parameters = new SqlParameter[]
+                {
+            new SqlParameter("@Apellido", entity.Apellido),
+            new SqlParameter("@Nombre", entity.Nombre),
+            new SqlParameter("@Documento", entity.Documento),
+            new SqlParameter("@EmailPersonal", entity.EmailPersonal),
+            new SqlParameter("@FechaNacimiento", entity.FechaNacimiento),
+            new SqlParameter("@Telefono", entity.Telefono),
+            new SqlParameter("@DireccionId", entity.Direccion.Id),
+            new SqlParameter("@Id", entity.Id)
+                };
+
+                var result = _DBManager.ExecuteNonQuery(query, parameters);
+
+                if (result <= 0)
+                {
+                    throw new Exception("Error al actualizar la persona");
+                }
+
+                _response.Ok(entity);
+                return _response;
+            }
+            catch (Exception ex)
+            {
+                _response.NotOk($"Error al actualizar la persona: {ex.Message}");
+                return _response;
+            }
+        }
+
 
         #endregion
 

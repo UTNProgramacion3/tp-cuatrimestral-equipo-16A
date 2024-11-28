@@ -77,8 +77,8 @@
                 <asp:Panel ID="PanelCrearUsuario" runat="server">
                     <div class="mb-3">
                         <label for="ddlRol" class="form-label">Rol</label>
-                        <asp:DropDownList ID="ddlRol" runat="server" CssClass="form-select" 
-                                          OnSelectedIndexChanged="ddlRol_SelectedIndexChanged" AutoPostBack="true">
+                        <asp:DropDownList ID="ddlRol" runat="server" CssClass="form-select"
+                            OnSelectedIndexChanged="ddlRol_SelectedIndexChanged" AutoPostBack="true">
                             <asp:ListItem Value="1" Text="Administrador"></asp:ListItem>
                             <asp:ListItem Value="2" Text="Empleado"></asp:ListItem>
                             <asp:ListItem Value="3" Text="Paciente"></asp:ListItem>
@@ -108,6 +108,141 @@
                         </asp:DropDownList>
                         <span class="text-danger" id="errorEspecialidad"></span>
                     </div>
+
+                    <div id="obraSocialDiv" class="mb-3" style="display: none;">
+                        <label for="txtObraSocial" class="form-label">Obra Social</label>
+                        <asp:TextBox ID="txtObraSocial" runat="server" CssClass="form-control" />
+                        <span class="text-danger" id="errorObraSocial"></span>
+                    </div>
+                    <div id="nroAfiliadoDiv" class="mb-3" style="display: none;">
+                        <label for="txtNroAfiliado" class="form-label">Número Afiliado</label>
+                        <asp:TextBox ID="txtNroAfiliado" runat="server" CssClass="form-control" />
+                        <span class="text-danger" id="errorNroAfiliado"></span>
+                    </div>
+
+                    <!-- Jornada Laboral -->
+                    <div id="jornadaLaboralDiv" class="border-top mt-4 pt-3" style="display: none;">
+                        <asp:DropDownList ID="ddlSede" runat="server" CssClass="form-select">
+                    <asp:ListItem Text="Seleccionar Sede" Value="" />
+
+                    </asp:DropDownList>
+                        <h2>Registrar Jornada Laboral Semanal</h2>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Lunes</label>
+                                <div class="small">
+                                    <label for="ddlInicioLunes" class="form-label">Inicio</label>
+                                    <asp:DropDownList ID="ddlInicioLunes" runat="server" CssClass="form-select">
+                                        <asp:ListItem Value="" Text="--:--" />
+                                    </asp:DropDownList>
+                                </div>
+                                <div class="small">
+                                    <label for="ddlFinLunes" class="form-label">Fin</label>
+                                    <asp:DropDownList ID="ddlFinLunes" runat="server" CssClass="form-select">
+                                        <asp:ListItem Value="" Text="--:--" />
+                                    </asp:DropDownList>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Martes</label>
+                                <div class="small">
+                                    <label for="ddlInicioMartes" class="form-label">Inicio</label>
+                                    <asp:DropDownList ID="ddlInicioMartes" runat="server" CssClass="form-select">
+                                        <asp:ListItem Value="" Text="--:--" />
+                                    </asp:DropDownList>
+                                </div>
+                                <div class="small">
+                                    <label for="ddlFinMartes" class="form-label">Fin</label>
+                                    <asp:DropDownList ID="ddlFinMartes" runat="server" CssClass="form-select">
+                                        <asp:ListItem Value="" Text="--:--" />
+                                    </asp:DropDownList>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Miércoles</label>
+                                <div class="small">
+                                    <label for="ddlInicioMiercoles" class="form-label">Inicio</label>
+                                    <asp:DropDownList ID="ddlInicioMiercoles" runat="server" CssClass="form-select">
+                                        <asp:ListItem Value="" Text="--:--" />
+                                    </asp:DropDownList>
+                                </div>
+                                <div class="small">
+                                    <label for="ddlFinMiercoles" class="form-label">Fin</label>
+                                    <asp:DropDownList ID="ddlFinMiercoles" runat="server" CssClass="form-select">
+                                        <asp:ListItem Value="" Text="--:--" />
+                                    </asp:DropDownList>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Jueves</label>
+                                <div class="small">
+                                    <label for="ddlInicioJueves" class="form-label">Inicio</label>
+                                    <asp:DropDownList ID="ddlInicioJueves" runat="server" CssClass="form-select">
+                                        <asp:ListItem Value="" Text="--:--" />
+                                    </asp:DropDownList>
+                                </div>
+                                <div class="small">
+                                    <label for="ddlFinJueves" class="form-label">Fin</label>
+                                    <asp:DropDownList ID="ddlFinJueves" runat="server" CssClass="form-select">
+                                        <asp:ListItem Value="" Text="--:--" />
+                                    </asp:DropDownList>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Viernes</label>
+                                <div class="small">
+                                    <label for="ddlInicioViernes" class="form-label">Inicio</label>
+                                    <asp:DropDownList ID="ddlInicioViernes" runat="server" CssClass="form-select">
+                                        <asp:ListItem Value="" Text="--:--" />
+                                    </asp:DropDownList>
+                                </div>
+                                <div class="small">
+                                    <label for="ddlFinViernes" class="form-label">Fin</label>
+                                    <asp:DropDownList ID="ddlFinViernes" runat="server" CssClass="form-select">
+                                        <asp:ListItem Value="" Text="--:--" />
+                                    </asp:DropDownList>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Sábado</label>
+                                <div class="small">
+                                    <label for="ddlInicioSabado" class="form-label">Inicio</label>
+                                    <asp:DropDownList ID="ddlInicioSabado" runat="server" CssClass="form-select">
+                                        <asp:ListItem Value="" Text="--:--" />
+                                    </asp:DropDownList>
+                                </div>
+                                <div class="small">
+                                    <label for="ddlFinSabado" class="form-label">Fin</label>
+                                    <asp:DropDownList ID="ddlFinSabado" runat="server" CssClass="form-select">
+                                        <asp:ListItem Value="" Text="--:--" />
+                                    </asp:DropDownList>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Domingo</label>
+                                <div class="small">
+                                    <label for="ddlInicioDomingo" class="form-label">Inicio</label>
+                                    <asp:DropDownList ID="ddlInicioDomingo" runat="server" CssClass="form-select">
+                                        <asp:ListItem Value="" Text="--:--" />
+                                    </asp:DropDownList>
+                                </div>
+                                <div class="small">
+                                    <label for="ddlFinDomingo" class="form-label">Fin</label>
+                                    <asp:DropDownList ID="ddlFinDomingo" runat="server" CssClass="form-select">
+                                        <asp:ListItem Value="" Text="--:--" />
+                                    </asp:DropDownList>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
 
                     <!-- Información personal -->
                     <div class="mb-3">
@@ -179,8 +314,8 @@
                     </div>
 
                     <div class="mt-4 text-center">
-                        <asp:Button ID="btnCrear" runat="server" Text="Crear Usuario" CssClass="btn btn-primary btn-lg" 
-                                    OnClientClick="return validarFormulario(event);" OnClick="btnCrear_Click" />
+                        <asp:Button ID="btnCrear" runat="server" Text="Crear Usuario" CssClass="btn btn-primary btn-lg"
+                            OnClientClick="return validarFormulario(event);" OnClick="btnCrear_Click" />
                     </div>
                 </asp:Panel>
             </div>
@@ -210,7 +345,6 @@
         }
 
         function validarFormulario(event) {
-            debugger
             let esValido = true;
 
             const rol = document.getElementById('<%= ddlRol.ClientID %>');
@@ -219,6 +353,8 @@
             const fechaNacimiento = document.getElementById('<%= txtFechaNacimiento.ClientID %>');
             const documento = document.getElementById('<%= txtDocumento.ClientID %>');
             const emailPersonal = document.getElementById('<%= txtEmailPersonal.ClientID %>');
+            const obraSocial = document.getElementById('<%= txtObraSocial.ClientID %>');
+            const numeroAfiliado = document.getElementById('<%= txtNroAfiliado.ClientID %>');
            <%-- const calle = document.getElementById('<%= txtCalle.ClientID %>');
             const numero = document.getElementById('<%= txtNumero.ClientID %>');
             const piso = document.getElementById('<%= txtPiso.ClientID %>');
@@ -235,6 +371,8 @@
             const errorFechaNac = document.getElementById("errorFechaNac");
             const errorDni = document.getElementById("errorDni");
             const errorEmail = document.getElementById("errorEmail");
+            const errorNumeroAfiliado = document.getElementById("errorNroAfiliado");
+            const errorObraSocial = document.getElementById("errorObraSocial");
             //const errorCalle = document.getElementById("errorCalle");
             //const errorNumero = document.getElementById("errorNumero");
             //const errorLocalidad = document.getElementById("errorLocalidad");
@@ -247,6 +385,8 @@
             errorFechaNac.textContent = "";
             errorDni.textContent = "";
             errorEmail.textContent = "";
+            errorNumeroAfiliado.textContent = "";
+            errorObraSocial.textContent = "";
             //errorCalle.textContent = "";
             //errorNumero.textContent = "";
             //errorLocalidad.textContent = "";
@@ -287,49 +427,13 @@
             }
 
             // Validar Email
-        if (!emailPersonal.value.trim()) {
+            if (!emailPersonal.value.trim()) {
                 errorEmail.textContent = "El correo electrónico es obligatorio.";
                 esValido = false;
             } else if (!emailPersonal.value.includes('@') || !emailPersonal.value.includes('.')) {
                 errorEmail.textContent = "El correo electrónico debe tener un formato válido.";
                 esValido = false;
             }
-
-          //// Validar Teléfono
-          //if (!telefono.value.trim()) {
-          //    errorTelefono.textContent = "El teléfono es obligatorio.";
-          //    esValido = false;
-          //}
-
-            // Validar Calle
-            //if (!calle.value.trim()) {
-            //    errorCalle.textContent = "La calle es obligatoria.";
-            //    esValido = false;
-            //}
-
-            //// Validar Número
-            //if (!numero.value.trim()) {
-            //    errorNumero.textContent = "El número es obligatorio.";
-            //    esValido = false;
-            //}
-
-            //// Validar Localidad
-            //if (!localidad.value.trim()) {
-            //    errorLocalidad.textContent = "La localidad es obligatoria.";
-            //    esValido = false;
-            //}
-
-            //// Validar Provincia
-            //if (!provincia.value.trim()) {
-            //    errorProvincia.textContent = "La provincia es obligatoria.";
-            //    esValido = false;
-            //}
-
-            //// Validar Código Postal
-            //if (!codigoPostal.value.trim()) {
-            //    errorCodigoPostal.textContent = "El código postal es obligatorio.";
-            //    esValido = false;
-            //}
 
             // Validar Matrícula (solo si la posición es "Médico")
             if (rol.value === "2" && !matricula.value.trim()) {
@@ -343,8 +447,17 @@
                 esValido = false;
             }
 
+            if (rol.value === "5" && !obraSocial.value) {
+                document.getElementById("errorObraSocial").textContent = "La obra social es obligatoria para pacientes.";
+                esValido = false;
+            }
+            if (rol.value === "5" && !numeroAfiliado.value) {
+                document.getElementById("errorNroAfiliado").textContent = "El número de afiliado es obligatorio para pacientes.";
+                esValido = false;
+            }
+
             if (!esValido) {
-                event.preventDefault(); 
+                event.preventDefault();
                 return esValido
             }
             return esValido;
@@ -368,11 +481,19 @@
             document.getElementById('especialidadDiv').style.display = 'none';
 
             if (role == "2") { // 2 es Medico
+
+                document.getElementById('matriculaDiv').style.display = 'block';
+                document.getElementById('especialidadDiv').style.display = 'block';
+                document.getElementById('jornadaLaboralDiv').style.display = 'block';
                 
-                    document.getElementById('matriculaDiv').style.display = 'block';
-                    document.getElementById('especialidadDiv').style.display = 'block';
-                }
-              //document.getElementById('legajoDiv').style.display = 'block';
+            }
+            
+
+            //document.getElementById('legajoDiv').style.display = 'block';
+            if (role == "5") { //5 es paciente
+                document.getElementById('obraSocialDiv').style.display = 'block';
+                document.getElementById('nroAfiliadoDiv').style.display = 'block';
+            }
         }
 
         window.onload = function () {

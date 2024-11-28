@@ -1,14 +1,19 @@
 ﻿using Business.Dtos;
 using Business.Interfaces;
+using DataAccess;
+using Domain;
 using Domain.Entities;
 using Domain.Enums;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Unity;
+using static TPCuatrimestral_equipo_16A.Global;
 
 namespace TPCuatrimestral_equipo_16A.Pages
 {
@@ -19,7 +24,10 @@ namespace TPCuatrimestral_equipo_16A.Pages
         private IMedicoManager _medicoManager;
         private IUsuarioManager _usuarioManager;
         private IPersonaManager _personaManager;
+        private ISeguridadService _seguridadService;
+        private ISedeManager _sedeManager;
         private bool _isEditModeEnabled;
+        private readonly int _modulo = (int)ModulosEnum.GestionDeUsuarios;
         private void InitDependencies()
         {
             IUnityContainer unityContainer;
@@ -28,6 +36,8 @@ namespace TPCuatrimestral_equipo_16A.Pages
             _medicoManager = (IMedicoManager)Global.Container.Resolve(typeof(IMedicoManager));
             _usuarioManager = (IUsuarioManager)Global.Container.Resolve(typeof(IUsuarioManager));
             _personaManager = (IPersonaManager)Global.Container.Resolve(typeof(IPersonaManager));
+            _seguridadService = (ISeguridadService)Global.Container.Resolve(typeof(ISeguridadService));
+            _sedeManager = (ISedeManager)Global.Container.Resolve(typeof(ISedeManager));
 
             string isEdit = Request.QueryString["mode"] ?? "";
             _isEditModeEnabled = isEdit != "" && isEdit.ToLower() == "edit";
@@ -35,6 +45,12 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            //var usuarioLogueado = GlobalData.UsuarioLogueado;
+            //var validacion = _seguridadService.PermitirAccesoAModulo(usuarioLogueado.RolId, new[] { (int)RolesEnum.Administrador });
+            //if (!validacion)
+            //{
+            //    Response.Redirect("~/Pages/Home.aspx");
+            //}
             InitDependencies();
 
 
@@ -47,6 +63,14 @@ namespace TPCuatrimestral_equipo_16A.Pages
                 ddlRol.Items.Add(new ListItem("Paciente", "3"));
                 CargarEspecialidades();
                 CargarRoles();
+                CargarSedes();
+                RellenarHoras(ddlInicioLunes, ddlFinLunes);
+                RellenarHoras(ddlInicioMartes, ddlFinMartes);
+                RellenarHoras(ddlInicioMiercoles, ddlFinMiercoles);
+                RellenarHoras(ddlInicioJueves, ddlFinJueves);
+                RellenarHoras(ddlInicioViernes, ddlFinViernes);
+                RellenarHoras(ddlInicioSabado, ddlFinSabado);
+                RellenarHoras(ddlInicioDomingo, ddlFinDomingo);
             }
 
             if (_isEditModeEnabled)
@@ -55,6 +79,10 @@ namespace TPCuatrimestral_equipo_16A.Pages
                 btnCrear.Text = "Editar";
                 ddlRol.Enabled = false;
                 txtMatricula.Enabled = false;
+                ddlRol.Enabled = false;
+                txtMatricula.Enabled = false;
+                ddlEspecialidad.Enabled = false;
+                ddlEspecialidad.Enabled = false;
 
                 switch (user.RolId)
                 {
@@ -72,7 +100,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
                         var paciente = _pacienteManager.ObtenerPacienteByUserId(user.Id);
                         cargarPacienteAEditar(paciente);
                         cargarDatosPersonaFormularioEditar((Persona)paciente);
-                        cargarDireccionFormularioEditar(paciente.Direccion);
+                        //cargarDireccionFormularioEditar(paciente.Direccion);
                         break;
                 }
             }
@@ -104,6 +132,10 @@ namespace TPCuatrimestral_equipo_16A.Pages
             txtApellido.Text = paciente.Apellido;
             txtEmailPersonal.Text = paciente.EmailPersonal;
             txtFechaNacimiento.Text = paciente.FechaNacimiento.ToString("dd-MM-yyyy");
+            ddlRol.SelectedValue = paciente.RolId.ToString();
+            txtObraSocial.Text = paciente.ObraSocial.ToString();
+            txtNroAfiliado.Text = paciente.NroAfiliado.ToString();
+            
         }
 
         private void cargarDatosPersonaFormularioEditar(Persona persona)
@@ -200,15 +232,26 @@ namespace TPCuatrimestral_equipo_16A.Pages
                     };
                     if (_isEditModeEnabled)
                     {
+                        if(rol == (int)RolesEnum.Medico)
+                        {
+                            var medico = new MedicoDto()
+                            {
+                                EspecialidadId = int.Parse(ddlEspecialidad.SelectedValue),
+                                Matricula = int.Parse(txtMatricula.Text),
+                            };
+                        _medicoManager.ActualizarMedico(medico);
+                        }
+                        if(rol== (int)RolesEnum.Empleado)
+                        {
 
+                        }
                     }
                     else
                     {
-                        var res = _empleadoManager.CrearNuevo(nuevoEmpleado);
-                        if (res.Success)
-                        {
-                            Response.Redirect("AsignarJornadaLaboral.aspx?id=" + res.Data.Id);
-                        }
+                        JornadaTrabajo jornadaGenerica = new JornadaTrabajo();
+                        //var jornadaLaboral = chkSwitch.Checked ?  ObtenerJornadasDesdeFormulario() : jornadaGenerica.Jornada ;
+                        var jornadaLaboral = ObtenerJornadasDesdeFormulario();
+                        var res = _empleadoManager.CrearNuevo(nuevoEmpleado, jornadaLaboral);
                     }
                     break;
 
@@ -223,17 +266,17 @@ namespace TPCuatrimestral_equipo_16A.Pages
                         EmailPersonal = txtEmailPersonal.Text.Trim(),
                         Telefono = txtTelefono.Text.Trim(),
                         FechaNacimiento = DateTime.Parse(txtFechaNacimiento.Text),
-                        RolId = (int)RolesEnum.Paciente
-
+                        RolId = (int)RolesEnum.Paciente,
+                        NroAfiliado = txtNroAfiliado.Text,
+                        ObraSocial = txtObraSocial.Text
                     };
                     if (_isEditModeEnabled)
                     {
-
+                        _pacienteManager.Actualizar(nuevoPaciente);
                     }
                     else
                     {
                         _pacienteManager.Crear(nuevoPaciente);
-
                     }
                     break;
             }
@@ -244,6 +287,16 @@ namespace TPCuatrimestral_equipo_16A.Pages
             string script = $"mostrarMensaje('{titulo}', '{texto}');";
             ScriptManager.RegisterStartupScript(this, GetType(), "MostrarMensaje", script, true);
             LimpiarCampos();
+        }
+
+        private void RellenarHoras(DropDownList ddlInicio, DropDownList ddlFin)
+        {
+            for (int i = 0; i < 24; i++)
+            {
+                string hora = i.ToString("D2") + ":00";
+                ddlInicio.Items.Add(new ListItem(hora, hora));
+                ddlFin.Items.Add(new ListItem(hora, hora));
+            }
         }
 
         private void CargarEspecialidades()
@@ -282,6 +335,94 @@ namespace TPCuatrimestral_equipo_16A.Pages
         {
             int rolSeleccionado = int.Parse(ddlRol.SelectedValue);
         }
+
+        private List<DiaLaboral> ObtenerJornadasDesdeFormulario()
+        {
+            List<DiaLaboral> jornadas = new List<DiaLaboral>();
+
+            jornadas.Add(new DiaLaboral
+            {
+                Dia = (int)DiasEnum.Lunes,
+                Inicio = ObtenerHoraDesdeFormulario(ddlInicioLunes),
+                Fin = ObtenerHoraDesdeFormulario(ddlFinLunes)
+            });
+
+            jornadas.Add(new DiaLaboral
+            {
+                Dia = (int)DiasEnum.Martes,
+                Inicio = ObtenerHoraDesdeFormulario(ddlInicioMartes),
+                Fin = ObtenerHoraDesdeFormulario(ddlFinMartes)
+            });
+
+            jornadas.Add(new DiaLaboral
+            {
+                Dia = (int)DiasEnum.Miercoles,
+                Inicio = ObtenerHoraDesdeFormulario(ddlInicioMiercoles),
+                Fin = ObtenerHoraDesdeFormulario(ddlFinMiercoles)
+            });
+
+            jornadas.Add(new DiaLaboral
+            {
+                Dia = (int)DiasEnum.Jueves,
+                Inicio = ObtenerHoraDesdeFormulario(ddlInicioJueves),
+                Fin = ObtenerHoraDesdeFormulario(ddlFinJueves)
+            });
+
+            jornadas.Add(new DiaLaboral
+            {
+                Dia = (int)DiasEnum.Viernes,
+                Inicio = ObtenerHoraDesdeFormulario(ddlInicioViernes),
+                Fin = ObtenerHoraDesdeFormulario(ddlFinViernes)
+            });
+
+            jornadas.Add(new DiaLaboral
+            {
+                Dia = (int)DiasEnum.Sabado,
+                Inicio = ObtenerHoraDesdeFormulario(ddlInicioSabado),
+                Fin = ObtenerHoraDesdeFormulario(ddlFinSabado)
+            });
+
+            jornadas.Add(new DiaLaboral
+            {
+                Dia = (int)DiasEnum.Domingo,
+                Inicio = ObtenerHoraDesdeFormulario(ddlInicioDomingo),
+                Fin = ObtenerHoraDesdeFormulario(ddlFinDomingo)
+            });
+
+            return jornadas;
+        }
+
+        private TimeSpan ObtenerHoraDesdeFormulario(DropDownList ddl)
+        {
+            string horaSeleccionada = ddl.SelectedValue; 
+            if (!string.IsNullOrEmpty(horaSeleccionada) && horaSeleccionada != "--:--")
+            {
+                try
+                {
+                    return TimeSpan.Parse(horaSeleccionada);
+                }
+                catch (FormatException)
+                {
+                    return TimeSpan.Zero; 
+                }
+            }
+            return TimeSpan.Zero; 
+        }
+
+        private void CargarSedes()
+        {
+            var sedes = _sedeManager.ObtenerTodos();
+
+            ddlSede.Items.Clear();
+
+            ddlSede.Items.Add(new ListItem("Seleccionar Sede", ""));
+
+            foreach (var sedeDto in sedes.Data)
+            {
+                ddlSede.Items.Add(new ListItem(sedeDto.Sede.Nombre, sedeDto.Sede.Id.ToString()));
+            }
+        }
+
 
 
     }

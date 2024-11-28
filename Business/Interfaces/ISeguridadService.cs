@@ -27,7 +27,9 @@ namespace Business.Interfaces
 
         bool AsignarPermisoARol(int permisoId, int rolId);
 
-        bool EliminarPermisoDeRol(int permisoId, int rolId);    
+        bool EliminarPermisoDeRol(int permisoId, int rolId);
+        bool PermitirAccesoAModulo(int rol, int[] roles);
+        //bool PermitirAccion
 
     }
 }

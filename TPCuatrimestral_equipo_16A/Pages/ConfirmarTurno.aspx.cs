@@ -57,8 +57,8 @@ namespace TPCuatrimestral_equipo_16A.Pages
         {
             TurnoDTO turnoReprogramar = new TurnoDTO();
             turnoReprogramar = (TurnoDTO)Session["TurnoDto"];
-            
-            if(Session["ReprogramarTurno"] != null)
+
+            if (Session["ReprogramarTurno"] != null)
             {
                 btnAtras.Visible = false;
 
@@ -95,7 +95,47 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
                     throw ex;
                 }
-                
+
+            }
+            else if (Session["CancelarTurno"] != null)
+            {
+                btnAtras.Visible = false;
+                btnConfirmar.Text = "Confirma Cancelacion de Turno";
+                cardHeader.InnerHtml = "<h2>Cancelar Turno</h2>";
+
+                try
+                {
+                    Response<Paciente> pacienteCancelar = _pacienteManager.ObtenerPorId(turnoReprogramar.Paciente.Id);
+                    Response<Medico> medicoCancelar = _medicoManager.ObtenerMedicoById(turnoReprogramar.Medico.Id);
+                    Response<Especialidad> especialidadCancelar = _especialidadManager.ObtenerPorId(medicoCancelar.Data.EspecialidadId);
+                    Response<Sede> sedeCancelar = _sedeManager.ObeterSedeById(turnoReprogramar.Sede.Id);
+                    Response<Direccion> direccionCancelar = _direccionManager.ObtenerPorId(sedeCancelar.Data.DireccionId);
+
+                    string direccionReprogramarString = direccionCancelar.Data.Calle.ToString() + " " + direccionCancelar.Data.Numero.ToString() + " " + direccionCancelar.Data.Provincia.ToString();
+
+                    lblNombrePaciente.Text = pacienteCancelar.Data.Nombre.ToString();
+                    lblApellidoPaciente.Text = pacienteCancelar.Data.Apellido.ToString();
+                    lblNombreMedico.Text = medicoCancelar.Data.Nombre.ToString();
+                    lblApellidoMedico.Text = medicoCancelar.Data.Apellido.ToString();
+                    lblEspecialidad.Text = especialidadCancelar.Data.Nombre.ToString();
+                    lblNombreSede.Text = sedeCancelar.Data.Nombre.ToString();
+                    lblDireccionSede.Text = direccionReprogramarString;
+                    lblFecha.Text = (string)Session["DiaTurno"].ToString();
+                    lblHora.Text = (string)Session["HoraTurno"].ToString();
+                    txtbObservaciones.InnerText = turnoReprogramar.Turno.Observaciones.ToString();
+
+                    Session["IdPaciente"] = pacienteCancelar.Data.Id;
+                    Session["IdMedico"] = medicoCancelar.Data.Id;
+                    Session["IdSede"] = sedeCancelar.Data.Id;
+                    Session["IdEstadoTurno"] = (int)EstadosEnum.Cancelado;
+                    Session["IdTurnoAreprogramar"] = turnoReprogramar.Turno.Id;
+                }
+                catch (Exception ex)
+                {
+
+                    throw ex;
+                }
+
             }
             else
             {
@@ -111,6 +151,45 @@ namespace TPCuatrimestral_equipo_16A.Pages
             }
         }
 
+        protected void ReasignarOCancelar()
+        {
+            TurnoDTO turno = new TurnoDTO();
+
+            turno.Paciente.Id = (int)Session["IdPaciente"];
+            turno.Medico.Id = (int)Session["IdMedico"];
+            turno.Sede.Id = (int)Session["IdSede"];
+            turno.EstadoTurno.Id = (int)Session["IdEstadoTurno"];
+            turno.Turno.Observaciones = (string)Session["Observaciones"];
+            
+            if (Session["CancelarTurno"] != null)
+            {
+                //Aca Cancelamos
+                var dia = Session["DiaTurno"];
+                turno.Turno.Fecha = (DateTime)Session["DiaTurno"];
+                turno.Turno.Hora = (TimeSpan)Session["HoraTurno"];
+
+                int idReprogramar = (int)EstadosEnum.Cancelado;
+                int idTurnoAcancelar = (int)Session["IdTurnoAreprogramar"];
+                turnoManager.CancelarOReprogramarTurno(idReprogramar, idTurnoAcancelar);
+            }
+            else
+            {
+                //Aca reprogramamos y se crea un turno nuevo
+
+                turno.Turno.Fecha = DateTime.Parse((string)Session["FechaTurno"]);
+                turno.Turno.Hora = TimeSpan.Parse((string)Session["HoraTurno"]);
+
+                turnoManager.Crear(turno);
+                int idReprogramar = (int)EstadosEnum.Reprogramado;
+                int idTurnoAreprogramar = (int)Session["IdTurnoAreprogramar"];
+                turnoManager.CancelarOReprogramarTurno(idReprogramar, idTurnoAreprogramar);
+            }
+
+            
+            
+
+        }
+
         protected void CrearTurno()
         {
             TurnoDTO turno = new TurnoDTO();
@@ -123,12 +202,8 @@ namespace TPCuatrimestral_equipo_16A.Pages
             turno.Turno.Hora = TimeSpan.Parse((string)Session["HoraTurno"]);
             turno.Turno.Observaciones = (string)Session["Observaciones"];
 
+
             turnoManager.Crear(turno);
-
-            int idReprogramar = (int)EstadosEnum.Reprogramado;
-            int idTurnoAreprogramar = (int)Session["IdTurnoAreprogramar"];
-            turnoManager.ReprogramarTurno(idReprogramar, idTurnoAreprogramar);
-
         }
 
         protected void btnConfirmar_Click(object sender, EventArgs e)
@@ -139,7 +214,15 @@ namespace TPCuatrimestral_equipo_16A.Pages
             
             TurnoConfirmado();
 
-            CrearTurno();
+            if (Session["CancelarTurno"] != null || Session["ReprogramarTurno"] != null)
+            {
+                ReasignarOCancelar();
+            }
+            else
+            {
+                CrearTurno();
+            }
+
 
             RedirectHome();
 
@@ -197,6 +280,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
             Session["IdSede"] = null;
             Session["IdEstadoTurno"] = null;
             Session["IdTurnoAreprogramar"] = null;
+            Session["CancelarTurno"] = null;
         }
 
 

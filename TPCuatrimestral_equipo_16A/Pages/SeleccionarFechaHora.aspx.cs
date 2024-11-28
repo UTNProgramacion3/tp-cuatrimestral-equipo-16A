@@ -64,6 +64,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
                 if(DateTime.Parse(chequeoFecha) >= DateTime.Now.Date && DateTime.Parse(txtBoxFechaTurno.Text) >= DateTime.Now.Date)
                 {
+                    Session["IdTurnoAreprogramar"] = 
                     Session["DiaTurno"] = txtBoxFechaTurno.Text;
                 }
                 else

@@ -15,6 +15,15 @@ namespace TPCuatrimestral_equipo_16A.Pages
     {
 
         /// <summary>
+        /// Control cardHeader.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl cardHeader;
+
+        /// <summary>
         /// Control lblNombrePaciente.
         /// </summary>
         /// <remarks>

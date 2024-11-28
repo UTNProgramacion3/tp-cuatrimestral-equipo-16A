@@ -35,6 +35,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
                 var tarjetas = new List<dynamic>
         {
             new { Titulo = "Agendar Turno", Descripcion = "Agenda un nuevo turno", Url = "/Pages/SeleccionarPaciente.aspx" },
+            new { Titulo = "Modificar Turno", Descripcion = "Modifica un turno existente.", Url = "/Pages/ListadoTurnos.aspx" },
             new { Titulo = "Turnos", Descripcion = "Consulta los Turnos.", Url = "/Pages/ListadoTurnos.aspx" },
             new { Titulo = "Perfil", Descripcion = "Gestiona tu perfil.", Url = "/Pages/Perfil.aspx" },
             new { Titulo = "Sedes", Descripcion = "Administrar las Sedes.", Url = "/Pages/ListarSedes.aspx" },

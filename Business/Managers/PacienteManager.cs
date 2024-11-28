@@ -93,7 +93,7 @@ namespace Business.Managers
         {
             string query = @"
             SELECT 
-                p.PacienteId AS PacienteId, p.ObraSocial, p.NroAfiliado, p.PersonaId,
+                p.Id AS Id, p.ObraSocial, p.NroAfiliado, p.PersonaId,
                 per.Id AS PersonaId, per.Nombre, per.Apellido, per.Documento, 
                 per.Telefono, per.FechaNacimiento, per.EmailPersonal, per.DireccionId, per.UsuarioId
             FROM Pacientes p

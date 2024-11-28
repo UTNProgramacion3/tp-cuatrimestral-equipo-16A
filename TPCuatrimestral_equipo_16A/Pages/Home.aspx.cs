@@ -44,22 +44,12 @@ namespace TPCuatrimestral_equipo_16A.Pages
             new { Titulo = "Usuarios", Descripcion = "Administrar los datos de usuarios.", Url = "#" },
             new { Titulo = "Permisos y Modulos", Descripcion = "Administrar Permisos de modulos.", Url = "/Pages/AdmPermisos.aspx"},
             new { Titulo = "Permisos y Roles", Descripcion = "Administrar Permisos de roles.", Url = "/Pages/RolesPermisos.aspx"},
+            new { Titulo = "Crear Usuario", Descripcion = "Creacion de cuentas", Url= "/Pages/CrearNuevoUsuario.aspx"}
         };
 
                 rptTarjetas.DataSource = tarjetas;
                 rptTarjetas.DataBind();
             }
-        }
-
-        protected void Button1_Click(object sender, EventArgs e)
-        {
-            //_emailManager.EnviarMailValidacionNuevaCuenta("escuderopablo.m@gmail.com", 1);
-            var res = _pacienteManager.ObtenerPorId(1);
-        }
-
-        protected void Button2_Click(object sender, EventArgs e)
-        {
-            Response.Redirect("Pages/CrearNuevoUsuario.aspx");
         }
     }
 }

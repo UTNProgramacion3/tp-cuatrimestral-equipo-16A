@@ -21,8 +21,8 @@ namespace Business.Interfaces
         List<Rol> ObtenerAllRoles();
         Usuario ObtenerUsuarioById(int id);
         List<UsuarioBasicoDto> ObtenerUsuariosDataBasica();
-
         int ObtenerMedicoPorUsuario(int usuarioId);
         int ObtenerPacientePorUsuario(int usuarioId);
+        Response<Usuario> CrearNuevoAdmin(NuevoAdminDto entity);
     }
 }

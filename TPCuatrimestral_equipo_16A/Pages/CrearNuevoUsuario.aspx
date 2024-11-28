@@ -79,7 +79,7 @@
                 </asp:DropDownList>
                 <span class="text-danger" id="errorDdlRol"></span>
             </div>
-            <div class="mb-3" id="posicion">
+          <%--  <div class="mb-3" id="posicion">
                 <div>
                     <label for="posicionEmpleado" class="form-label">Posición empleado</label>
                     <asp:DropDownList ID="posicionEmpleado" runat="server" CssClass="form-select">
@@ -89,7 +89,7 @@
                     </asp:DropDownList>
                     <span class="text-danger" id="errorPosicion"></span>
 
-                </div>
+                </div>--%>
 
                 <!-- Campos de Médico y Empleado -->
                 <div class="mb-3" id="legajoDiv" style="display: none;">
@@ -210,7 +210,7 @@
             let esValido = true;
 
             const rol = document.getElementById('<%= ddlRol.ClientID %>');
-            const posicionEmpleado = document.getElementById('<%= posicionEmpleado.ClientID %>');
+            const posicionEmpleado = document.getElementById('<%= ddlRol.ClientID %>');
             const nombre = document.getElementById('<%= txtNombre.ClientID %>');
             const apellido = document.getElementById('<%= txtApellido.ClientID %>');
             const fechaNacimiento = document.getElementById('<%= txtFechaNacimiento.ClientID %>');
@@ -361,28 +361,25 @@
 
 
         function toggleFields() {
+            debugger
             var role = document.getElementById('<%= ddlRol.ClientID %>').value;
-            var posicion = document.getElementById('<%= posicionEmpleado.ClientID %>').value;
-
+            ////////var posicion = document.getElementById('<%= ddlRol.ClientID %>').value;
+            console.log(role)
             document.getElementById('matriculaDiv').style.display = 'none';
             document.getElementById('especialidadDiv').style.display = 'none';
           //document.getElementById('legajoDiv').style.display = 'none';
-            document.getElementById('posicion').style.display = 'none';
 
-            if (role == "4") { // 2 es Empleado
-                document.getElementById('posicion').style.display = 'block';
-
-                if (posicion == "1") { // 1 es Médico
+            if (role == "2") { // 2 es Medico
+                
                     document.getElementById('matriculaDiv').style.display = 'block';
                     document.getElementById('especialidadDiv').style.display = 'block';
                 }
               //document.getElementById('legajoDiv').style.display = 'block';
-            }
         }
 
         window.onload = function () {
             document.getElementById('<%= ddlRol.ClientID %>').addEventListener('change', toggleFields);
-            document.getElementById('<%= posicionEmpleado.ClientID %>').addEventListener('change', toggleFields);
+            document.getElementById('<%= ddlRol.ClientID %>').addEventListener('change', toggleFields);
 
             toggleFields();
         };

@@ -12,10 +12,16 @@
             <div class="card mb-3">
                 <div class="card-header">
                     <h5><%# Eval("Nombre") %></h5>
+                    <asp:Button ID="btnTogglePermisos" runat="server" 
+                     Text="Mostrar Permisos" 
+                     CssClass= "btn-toggle-permisos"
+                     OnClick="btnTogglePermisos_Click" 
+                     CommandArgument='<%# Eval("Id") %>' />
                     <asp:HiddenField ID="hfRolId" runat="server" Value='<%# Eval("Id") %>' />
                 </div>
+            <asp:Panel runat="server" ID="pnlPermisos" Visible="false">
+
                 <div class="card-body">
-                    <!-- Lista de permisos -->
                     <ul class="list-group">
                         <asp:Repeater ID="rptPermisos" runat="server" DataSource='<%# Eval("Permisos") %>'>
                             <ItemTemplate>
@@ -38,6 +44,7 @@
                             CommandName="AgregarPermiso" CommandArgument='<%# Eval("Id") %>' />
                     </div>
                 </div>
+            </asp:Panel>
             </div>
         </ItemTemplate>
     </asp:Repeater>

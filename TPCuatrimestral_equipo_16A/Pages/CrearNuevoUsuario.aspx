@@ -179,7 +179,7 @@
                     </div>
                 </asp:Panel>
             </div>
-            <asp:Button ID="btnCrear" runat="server" Text="Crear Usuario" CssClass="btn btn-primary" OnClick="btnCrear_Click" OnClientClick="return validarFormulario(event);" />
+            <asp:Button ID="btnCrear" runat="server" Text="Crear Usuario" CssClass="btn btn-primary" OnClientClick="return validarFormulario(event);" OnClick="btnCrear_Click" />
 
         </asp:Panel>
     </div>
@@ -207,7 +207,6 @@
 
         function validarFormulario(event) {
             debugger
-            event.preventDefault(); 
             let esValido = true;
 
             const rol = document.getElementById('<%= ddlRol.ClientID %>');
@@ -341,11 +340,10 @@
             }
 
             if (!esValido) {
+                event.preventDefault(); 
                 return esValido
             }
-            __doPostBack('<%= btnCrear.ClientID%>', '');
             return esValido;
-
         }
 
         function mostrarMensaje(mensaje, titulo) {

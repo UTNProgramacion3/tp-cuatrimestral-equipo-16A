@@ -35,7 +35,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
         {
             if (!IsPostBack)
             {
-            InitDependencies();
+                InitDependencies();
             }
             else
             {
@@ -79,33 +79,71 @@ namespace TPCuatrimestral_equipo_16A.Pages
             return listado;
         }
 
+        protected void gvUsuarios_RowEditing(object sender, GridViewEditEventArgs e)
+        {
+            // Configura el GridView para el modo de edición
+            gvUsuarios.EditIndex = e.NewEditIndex;
+
+            // Vuelve a enlazar los datos al GridView
+            BindGrid();
+        }
+
+        protected void gvUsuarios_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
+        {
+            // Cancela la edición y vuelve a la vista normal
+            gvUsuarios.EditIndex = -1;
+            BindGrid();
+        }
+
+        protected void gvUsuarios_RowUpdating(object sender, GridViewUpdateEventArgs e)
+        {
+            // Aquí se pueden obtener los datos actualizados y guardar los cambios
+            int userId = Convert.ToInt32(gvUsuarios.DataKeys[e.RowIndex].Value);
+            string nuevoValor = ((TextBox)gvUsuarios.Rows[e.RowIndex].FindControl("txtNombre")).Text;
+
+            // Lógica para actualizar el usuario en la base de datos
+            // _usuarioManager.ActualizarUsuario(userId, nuevoValor);
+
+            gvUsuarios.EditIndex = -1;
+            BindGrid();
+        }
+
         protected void gvUsuarios_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            int userId = Convert.ToInt32(e.CommandArgument);
+            int userId = Convert.ToInt32(e.CommandArgument); // Obtiene el ID del usuario
 
             switch (e.CommandName)
             {
                 case "Edit":
-                    Response.Redirect($"EditarUsuario.aspx?Id={userId}");
+                    // Redirige a la página de edición con el modo "edit" y el ID del usuario
+                    Response.Redirect($"CrearNuevoUsuario.aspx?Mode=edit&Id={userId}");
                     break;
 
                 case "View":
+                    // Redirige a la página de vista con el ID del usuario
                     Response.Redirect($"VerUsuario.aspx?Id={userId}");
                     break;
 
                 case "Delete":
+                    // Lógica para eliminar el usuario
                     EliminarUsuario(userId);
                     break;
             }
         }
 
+
         private void EliminarUsuario(int userId)
         {
             //_usuarioManager.EliminarUsuario(userId);
-            CargarUsuarios(); 
+            CargarUsuarios();
             gvUsuarios.DataSource = _listadoUsuarios;
             gvUsuarios.DataBind();
         }
 
+        private void BindGrid()
+        {
+            gvUsuarios.DataSource = _usuarios;
+            gvUsuarios.DataBind();
+        }
     }
 }

@@ -116,7 +116,7 @@ namespace Business.Managers
                 var res = _DBManager.ExecuteNonQueryAndGetData(query, parameters, retrieveData);
                 Empleado empleadoCreado = res.GetEntity<Empleado>();
 
-                if (entity.Posicion == (int)PosicionEnum.Medico)
+                if (entity.RolId == (int)RolesEnum.Medico)
                 {
                     MedicoDto nuevoMedico = new MedicoDto()
                     {

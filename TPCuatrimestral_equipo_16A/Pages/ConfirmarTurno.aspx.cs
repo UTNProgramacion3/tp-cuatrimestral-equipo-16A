@@ -127,11 +127,11 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
             turnoManager.Crear(turno);
 
+            var paciente = _pacienteManager.ObtenerPorId(turno.Paciente.Id);
             int idReprogramar = (int)EstadosEnum.Reprogramado;
             int idTurnoAreprogramar = (int)Session["IdTurnoAreprogramar"];
             turnoManager.ReprogramarTurno(idReprogramar, idTurnoAreprogramar);
-            _emailManager.EnviarEstadoTurno(turno, new Paciente());
-
+            _emailManager.EnviarEstadoTurno(turno, paciente.Data);
         }
 
         protected void btnConfirmar_Click(object sender, EventArgs e)

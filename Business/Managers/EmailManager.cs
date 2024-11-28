@@ -188,7 +188,7 @@ namespace Business.Managers
                                .Replace("{{APP_NAME}}", _APP_NAME)
                                .Replace("{{BASE_URL}}", _BASE_URL);
 
-            var mail = GenerarNuevoEmail("escuderopablo.m@gmail.com", $"Estado del turno - {_APP_NAME}", htmlBody);
+            var mail = GenerarNuevoEmail(paciente.EmailPersonal, $"Estado del turno - {_APP_NAME}", htmlBody);
 
             try
             {

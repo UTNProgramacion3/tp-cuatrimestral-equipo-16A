@@ -87,6 +87,7 @@
     <Content Include="Pages\CrearNuevoUsuario.aspx" />
     <Content Include="Pages\Especialidades.aspx" />
     <Content Include="Pages\Home.aspx" />
+    <Content Include="Pages\ListadoMedicos.aspx" />
     <Content Include="Pages\ListadoUsuarios.aspx" />
     <Content Include="Pages\ListarSedes.aspx" />
     <Content Include="Pages\Login.aspx" />
@@ -153,6 +154,13 @@
     </Compile>
     <Compile Include="Pages\Home.aspx.designer.cs">
       <DependentUpon>Home.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ListadoMedicos.aspx.cs">
+      <DependentUpon>ListadoMedicos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\ListadoMedicos.aspx.designer.cs">
+      <DependentUpon>ListadoMedicos.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\ListadoUsuarios.aspx.cs">
       <DependentUpon>ListadoUsuarios.aspx</DependentUpon>

@@ -64,7 +64,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
                 try
                 {
-                    Response<Paciente> pacienteReprogramar = _pacienteManager.ObtenerPorId(turnoReprogramar.Paciente.Id);
+                    Response<Paciente> pacienteReprogramar = _pacienteManager.ObtenerPorIdTurno(turnoReprogramar.Paciente.Id);
                     Response<Medico> medicoReprogramar = _medicoManager.ObtenerMedicoById(turnoReprogramar.Medico.Id);
                     Response<Especialidad> especialidadReprogramar = _especialidadManager.ObtenerPorId(medicoReprogramar.Data.EspecialidadId);
                     Response<Sede> sedeReprogramar = _sedeManager.ObeterSedeById(turnoReprogramar.Sede.Id);
@@ -105,7 +105,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
                 try
                 {
-                    Response<Paciente> pacienteCancelar = _pacienteManager.ObtenerPorId(turnoReprogramar.Paciente.Id);
+                    Response<Paciente> pacienteCancelar = _pacienteManager.ObtenerPorIdTurno(turnoReprogramar.Paciente.Id);
                     Response<Medico> medicoCancelar = _medicoManager.ObtenerMedicoById(turnoReprogramar.Medico.Id);
                     Response<Especialidad> especialidadCancelar = _especialidadManager.ObtenerPorId(medicoCancelar.Data.EspecialidadId);
                     Response<Sede> sedeCancelar = _sedeManager.ObeterSedeById(turnoReprogramar.Sede.Id);
@@ -281,6 +281,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
             Session["IdEstadoTurno"] = null;
             Session["IdTurnoAreprogramar"] = null;
             Session["CancelarTurno"] = null;
+            Session["DiaTurno"] = null;
         }
 
 

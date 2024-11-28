@@ -158,6 +158,37 @@ namespace Business.Managers
             return _response;
         }
 
+        public Response<Paciente> ObtenerPorIdTurno(int pacienteId)
+        {
+            string query = @"SELECT
+                                p.Id AS Id, p.ObraSocial, p.NroAfiliado, p.PersonaId,
+                                per.Id AS PersonaId, per.Nombre, per.Apellido, per.Documento, 
+                                per.Telefono, per.FechaNacimiento, per.EmailPersonal, per.DireccionId, per.UsuarioId
+                            FROM Pacientes p
+                            INNER JOIN Personas per ON p.PersonaId = per.Id
+                            WHERE p.Id = @Id";
+
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@Id", pacienteId)
+            };
+
+            var res = _DBManager.ExecuteQuery(query, parameters);
+
+            if (res.Rows.Count == 0)
+            {
+                _response.NotOk("Error al encontrar paciente");
+                return _response;
+            }
+
+            var paciente = res.GetEntity<Paciente>();
+            paciente.Direccion = _direccionManager.ObtenerPorId(paciente.DireccionId).Data;
+            //paciente.HistoriaClinica = ObtenerHistoriaClinicaPorPacienteId(pacienteId).Data;
+
+            _response.Ok(paciente);
+            return _response;
+        }
+
         public Response<List<Paciente>> ObtenerTodos()
         {
             string query = @"

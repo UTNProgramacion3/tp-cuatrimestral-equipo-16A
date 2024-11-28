@@ -18,5 +18,7 @@ namespace Business.Interfaces
 
         bool EditarPaciente(string obraSocial, string nroAfiliado, int personaId);
         Response<Paciente> Actualizar(Paciente entity);
+
+        Response<Paciente> ObtenerPorIdTurno(int pacienteId);
     }
 }

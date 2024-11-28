@@ -89,21 +89,74 @@ namespace Business.Managers
                 throw ex;
             }
         }
-        /*public TurnoDTO ObtenerPorId(int id)
-        {
-            string query = @"Select 
+        
+        public List<TurnoDTO> ObtenerTurnosPorPacientes(int IdPaciente)
+        {         
+            string query = @"SELECT   
                                 T.Id,
                                 T.IdMedico,
                                 T.IdPaciente,
                                 T.Fecha,
                                 T.Hora,
                                 T.IdEstadoTurno,
-                                T.EstadoTurno,
+                                ET.Estado,
+                                T.Fecha,
+                                T.Hora,
+                                T.Observaciones,
+                                T.IdEstadoTurno
                             From Turnos T
-                            Inner JOIN Medicos M ON T.IdMedico = T.Id
-                            Inner JOIN Pacientes P ON T.IdPaciente = P.Id
-                            Inner JOIN EstadoTurno ET ON T.IdEstadoTurno = ET.Id
-                            Where T.Id = @Id";
+                            LEFT JOIN Medicos M ON T.IdMedico = T.Id
+                            LEFT JOIN Pacientes P ON T.IdPaciente = P.Id
+                            LEFT JOIN EstadoTurnos ET ON T.IdEstadoTurno = ET.Id
+                            Where T.IdPaciente = @IdPaciente";
+
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@IdPaciente", IdPaciente)
+            };
+
+            try
+            {
+                DataTable res = _dbManager.ExecuteQuery(query, parameters);
+                
+                if(res.Rows.Count==0)
+                {
+                    return new List<TurnoDTO>();
+                }
+
+
+                var listaTurnos = _mapper.ListMapFromRow(res);
+
+                return listaTurnos;
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+        }
+        
+        public TurnoDTO ObtenerPorId(int id)
+        {
+            string query = @"Select 
+                                T.Id AS Turno_Id,
+                                T.IdMedico AS Medico_Id,
+                                T.IdPaciente AS Paciente_Id,
+                                SE.Id AS Sede_Id,
+                                T.Fecha AS Turno_Fecha,
+                                T.Hora AS Turno_Hora,
+                                T.IdEstadoTurno AS EstadoTurno_Id,
+                                ET.Estado AS EstadoTurno_Nombre,
+                                T.Observaciones AS Turno_Observaciones
+                            FROM Turnos T
+                            LEFT JOIN Medicos M ON T.IdMedico = M.Id
+                            LEFT JOIN Pacientes P ON T.IdPaciente = P.Id
+                            LEFT JOIN EstadoTurnos ET ON T.IdEstadoTurno = ET.Id
+                            LEFT JOIN Sedes SE ON T.IdSede = SE.id
+                            Where T.Id = @id";
 
             SqlParameter[] parametros = new SqlParameter[]
                 {
@@ -128,13 +181,15 @@ namespace Business.Managers
             {
                 throw ex;
             }
+        }
 
 
-        }*/
 
         public List<TurnoDTO> ObtenerTodos()
         {
-            string query = @"Select	T.Fecha AS Turno_Fecha,
+            string query = @"Select
+                            T.Id AS Turno_Id,
+                            T.Fecha AS Turno_Fecha,
 		                    T.Hora AS Turno_Hora,
 		                    dbo.fn_buscar_nombre(EM.PersonaId) AS Medico_Nombre,
 		                    dbo.fn_buscar_apellido(EM.PersonaId) AS Medico_Apellido,
@@ -316,6 +371,37 @@ namespace Business.Managers
             }
 
             return response;
+        }
+
+        public bool ReprogramarTurno(int IdEstado, int IdTurno)
+        {
+            string query = @"Update Turnos 
+                            Set IdEstadoTurno = @IdEstado
+                            Where Id = @IdTurno";
+
+            SqlParameter[] parametros = new SqlParameter[]
+                {
+                    new SqlParameter("@IdEstado",IdEstado),
+                    new SqlParameter("@IdTurno", IdTurno)
+                };
+
+            try
+            {
+
+                var res = _dbManager.ExecuteNonQuery(query, parametros);
+
+                if (res == 0)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
         }
 
         /*public bool Update(Turno turno)

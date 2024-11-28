@@ -105,7 +105,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
                 try
                 {
-                    Response<Paciente> pacienteCancelar = _pacienteManager.ObtenerPorId(turnoReprogramar.Paciente.Id);
+                    Response<Paciente> pacienteCancelar = _pacienteManager.ObtenerPorIdTurno(turnoReprogramar.Paciente.Id);
                     Response<Medico> medicoCancelar = _medicoManager.ObtenerMedicoById(turnoReprogramar.Medico.Id);
                     Response<Especialidad> especialidadCancelar = _especialidadManager.ObtenerPorId(medicoCancelar.Data.EspecialidadId);
                     Response<Sede> sedeCancelar = _sedeManager.ObeterSedeById(turnoReprogramar.Sede.Id);

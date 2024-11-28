@@ -1,4 +1,5 @@
-﻿using Business.Interfaces;
+﻿using Business.Dtos;
+using Business.Interfaces;
 using DataAccess;
 using DataAccess.Extensions;
 using Domain.Entities;
@@ -118,13 +119,23 @@ namespace Business.Managers
         public Response<Paciente> ObtenerPorId(int pacienteId)
         {
             string query = @"
-            SELECT 
-                p.Id AS Id, p.ObraSocial, p.NroAfiliado, p.PersonaId,
-                per.Id AS PersonaId, per.Nombre, per.Apellido, per.Documento, 
-                per.Telefono, per.FechaNacimiento, per.EmailPersonal, per.DireccionId, per.UsuarioId
-            FROM Pacientes p
-            INNER JOIN Personas per ON p.PersonaId = per.Id
-            WHERE p.Id = @Id";
+
+                            SELECT 
+                                p.PacienteId AS PacienteId, p.ObraSocial, p.NroAfiliado, p.PersonaId,
+                                per.Id AS PersonaId, per.Nombre, per.Apellido, per.Documento, 
+                                per.Telefono, per.FechaNacimiento, per.EmailPersonal, per.DireccionId, per.UsuarioId
+                            FROM Pacientes p
+                            INNER JOIN Personas per ON p.PersonaId = per.Id
+                            WHERE p.Id = @Id";
+
+            //SELECT 
+            //    p.Id AS Id, p.ObraSocial, p.NroAfiliado, p.PersonaId,
+            //    per.Id AS PersonaId, per.Nombre, per.Apellido, per.Documento, 
+            //    per.Telefono, per.FechaNacimiento, per.EmailPersonal, per.DireccionId, per.UsuarioId
+            //FROM Pacientes p
+            //INNER JOIN Personas per ON p.PersonaId = per.Id
+            //WHERE p.Id = @Id";
+
 
             SqlParameter[] parameters = new SqlParameter[]
             {
@@ -215,38 +226,116 @@ namespace Business.Managers
             var res = _DBManager.ExecuteQuery(query, parameters);
             return res.GetEntity<Paciente>();
         }
-            #endregion
 
-            #region Private methods
-            //private Response<HistoriaClinica> ObtenerHistoriaClinicaPorPacienteId(int pacienteId)
-            //{
-            //    string query = @"
-            //    SELECT 
-            //        hc.Id AS HistoriaClinicaId, hc.Detalle, hc.FechaCreacion, hc.PacienteId
-            //    FROM HistoriaClinica hc
-            //    WHERE hc.PacienteId = @PacienteId";
+        public Response<List<PacienteSimpleDto>> ObtenerPacientesFiltrados(string nombre, string apellido, string documento, string obraSocial, string nroAfiliado)
+        {
+            string query = "SELECT p.Id as PersonaId, p.Nombre, p.Apellido, p.Documento, p.Telefono, p.EmailPersonal, ps.ObraSocial, ps.NroAfiliado " +
+                           "FROM Personas p " +
+                           "LEFT JOIN Pacientes ps ON p.Id = ps.PersonaId " +
+                           "WHERE (@Nombre = '' OR p.Nombre LIKE @Nombre) " +
+                           "AND (@Apellido = '' OR p.Apellido LIKE @Apellido) " +
+                           "AND (@Documento = '' OR p.Documento LIKE @Documento) " +
+                           "AND (@ObraSocial = '' OR ps.ObraSocial = @ObraSocial) " +
+                           "AND (@NroAfiliado = '' OR ps.NroAfiliado LIKE @NroAfiliado)";
+            SqlParameter[] parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@Nombre", "%" + nombre + "%"),
+                    new SqlParameter("@Apellido", "%" + apellido + "%"),
+                    new SqlParameter("@Documento", "%" + documento + "%"),
+                    new SqlParameter("@ObraSocial", obraSocial ?? ""),
+                    new SqlParameter("@NroAfiliado", "%" + nroAfiliado + "%")
 
-            //    SqlParameter[] parameters = new SqlParameter[]
-            //    {
-            //        new SqlParameter("@PacienteId", pacienteId)
-            //    };
+                };
 
-            //    var response = new Response<HistoriaClinica>();
+            Mapper<PacienteSimpleDto> mapper = new Mapper<PacienteSimpleDto>();
+            Response<List<PacienteSimpleDto>> response = new Response<List<PacienteSimpleDto>>();
 
-            //    var res = _DBManager.ExecuteQuery(query, parameters);
+            try
+            {
+                var dt = _DBManager.ExecuteQuery(query, parameters);
 
-            //    if (res.Rows.Count == 0)
-            //    {
-            //        response.NotOk("No se encontró una historia clínica para el paciente especificado.");
-            //        return response;
-            //    }
+                if(dt.Rows.Count == 0)
+                {
+                    response.NotOk("Error al traer pacientes.");
+                    return response;
+                }
 
-            //    var historiaClinica = res.GetEntity<HistoriaClinica>();
+                var pacientes = mapper.ListMapFromRow(dt);
 
-            //    response.Ok(historiaClinica);
-            //    return response;
-            //}
+                if(pacientes.Count == 0)
+                {
+                    response.NotOk("Error en el mapeo");
+                    return response;
+                }
 
-            #endregion
+                response.Ok(pacientes);
+
+            }catch (Exception ex)
+            {
+                response.NotOk(ex.Message);
+            }
+
+            return response;
         }
+
+        public bool EditarPaciente(string obraSocial, string nroAfiliado, int personaId)
+        {
+            string query = @"UPDATE Pacientes
+                            SET
+                                ObraSocial = @ObraSocial,
+                                NroAfiliado = @NroAfiliado
+                            WHERE PersonaId = @PersonaId";
+
+            SqlParameter[] parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@ObraSocial", obraSocial),
+                    new SqlParameter("@NroAfiliado", nroAfiliado),
+                    new SqlParameter("@PersonaId", personaId)
+                };
+
+            try
+            {
+                var res = _DBManager.ExecuteNonQuery(query, parameters);
+
+                return res > 0;
+            }catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        #endregion
+
+        #region Private methods
+        //private Response<HistoriaClinica> ObtenerHistoriaClinicaPorPacienteId(int pacienteId)
+        //{
+        //    string query = @"
+        //    SELECT 
+        //        hc.Id AS HistoriaClinicaId, hc.Detalle, hc.FechaCreacion, hc.PacienteId
+        //    FROM HistoriaClinica hc
+        //    WHERE hc.PacienteId = @PacienteId";
+
+        //    SqlParameter[] parameters = new SqlParameter[]
+        //    {
+        //        new SqlParameter("@PacienteId", pacienteId)
+        //    };
+
+        //    var response = new Response<HistoriaClinica>();
+
+        //    var res = _DBManager.ExecuteQuery(query, parameters);
+
+        //    if (res.Rows.Count == 0)
+        //    {
+        //        response.NotOk("No se encontró una historia clínica para el paciente especificado.");
+        //        return response;
+        //    }
+
+        //    var historiaClinica = res.GetEntity<HistoriaClinica>();
+
+        //    response.Ok(historiaClinica);
+        //    return response;
+        //}
+
+        #endregion
+    }
 }

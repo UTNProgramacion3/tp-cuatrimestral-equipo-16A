@@ -2,7 +2,6 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <style>
-        /* General card styling */
         .card {
             border: 1px solid #ddd;
             border-radius: 8px;
@@ -19,18 +18,18 @@
             text-align: center;
         }
         .btn-toggle-permisos {
-         font-size: 0.6em; /* Más pequeño */
-        background-color: #f8f8f0; /* Blanco hueso */
-        color: #333; /* Texto negro */
-        border: 1px solid #ccc; /* Borde sutil */
-        padding: 4px 8px; /* Menos espaciado */
-        border-radius: 20px; /* Bordes más redondeados */
-        text-transform: none; /* Sin mayúsculas */
-        transition: background-color 0.3s ease; /* Transición suave */
+         font-size: 0.6em; 
+        background-color: #f8f8f0; 
+        color: #333; 
+        border: 1px solid #ccc; 
+        padding: 4px 8px; 
+        border-radius: 20px; 
+        text-transform: none; 
+        transition: background-color 0.3s ease; 
                              }
 
     .btn-toggle-permisos:hover {
-        background-color: #e2e2d9; /* Color ligeramente más oscuro al pasar el mouse */
+        background-color: #e2e2d9; 
     }
 
         .card-body {
@@ -50,7 +49,6 @@
                 border-bottom: none;
             }
 
-            /* Label and input styles */
             .list-group-item .me-2 {
                 margin-right: 10px;
                 font-size: 1em;
@@ -60,12 +58,11 @@
             width: 60%;
         }
 
-        /* Button styling */
+
         .btn-sm {
             font-size: 0.9em;
         }
 
-        /* Margin for permission panel */
         .mt-3 {
             margin-top: 20px;
         }

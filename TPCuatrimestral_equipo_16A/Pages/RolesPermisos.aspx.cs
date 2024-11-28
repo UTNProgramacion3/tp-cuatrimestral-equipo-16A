@@ -167,5 +167,21 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
             CargarRoles();
         }
+
+        protected void btnTogglePermisos_Click(object sender, EventArgs e)
+        {
+            Button btn = (Button)sender;
+            string moduloId = btn.CommandArgument;
+
+            RepeaterItem item = (RepeaterItem)btn.NamingContainer;
+            Panel permisosPanel = (Panel)item.FindControl("pnlPermisos");
+
+            if (permisosPanel != null)
+            {
+
+                permisosPanel.Visible = !permisosPanel.Visible;
+                btn.Text = permisosPanel.Visible ? "Ocultar Permisos" : "Mostrar Permisos";
+            }
+        }
     }
 }

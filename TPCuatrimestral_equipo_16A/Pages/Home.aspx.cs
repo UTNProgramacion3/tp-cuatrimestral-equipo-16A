@@ -40,27 +40,17 @@ namespace TPCuatrimestral_equipo_16A.Pages
             new { Titulo = "Perfil", Descripcion = "Gestiona tu perfil.", Url = "/Pages/Perfil.aspx" },
             new { Titulo = "Sedes", Descripcion = "Administrar las Sedes.", Url = "/Pages/ListarSedes.aspx" },
             new { Titulo = "Especialidades", Descripcion = "Administrar las Especialidades.", Url = "/Pages/Especialidades.aspx" },
-            new { Titulo = "Pacientes", Descripcion = "Administrar los datos de pacientes.", Url = "#" },
+            new { Titulo = "Pacientes", Descripcion = "Administrar los datos de pacientes.", Url = "/Pages/ListadoPacientes.aspx" },
             new { Titulo = "Medicos", Descripcion = "Administrar los datos de medicos.", Url = "/Pages/ListadoMedicos.aspx" },
             new { Titulo = "Usuarios", Descripcion = "Administrar los datos de usuarios.", Url = "/Pages/MenuUsuario.aspx" },
             new { Titulo = "Permisos y Modulos", Descripcion = "Administrar Permisos de modulos.", Url = "/Pages/AdmPermisos.aspx"},
             new { Titulo = "Permisos y Roles", Descripcion = "Administrar Permisos de roles.", Url = "/Pages/RolesPermisos.aspx"},
+            new { Titulo = "Crear Usuario", Descripcion = "Creacion de cuentas", Url= "/Pages/CrearNuevoUsuario.aspx"}
         };
 
                 rptTarjetas.DataSource = tarjetas;
                 rptTarjetas.DataBind();
             }
-        }
-
-        protected void Button1_Click(object sender, EventArgs e)
-        {
-            //_emailManager.EnviarMailValidacionNuevaCuenta("escuderopablo.m@gmail.com", 1);
-            var res = _pacienteManager.ObtenerPorId(1);
-        }
-
-        protected void Button2_Click(object sender, EventArgs e)
-        {
-            Response.Redirect("Pages/CrearNuevoUsuario.aspx");
         }
     }
 }

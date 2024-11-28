@@ -154,5 +154,38 @@ namespace Business.Managers
 
             return response;
         }
+
+        public bool EditarPersona(string nombre, string apellido, string documento, string telefono, string fechanacimiento, string emailpersonal, int personaId)
+        {
+            string query = @"UPDATE Personas
+                            SET
+                                Nombre = @Nombre,
+                                Apellido = @Apellido,
+                                Documento = @Documento,
+                                Telefono = @Telefono,
+                                FechaNacimiento = @FechaNacimiento,
+                                EmailPersonal = @EmailPersonal
+                            WHERE Id = @PersonaId";
+
+            SqlParameter[] parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@Nombre", nombre),
+                    new SqlParameter("@Apellido", apellido),
+                    new SqlParameter("@Documento", documento),
+                    new SqlParameter("@Telefono", telefono),
+                    new SqlParameter("@FechaNacimiento", fechanacimiento),
+                    new SqlParameter("@EmailPersonal", emailpersonal),
+                    new SqlParameter("@PersonaId", personaId)
+                };
+
+            try
+            {
+                var res = _DBManager.ExecuteNonQuery(query, parameters);
+
+                return res > 0;
+
+            }
+            catch (Exception ex) { return false; }
+        }
     }
 }

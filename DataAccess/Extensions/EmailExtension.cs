@@ -11,7 +11,7 @@ namespace DataAccess.Extensions
     {
         public static string CrearEmailCorporativo(this Persona empleado)
         {
-            return empleado.Nombre + "." + empleado.Apellido + "@clinica.com";
+            return empleado.Nombre.ToLower() + "." + empleado.Apellido.ToLower() + "@clinica.com";
         }
     }
 }

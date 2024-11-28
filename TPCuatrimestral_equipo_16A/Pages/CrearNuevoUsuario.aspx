@@ -179,7 +179,8 @@
                     </div>
                 </asp:Panel>
             </div>
-            <asp:Button ID="btnCrear" runat="server" Text="Crear Usuario" CssClass="btn btn-primary" OnClick="btnCrear_Click" />
+            <asp:Button ID="btnCrear" runat="server" Text="Crear Usuario" CssClass="btn btn-primary" OnClick="btnCrear_Click" OnClientClick="return validarFormulario(event);" />
+
         </asp:Panel>
     </div>
 
@@ -210,7 +211,6 @@
             let esValido = true;
 
             const rol = document.getElementById('<%= ddlRol.ClientID %>');
-            const posicionEmpleado = document.getElementById('<%= ddlRol.ClientID %>');
             const nombre = document.getElementById('<%= txtNombre.ClientID %>');
             const apellido = document.getElementById('<%= txtApellido.ClientID %>');
             const fechaNacimiento = document.getElementById('<%= txtFechaNacimiento.ClientID %>');
@@ -223,7 +223,6 @@
             const localidad = document.getElementById('<%= txtLocalidad.ClientID %>');
             const provincia = document.getElementById('<%= txtProvincia.ClientID %>');
             const codigoPostal = document.getElementById('<%= txtCodigoPostal.ClientID %>');--%>
-            ////const legajo = document.getElementById('<%= txtLegajo.ClientID %>');
             const matricula = document.getElementById('<%= txtMatricula.ClientID %>');
             const especialidad = document.getElementById('<%= ddlEspecialidad.ClientID %>');
 
@@ -330,13 +329,13 @@
             //}
 
             // Validar Matrícula (solo si la posición es "Médico")
-            if (posicionEmpleado.value === "1" && !matricula.value.trim()) {
+            if (rol.value === "2" && !matricula.value.trim()) {
                 document.getElementById("errorMatricula").textContent = "La matrícula es obligatoria para médicos.";
                 esValido = false;
             }
 
             // Validar Especialidad (solo si la posición es "Médico")
-            if (posicionEmpleado.value === "1" && !especialidad.value) {
+            if (rol.value === "2" && !especialidad.value) {
                 document.getElementById("errorEspecialidad").textContent = "La especialidad es obligatoria para médicos.";
                 esValido = false;
             }
@@ -363,11 +362,8 @@
         function toggleFields() {
             debugger
             var role = document.getElementById('<%= ddlRol.ClientID %>').value;
-            ////////var posicion = document.getElementById('<%= ddlRol.ClientID %>').value;
-            console.log(role)
             document.getElementById('matriculaDiv').style.display = 'none';
             document.getElementById('especialidadDiv').style.display = 'none';
-          //document.getElementById('legajoDiv').style.display = 'none';
 
             if (role == "2") { // 2 es Medico
                 

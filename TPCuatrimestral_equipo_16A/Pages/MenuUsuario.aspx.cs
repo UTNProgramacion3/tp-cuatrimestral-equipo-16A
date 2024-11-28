@@ -1,8 +1,4 @@
 ﻿using Business.Interfaces;
-using Business.Managers;
-using DataAccess;
-using Domain.Entities;
-using Domain.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +9,8 @@ using Unity;
 
 namespace TPCuatrimestral_equipo_16A.Pages
 {
-	public partial class Home : System.Web.UI.Page
-	{
+    public partial class MenuUsuario : System.Web.UI.Page
+    {
 
         private IEmailManager _emailManager;
         private IPacienteManager _pacienteManager;
@@ -27,25 +23,16 @@ namespace TPCuatrimestral_equipo_16A.Pages
         }
 
         protected void Page_Load(object sender, EventArgs e)
-		{
+        {
             InitDependencies();
 
             if (!IsPostBack)
             {
                 var tarjetas = new List<dynamic>
         {
-            new { Titulo = "Agendar Turno", Descripcion = "Agenda un nuevo turno", Url = "/Pages/SeleccionarPaciente.aspx" },
-            new { Titulo = "Turnos", Descripcion = "Consulta los Turnos.", Url = "/Pages/ListadoTurnos.aspx" },
-            new { Titulo = "Perfil", Descripcion = "Gestiona tu perfil.", Url = "/Pages/Perfil.aspx" },
-            new { Titulo = "Sedes", Descripcion = "Administrar las Sedes.", Url = "/Pages/ListarSedes.aspx" },
-            new { Titulo = "Especialidades", Descripcion = "Administrar las Especialidades.", Url = "/Pages/Especialidades.aspx" },
-            new { Titulo = "Pacientes", Descripcion = "Administrar los datos de pacientes.", Url = "#" },
-            new { Titulo = "Medicos", Descripcion = "Administrar los datos de medicos.", Url = "#" },
-            new { Titulo = "Usuarios", Descripcion = "Administrar los datos de usuarios.", Url = "/Pages/MenuUsuario.aspx" },
-            new { Titulo = "Permisos y Modulos", Descripcion = "Administrar Permisos de modulos.", Url = "/Pages/AdmPermisos.aspx"},
-            new { Titulo = "Permisos y Roles", Descripcion = "Administrar Permisos de roles.", Url = "/Pages/RolesPermisos.aspx"},
+            new { Titulo = "Crear Usuario", Descripcion = "Crea un nuevo Usuario", Url = "/Pages/CrearNuevoUsuario.aspx" },
+            new { Titulo = "Listar Usuarios", Descripcion = "Permite visualizar usuarios existentes", Url = "/Pages/ListadoUsuarios.aspx" },
         };
-
                 rptTarjetas.DataSource = tarjetas;
                 rptTarjetas.DataBind();
             }

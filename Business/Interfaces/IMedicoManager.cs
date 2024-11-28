@@ -17,5 +17,6 @@ namespace Business.Interfaces
         Response<List<MedicoDto>> ObtenerTodos();
         List<Especialidad> ObtenerTodasEspecialidades();
         Medico ObtenerMedicoByUserId(int userId);
+        Response<Medico> ActualizarMedico(MedicoDto entity);
     }
 }

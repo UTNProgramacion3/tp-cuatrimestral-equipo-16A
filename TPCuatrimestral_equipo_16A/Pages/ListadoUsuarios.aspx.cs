@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Unity;
+using static TPCuatrimestral_equipo_16A.Global;
 
 namespace TPCuatrimestral_equipo_16A.Pages
 {
@@ -21,7 +22,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
         {
             IUnityContainer unityContainer;
             _usuarioManager = (IUsuarioManager)Global.Container.Resolve(typeof(IUsuarioManager));
-
+            Usuario user = GlobalData.UsuarioLogueado;
             CargarUsuarios();
             CargarRoles();
             Session["ListadoUsuarios"] = _listadoUsuarios;

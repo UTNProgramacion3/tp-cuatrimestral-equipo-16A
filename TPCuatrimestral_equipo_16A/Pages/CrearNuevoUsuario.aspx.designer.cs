@@ -60,6 +60,24 @@ namespace TPCuatrimestral_equipo_16A.Pages
         protected global::System.Web.UI.WebControls.DropDownList ddlEspecialidad;
 
         /// <summary>
+        /// txtObraSocial control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtObraSocial;
+
+        /// <summary>
+        /// txtNroAfiliado control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtNroAfiliado;
+
+        /// <summary>
         /// txtNombre control.
         /// </summary>
         /// <remarks>

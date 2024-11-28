@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Unity;
+using static TPCuatrimestral_equipo_16A.Global;
 
 namespace TPCuatrimestral_equipo_16A.Pages
 {
@@ -35,6 +36,11 @@ namespace TPCuatrimestral_equipo_16A.Pages
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            var user = GlobalData.UsuarioLogueado;
+            if(user.RolId != (int)RolesEnum.Administrador)
+            {
+                Response.Redirect("~/Pages/Home.aspx");
+            }
             InitDependencies();
 
 
@@ -55,6 +61,10 @@ namespace TPCuatrimestral_equipo_16A.Pages
                 btnCrear.Text = "Editar";
                 ddlRol.Enabled = false;
                 txtMatricula.Enabled = false;
+                ddlRol.Enabled = false;
+                txtMatricula.Enabled = false;
+                ddlEspecialidad.Enabled = false;
+                ddlEspecialidad.Enabled = false;
 
                 switch (user.RolId)
                 {
@@ -72,7 +82,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
                         var paciente = _pacienteManager.ObtenerPacienteByUserId(user.Id);
                         cargarPacienteAEditar(paciente);
                         cargarDatosPersonaFormularioEditar((Persona)paciente);
-                        cargarDireccionFormularioEditar(paciente.Direccion);
+                        //cargarDireccionFormularioEditar(paciente.Direccion);
                         break;
                 }
             }
@@ -104,6 +114,10 @@ namespace TPCuatrimestral_equipo_16A.Pages
             txtApellido.Text = paciente.Apellido;
             txtEmailPersonal.Text = paciente.EmailPersonal;
             txtFechaNacimiento.Text = paciente.FechaNacimiento.ToString("dd-MM-yyyy");
+            ddlRol.SelectedValue = paciente.RolId.ToString();
+            txtObraSocial.Text = paciente.ObraSocial.ToString();
+            txtNroAfiliado.Text = paciente.NroAfiliado.ToString();
+            
         }
 
         private void cargarDatosPersonaFormularioEditar(Persona persona)
@@ -200,7 +214,19 @@ namespace TPCuatrimestral_equipo_16A.Pages
                     };
                     if (_isEditModeEnabled)
                     {
+                        if(rol == (int)RolesEnum.Medico)
+                        {
+                            var medico = new MedicoDto()
+                            {
+                                EspecialidadId = int.Parse(ddlEspecialidad.SelectedValue),
+                                Matricula = int.Parse(txtMatricula.Text),
+                            };
+                        _medicoManager.ActualizarMedico(medico);
+                        }
+                        if(rol== (int)RolesEnum.Empleado)
+                        {
 
+                        }
                     }
                     else
                     {
@@ -223,17 +249,17 @@ namespace TPCuatrimestral_equipo_16A.Pages
                         EmailPersonal = txtEmailPersonal.Text.Trim(),
                         Telefono = txtTelefono.Text.Trim(),
                         FechaNacimiento = DateTime.Parse(txtFechaNacimiento.Text),
-                        RolId = (int)RolesEnum.Paciente
-
+                        RolId = (int)RolesEnum.Paciente,
+                        NroAfiliado = txtNroAfiliado.Text,
+                        ObraSocial = txtObraSocial.Text
                     };
                     if (_isEditModeEnabled)
                     {
-                        //_pacienteManager.Actu
+                        _pacienteManager.Actualizar(nuevoPaciente);
                     }
                     else
                     {
                         _pacienteManager.Crear(nuevoPaciente);
-
                     }
                     break;
             }

@@ -204,18 +204,37 @@ namespace Business.Managers
         public Paciente ObtenerPacienteByUserId(int userId)
         {
             string query = @"
-            SELECT 
-                PAC.*,           
-                PER.*,          
-                DIR.*            
-            FROM 
-                Pacientes PAC
-            LEFT JOIN 
-                Personas PER ON PAC.PersonaId = PER.Id
-            LEFT JOIN 
-                Direcciones DIR ON DIR.Id = PER.DireccionId
-            WHERE 
-                PER.UsuarioId = @UserId";
+           SELECT 
+    PAC.Id AS PacienteId,
+    PAC.PersonaId,
+    PAC.ObraSocial,
+    PAC.NroAfiliado,
+    PER.Id AS PersonaId,
+    PER.Nombre,
+    PER.Apellido,
+    PER.Documento,
+    PER.EmailPersonal,
+    PER.FechaNacimiento,
+    PER.Telefono,
+    DIR.Id AS DireccionId,
+    DIR.Calle,
+    DIR.Numero,
+    DIR.Piso,
+    DIR.Depto,
+    DIR.Localidad,
+    DIR.Provincia,
+    DIR.CodigoPostal,
+u.RolId
+    
+FROM 
+    Pacientes PAC
+LEFT JOIN 
+    Personas PER ON PAC.PersonaId = PER.Id
+LEFT JOIN 
+    Direcciones DIR ON DIR.Id = PER.DireccionId
+   left join Usuarios u on u.Id = per.UsuarioId
+WHERE 
+    PER.UsuarioId = @UserId";
 
 
             SqlParameter[] parameters = new SqlParameter[]

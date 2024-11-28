@@ -109,6 +109,18 @@
                         <span class="text-danger" id="errorEspecialidad"></span>
                     </div>
 
+                    <div id="obraSocialDiv" class="mb-3" style="display: none;">
+                        <label for="txtObraSocial" class="form-label">Obra Social</label>
+                        <asp:TextBox ID="txtObraSocial" runat="server" CssClass="form-control" />
+                        <span class="text-danger" id="errorObraSocial"></span>
+                    </div>
+                    <div id="nroAfiliadoDiv" class="mb-3" style="display: none;">
+                        <label for="txtNroAfiliado" class="form-label">Número Afiliado</label>
+                        <asp:TextBox ID="txtNroAfiliado" runat="server" CssClass="form-control" />
+                        <span class="text-danger" id="errorNroAfiliado"></span>
+                    </div>
+
+
                     <!-- Información personal -->
                     <div class="mb-3">
                         <label for="txtNombre" class="form-label">Nombre</label>
@@ -219,6 +231,8 @@
             const fechaNacimiento = document.getElementById('<%= txtFechaNacimiento.ClientID %>');
             const documento = document.getElementById('<%= txtDocumento.ClientID %>');
             const emailPersonal = document.getElementById('<%= txtEmailPersonal.ClientID %>');
+         const obraSocial = document.getElementById('<%= txtObraSocial.ClientID %>');
+            const numeroAfiliado = document.getElementById('<%= txtNroAfiliado.ClientID %>');
            <%-- const calle = document.getElementById('<%= txtCalle.ClientID %>');
             const numero = document.getElementById('<%= txtNumero.ClientID %>');
             const piso = document.getElementById('<%= txtPiso.ClientID %>');
@@ -235,6 +249,8 @@
             const errorFechaNac = document.getElementById("errorFechaNac");
             const errorDni = document.getElementById("errorDni");
             const errorEmail = document.getElementById("errorEmail");
+            const errorNumeroAfiliado = document.getElementById("errorNroAfiliado");
+            const errorObraSocial = document.getElementById("errorObraSocial");
             //const errorCalle = document.getElementById("errorCalle");
             //const errorNumero = document.getElementById("errorNumero");
             //const errorLocalidad = document.getElementById("errorLocalidad");
@@ -247,6 +263,8 @@
             errorFechaNac.textContent = "";
             errorDni.textContent = "";
             errorEmail.textContent = "";
+             errorNumeroAfiliado.textContent = "";
+            errorObraSocial.textContent = "";
             //errorCalle.textContent = "";
             //errorNumero.textContent = "";
             //errorLocalidad.textContent = "";
@@ -307,6 +325,15 @@
                 esValido = false;
             }
 
+              if (rol.value === "5" && !obraSocial.value) {
+                document.getElementById("errorObraSocial").textContent = "La obra social es obligatoria para pacientes.";
+                esValido = false;
+            }
+            if (rol.value === "5" && !numeroAfiliado.value) {
+                document.getElementById("errorNroAfiliado").textContent = "El número de afiliado es obligatorio para pacientes.";
+                esValido = false;
+            }
+
             if (!esValido) {
                 event.preventDefault(); 
                 return esValido
@@ -337,6 +364,10 @@
                     document.getElementById('especialidadDiv').style.display = 'block';
                 }
               //document.getElementById('legajoDiv').style.display = 'block';
+               if (role == "5") { //5 es paciente
+                document.getElementById('obraSocialDiv').style.display = 'block';
+                document.getElementById('nroAfiliadoDiv').style.display = 'block';
+            }
         }
 
         window.onload = function () {

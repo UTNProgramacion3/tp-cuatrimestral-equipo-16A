@@ -304,6 +304,61 @@ namespace Business.Managers
             }
         }
 
+        public Response<Paciente> Actualizar(Paciente entity)
+        {
+            try
+            {
+                // Actualizar la dirección
+                var direccionActualizada = _direccionManager.Actualizar(entity.Direccion);
+
+                if (!direccionActualizada.Success)
+                {
+                    throw new Exception("Error al actualizar la dirección");
+                }
+
+                // Actualizar los datos de la persona
+                string query = @"
+            UPDATE Personas
+            SET 
+                Apellido = @Apellido,
+                Nombre = @Nombre,
+                Documento = @Documento,
+                EmailPersonal = @EmailPersonal,
+                FechaNacimiento = @FechaNacimiento,
+                Telefono = @Telefono,
+                DireccionId = @DireccionId
+            WHERE Id = @Id";
+
+                SqlParameter[] parameters = new SqlParameter[]
+                {
+            new SqlParameter("@Apellido", entity.Apellido),
+            new SqlParameter("@Nombre", entity.Nombre),
+            new SqlParameter("@Documento", entity.Documento),
+            new SqlParameter("@EmailPersonal", entity.EmailPersonal),
+            new SqlParameter("@FechaNacimiento", entity.FechaNacimiento),
+            new SqlParameter("@Telefono", entity.Telefono),
+            new SqlParameter("@DireccionId", entity.Direccion.Id),
+            new SqlParameter("@Id", entity.Id)
+                };
+
+                var result = _DBManager.ExecuteNonQuery(query, parameters);
+
+                if (result <= 0)
+                {
+                    throw new Exception("Error al actualizar la persona");
+                }
+
+                _response.Ok(entity);
+                return _response;
+            }
+            catch (Exception ex)
+            {
+                _response.NotOk($"Error al actualizar la persona: {ex.Message}");
+                return _response;
+            }
+        }
+
+
         #endregion
 
         #region Private methods

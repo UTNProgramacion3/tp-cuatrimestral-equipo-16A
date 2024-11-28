@@ -295,42 +295,6 @@
                 esValido = false;
             }
 
-          //// Validar Teléfono
-          //if (!telefono.value.trim()) {
-          //    errorTelefono.textContent = "El teléfono es obligatorio.";
-          //    esValido = false;
-          //}
-
-            // Validar Calle
-            //if (!calle.value.trim()) {
-            //    errorCalle.textContent = "La calle es obligatoria.";
-            //    esValido = false;
-            //}
-
-            //// Validar Número
-            //if (!numero.value.trim()) {
-            //    errorNumero.textContent = "El número es obligatorio.";
-            //    esValido = false;
-            //}
-
-            //// Validar Localidad
-            //if (!localidad.value.trim()) {
-            //    errorLocalidad.textContent = "La localidad es obligatoria.";
-            //    esValido = false;
-            //}
-
-            //// Validar Provincia
-            //if (!provincia.value.trim()) {
-            //    errorProvincia.textContent = "La provincia es obligatoria.";
-            //    esValido = false;
-            //}
-
-            //// Validar Código Postal
-            //if (!codigoPostal.value.trim()) {
-            //    errorCodigoPostal.textContent = "El código postal es obligatorio.";
-            //    esValido = false;
-            //}
-
             // Validar Matrícula (solo si la posición es "Médico")
             if (rol.value === "2" && !matricula.value.trim()) {
                 document.getElementById("errorMatricula").textContent = "La matrícula es obligatoria para médicos.";

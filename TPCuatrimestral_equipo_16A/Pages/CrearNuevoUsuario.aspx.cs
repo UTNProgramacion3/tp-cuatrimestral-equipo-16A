@@ -228,7 +228,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
                     };
                     if (_isEditModeEnabled)
                     {
-
+                        //_pacienteManager.Actu
                     }
                     else
                     {

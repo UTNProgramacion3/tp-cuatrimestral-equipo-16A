@@ -39,12 +39,18 @@ namespace TPCuatrimestral_equipo_16A.Pages
             dbManager = new DBManager();
             sedeManager = new SedeManager();
 
+            var user = Global.GlobalData.UsuarioLogueado;
+
             InitDependencies();
 
             //txtbSedeSeleccionada.Text = (string)Session["NombreSede"];
 
             if (!IsPostBack)
-            {
+            {   
+                //if(user.Rol.Nombre != "Admin")
+                //{
+                //    Response.Redirect("~/Pages/Home.aspx", false);
+                //}
                 CargarSedes();
             }
 
@@ -166,11 +172,11 @@ namespace TPCuatrimestral_equipo_16A.Pages
         protected void btnModificarSede_Click(object sender, EventArgs e)
         {
 
-            if (!string.IsNullOrEmpty(txtCrearNombreSede.Text)
-                && !string.IsNullOrEmpty(txtCrearCalleSede.Text)
-                && !string.IsNullOrEmpty(txtCrearNumeroSede.Text)
-                && !string.IsNullOrEmpty(txtCrearLocalidadSede.Text)
-                && !string.IsNullOrEmpty(txtCrearProvinciaSede.Text))
+            if (!string.IsNullOrEmpty(txtNombreSede.Text)
+                && !string.IsNullOrEmpty(txtCalleSede.Text)
+                && !string.IsNullOrEmpty(txtNumero.Text)
+                && !string.IsNullOrEmpty(txtLocalidad.Text)
+                && !string.IsNullOrEmpty(txtProvincia.Text))
             {
 
                 Direccion _direccion = new Direccion();

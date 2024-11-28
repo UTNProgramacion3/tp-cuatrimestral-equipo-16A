@@ -20,5 +20,6 @@ namespace Business.Interfaces
 
         Response<bool> GuardarComentario(int turnoId, string comentario);
         string ObtenerComentario(int turnoId);
+        List<TurnoDTO> ObtenerTurnosPorPacientes(int IdPaciente);
     }
 }

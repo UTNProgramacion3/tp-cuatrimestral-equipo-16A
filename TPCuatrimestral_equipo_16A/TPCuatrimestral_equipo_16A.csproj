@@ -83,6 +83,7 @@
     <Content Include="ImagesFolder\logo.png" />
     <Content Include="Pages\AdmPermisos.aspx" />
     <Content Include="Pages\CambioPassword.aspx" />
+    <Content Include="Pages\CancelarTurno.aspx" />
     <Content Include="Pages\ConfirmarTurno.aspx" />
     <Content Include="Pages\CrearNuevoUsuario.aspx" />
     <Content Include="Pages\EdicionPaciente.aspx" />
@@ -130,6 +131,13 @@
     </Compile>
     <Compile Include="Pages\CambioPassword.aspx.designer.cs">
       <DependentUpon>CambioPassword.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\CancelarTurno.aspx.cs">
+      <DependentUpon>CancelarTurno.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\CancelarTurno.aspx.designer.cs">
+      <DependentUpon>CancelarTurno.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\ConfirmarTurno.aspx.cs">
       <DependentUpon>ConfirmarTurno.aspx</DependentUpon>

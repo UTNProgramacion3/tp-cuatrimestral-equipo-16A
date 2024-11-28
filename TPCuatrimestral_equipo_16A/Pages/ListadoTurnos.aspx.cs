@@ -39,21 +39,43 @@ namespace TPCuatrimestral_equipo_16A.Views
                     turno = _manager.ObtenerPorId(int.Parse(cellValue));
                 }
 
-                try
-                {
-                    Session["TurnoDto"] = turno;
-                    Session["ReprogramarTurno"] = true;
-
-                    Session["IdMedico"] = turno.Medico.Id;
-                    Session["DiaTurno"] = turno.Turno.Fecha;
-
-                    Response.Redirect("~/Pages/SeleccionarFechaHora.aspx", false);
-                }
-                catch (Exception ex)
+                if(Session["CancelarTurno"] != null)
                 {
 
-                    throw ex;
+                    try
+                    {
+                        Session["TurnoDto"] = turno;
+                        Session["IdMedico"] = turno.Medico.Id;
+                        Session["DiaTurno"] = turno.Turno.Fecha;
+                        Session["HoraTurno"] = turno.Turno.Hora;
+                        Response.Redirect("~/Pages/ConfirmarTurno.aspx", false);
+                    }
+                    catch (Exception ex)
+                    {
+
+                        throw ex;
+                    }
+
                 }
+                else
+                {
+                    try
+                    {
+                        Session["TurnoDto"] = turno;
+                        Session["ReprogramarTurno"] = true;
+
+                        Session["IdMedico"] = turno.Medico.Id;
+                        Session["DiaTurno"] = turno.Turno.Fecha;
+
+                        Response.Redirect("~/Pages/SeleccionarFechaHora.aspx", false);
+                    }
+                    catch (Exception ex)
+                    {
+
+                        throw ex;
+                    }
+                }
+
 
             }
 

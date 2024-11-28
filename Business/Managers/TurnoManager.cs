@@ -373,10 +373,12 @@ namespace Business.Managers
             return response;
         }
 
-        public bool ReprogramarTurno(int IdEstado, int IdTurno)
+        public bool CancelarOReprogramarTurno(int IdEstado, int IdTurno)
         {
             string query = @"Update Turnos 
-                            Set IdEstadoTurno = @IdEstado
+                            Set
+                            IdEstadoTurno = @IdEstado,
+                            Activo = 0
                             Where Id = @IdTurno";
 
             SqlParameter[] parametros = new SqlParameter[]

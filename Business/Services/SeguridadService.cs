@@ -373,6 +373,11 @@ namespace Business.Services
                 
         }
 
+        public bool PermitirAccesoAModulo(int rol, int[] roles)
+        {
+            return roles.Contains(rol);
+        }
+
         //public void VerificarTokensVencidos()
         //{
         //    try

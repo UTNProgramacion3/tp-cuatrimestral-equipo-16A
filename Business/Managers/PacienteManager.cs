@@ -1,4 +1,5 @@
-﻿using Business.Interfaces;
+﻿using Business.Dtos;
+using Business.Interfaces;
 using DataAccess;
 using DataAccess.Extensions;
 using Domain.Entities;
@@ -19,7 +20,11 @@ namespace Business.Managers
         private readonly Response<Paciente> _response;
         private readonly IDireccionManager _direccionManager;
         private readonly IPersonaManager _personaManager;
+        private readonly IUsuarioManager _usuarioManager;
+        private readonly IEmailManager _emailManager;
         private readonly IMapper<Paciente> _mapper;
+        private readonly string _VALIDAR_CON_EMAIL;
+
         #endregion
 
         #region Builder
@@ -27,7 +32,9 @@ namespace Business.Managers
             DBManager manager,
             Response<Paciente> response,
             IDireccionManager direccionManager,
-            IPersonaManager personaManager
+            IPersonaManager personaManager,
+            IUsuarioManager usuarioManager,
+            IEmailManager emailManager
             )
             
         {
@@ -35,7 +42,11 @@ namespace Business.Managers
             _response = response;
             _direccionManager = direccionManager;
             _personaManager = personaManager;
+            _usuarioManager = usuarioManager;
+            _emailManager = emailManager;
             _mapper = new Mapper<Paciente>();
+            _VALIDAR_CON_EMAIL = Environment.GetEnvironmentVariable("VALIDAR_CON_EMAIL");
+
         }
         #endregion
 
@@ -44,6 +55,21 @@ namespace Business.Managers
         {
             try
             {
+                bool validarConEmail = _VALIDAR_CON_EMAIL == "true";
+                var user = _usuarioManager.GenerarUsuario((Persona)entity, entity.RolId);
+                user.Activo = !validarConEmail;
+                var usuarioCreado = _usuarioManager.Crear(user);
+                var nombreUsuario = $"{entity.Apellido}, {entity.Nombre}";
+
+                if (validarConEmail)
+                {
+                    _emailManager.EnviarMailValidacionNuevaCuenta(entity.EmailPersonal, usuarioCreado.Data.Id, nombreUsuario);
+                }
+
+                if (!usuarioCreado.Success)
+                {
+                    throw new Exception("Error al crear el usuario");
+                }
                 var direccionCreada = _direccionManager.Crear(entity.Direccion);
 
                 if (!direccionCreada.Success)
@@ -59,7 +85,8 @@ namespace Business.Managers
                     EmailPersonal = entity.EmailPersonal,
                     FechaNacimiento = entity.FechaNacimiento,
                     Telefono = entity.Telefono,
-                    Direccion = direccionCreada.Data
+                    DireccionId = direccionCreada.Data.Id,
+                    UsuarioId = usuarioCreado.Data.Id
                 };
 
                 var personaCreada = _personaManager.Crear(persona);
@@ -73,8 +100,8 @@ namespace Business.Managers
                 SqlParameter[] parameters = new SqlParameter[]
                 {
                     new SqlParameter("@PersonaId", personaCreada.Data.Id),
-                    new SqlParameter("@ObraSocial", entity.ObraSocial),
-                    new SqlParameter("@NroAfiliado", entity.NroAfiliado),
+                    new SqlParameter("@ObraSocial", entity.ObraSocial ?? ""),
+                    new SqlParameter("@NroAfiliado", entity.NroAfiliado ?? ""),
                 };
 
                 var res = _DBManager.ExecuteQuery(query, parameters);
@@ -92,17 +119,27 @@ namespace Business.Managers
         public Response<Paciente> ObtenerPorId(int pacienteId)
         {
             string query = @"
-            SELECT 
-                p.Id AS Id, p.ObraSocial, p.NroAfiliado, p.PersonaId,
-                per.Id AS PersonaId, per.Nombre, per.Apellido, per.Documento, 
-                per.Telefono, per.FechaNacimiento, per.EmailPersonal, per.DireccionId, per.UsuarioId
-            FROM Pacientes p
-            INNER JOIN Personas per ON p.PersonaId = per.Id
-            WHERE p.Id = @Id";
+
+                            SELECT 
+                                p.PacienteId AS PacienteId, p.ObraSocial, p.NroAfiliado, p.PersonaId,
+                                per.Id AS PersonaId, per.Nombre, per.Apellido, per.Documento, 
+                                per.Telefono, per.FechaNacimiento, per.EmailPersonal, per.DireccionId, per.UsuarioId
+                            FROM Pacientes p
+                            INNER JOIN Personas per ON p.PersonaId = per.Id
+                            WHERE p.Id = @Id";
+
+            //SELECT 
+            //    p.Id AS Id, p.ObraSocial, p.NroAfiliado, p.PersonaId,
+            //    per.Id AS PersonaId, per.Nombre, per.Apellido, per.Documento, 
+            //    per.Telefono, per.FechaNacimiento, per.EmailPersonal, per.DireccionId, per.UsuarioId
+            //FROM Pacientes p
+            //INNER JOIN Personas per ON p.PersonaId = per.Id
+            //WHERE p.Id = @Id";
+
 
             SqlParameter[] parameters = new SqlParameter[]
             {
-        new SqlParameter("@Id", pacienteId)
+                new SqlParameter("@Id", pacienteId)
             };
 
             var res = _DBManager.ExecuteQuery(query, parameters);
@@ -166,9 +203,39 @@ namespace Business.Managers
 
         public Paciente ObtenerPacienteByUserId(int userId)
         {
-            string query = @"SELECT * FROM Pacientes 
-            left join Personas on Pacientes.PersonaId = Personas.Id
-            WHERE UsuarioId = @UserId";
+            string query = @"
+           SELECT 
+    PAC.Id AS PacienteId,
+    PAC.PersonaId,
+    PAC.ObraSocial,
+    PAC.NroAfiliado,
+    PER.Id AS PersonaId,
+    PER.Nombre,
+    PER.Apellido,
+    PER.Documento,
+    PER.EmailPersonal,
+    PER.FechaNacimiento,
+    PER.Telefono,
+    DIR.Id AS DireccionId,
+    DIR.Calle,
+    DIR.Numero,
+    DIR.Piso,
+    DIR.Depto,
+    DIR.Localidad,
+    DIR.Provincia,
+    DIR.CodigoPostal,
+u.RolId
+    
+FROM 
+    Pacientes PAC
+LEFT JOIN 
+    Personas PER ON PAC.PersonaId = PER.Id
+LEFT JOIN 
+    Direcciones DIR ON DIR.Id = PER.DireccionId
+   left join Usuarios u on u.Id = per.UsuarioId
+WHERE 
+    PER.UsuarioId = @UserId";
+
 
             SqlParameter[] parameters = new SqlParameter[]
             {
@@ -178,38 +245,171 @@ namespace Business.Managers
             var res = _DBManager.ExecuteQuery(query, parameters);
             return res.GetEntity<Paciente>();
         }
-            #endregion
 
-            #region Private methods
-            //private Response<HistoriaClinica> ObtenerHistoriaClinicaPorPacienteId(int pacienteId)
-            //{
-            //    string query = @"
-            //    SELECT 
-            //        hc.Id AS HistoriaClinicaId, hc.Detalle, hc.FechaCreacion, hc.PacienteId
-            //    FROM HistoriaClinica hc
-            //    WHERE hc.PacienteId = @PacienteId";
+        public Response<List<PacienteSimpleDto>> ObtenerPacientesFiltrados(string nombre, string apellido, string documento, string obraSocial, string nroAfiliado)
+        {
+            string query = "SELECT p.Id as PersonaId, p.Nombre, p.Apellido, p.Documento, p.Telefono, p.EmailPersonal, ps.ObraSocial, ps.NroAfiliado " +
+                           "FROM Personas p " +
+                           "LEFT JOIN Pacientes ps ON p.Id = ps.PersonaId " +
+                           "WHERE (@Nombre = '' OR p.Nombre LIKE @Nombre) " +
+                           "AND (@Apellido = '' OR p.Apellido LIKE @Apellido) " +
+                           "AND (@Documento = '' OR p.Documento LIKE @Documento) " +
+                           "AND (@ObraSocial = '' OR ps.ObraSocial = @ObraSocial) " +
+                           "AND (@NroAfiliado = '' OR ps.NroAfiliado LIKE @NroAfiliado)";
+            SqlParameter[] parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@Nombre", "%" + nombre + "%"),
+                    new SqlParameter("@Apellido", "%" + apellido + "%"),
+                    new SqlParameter("@Documento", "%" + documento + "%"),
+                    new SqlParameter("@ObraSocial", obraSocial ?? ""),
+                    new SqlParameter("@NroAfiliado", "%" + nroAfiliado + "%")
 
-            //    SqlParameter[] parameters = new SqlParameter[]
-            //    {
-            //        new SqlParameter("@PacienteId", pacienteId)
-            //    };
+                };
 
-            //    var response = new Response<HistoriaClinica>();
+            Mapper<PacienteSimpleDto> mapper = new Mapper<PacienteSimpleDto>();
+            Response<List<PacienteSimpleDto>> response = new Response<List<PacienteSimpleDto>>();
 
-            //    var res = _DBManager.ExecuteQuery(query, parameters);
+            try
+            {
+                var dt = _DBManager.ExecuteQuery(query, parameters);
 
-            //    if (res.Rows.Count == 0)
-            //    {
-            //        response.NotOk("No se encontró una historia clínica para el paciente especificado.");
-            //        return response;
-            //    }
+                if(dt.Rows.Count == 0)
+                {
+                    response.NotOk("Error al traer pacientes.");
+                    return response;
+                }
 
-            //    var historiaClinica = res.GetEntity<HistoriaClinica>();
+                var pacientes = mapper.ListMapFromRow(dt);
 
-            //    response.Ok(historiaClinica);
-            //    return response;
-            //}
+                if(pacientes.Count == 0)
+                {
+                    response.NotOk("Error en el mapeo");
+                    return response;
+                }
 
-            #endregion
+                response.Ok(pacientes);
+
+            }catch (Exception ex)
+            {
+                response.NotOk(ex.Message);
+            }
+
+            return response;
         }
+
+        public bool EditarPaciente(string obraSocial, string nroAfiliado, int personaId)
+        {
+            string query = @"UPDATE Pacientes
+                            SET
+                                ObraSocial = @ObraSocial,
+                                NroAfiliado = @NroAfiliado
+                            WHERE PersonaId = @PersonaId";
+
+            SqlParameter[] parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@ObraSocial", obraSocial),
+                    new SqlParameter("@NroAfiliado", nroAfiliado),
+                    new SqlParameter("@PersonaId", personaId)
+                };
+
+            try
+            {
+                var res = _DBManager.ExecuteNonQuery(query, parameters);
+
+                return res > 0;
+            }catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public Response<Paciente> Actualizar(Paciente entity)
+        {
+            try
+            {
+                // Actualizar la dirección
+                var direccionActualizada = _direccionManager.Actualizar(entity.Direccion);
+
+                if (!direccionActualizada.Success)
+                {
+                    throw new Exception("Error al actualizar la dirección");
+                }
+
+                // Actualizar los datos de la persona
+                string query = @"
+            UPDATE Personas
+            SET 
+                Apellido = @Apellido,
+                Nombre = @Nombre,
+                Documento = @Documento,
+                EmailPersonal = @EmailPersonal,
+                FechaNacimiento = @FechaNacimiento,
+                Telefono = @Telefono,
+                DireccionId = @DireccionId
+            WHERE Id = @Id";
+
+                SqlParameter[] parameters = new SqlParameter[]
+                {
+            new SqlParameter("@Apellido", entity.Apellido),
+            new SqlParameter("@Nombre", entity.Nombre),
+            new SqlParameter("@Documento", entity.Documento),
+            new SqlParameter("@EmailPersonal", entity.EmailPersonal),
+            new SqlParameter("@FechaNacimiento", entity.FechaNacimiento),
+            new SqlParameter("@Telefono", entity.Telefono),
+            new SqlParameter("@DireccionId", entity.Direccion.Id),
+            new SqlParameter("@Id", entity.Id)
+                };
+
+                var result = _DBManager.ExecuteNonQuery(query, parameters);
+
+                if (result <= 0)
+                {
+                    throw new Exception("Error al actualizar la persona");
+                }
+
+                _response.Ok(entity);
+                return _response;
+            }
+            catch (Exception ex)
+            {
+                _response.NotOk($"Error al actualizar la persona: {ex.Message}");
+                return _response;
+            }
+        }
+
+
+        #endregion
+
+        #region Private methods
+        //private Response<HistoriaClinica> ObtenerHistoriaClinicaPorPacienteId(int pacienteId)
+        //{
+        //    string query = @"
+        //    SELECT 
+        //        hc.Id AS HistoriaClinicaId, hc.Detalle, hc.FechaCreacion, hc.PacienteId
+        //    FROM HistoriaClinica hc
+        //    WHERE hc.PacienteId = @PacienteId";
+
+        //    SqlParameter[] parameters = new SqlParameter[]
+        //    {
+        //        new SqlParameter("@PacienteId", pacienteId)
+        //    };
+
+        //    var response = new Response<HistoriaClinica>();
+
+        //    var res = _DBManager.ExecuteQuery(query, parameters);
+
+        //    if (res.Rows.Count == 0)
+        //    {
+        //        response.NotOk("No se encontró una historia clínica para el paciente especificado.");
+        //        return response;
+        //    }
+
+        //    var historiaClinica = res.GetEntity<HistoriaClinica>();
+
+        //    response.Ok(historiaClinica);
+        //    return response;
+        //}
+
+        #endregion
+    }
 }

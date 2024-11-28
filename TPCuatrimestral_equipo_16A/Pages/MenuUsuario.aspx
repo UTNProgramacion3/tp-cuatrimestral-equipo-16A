@@ -1,10 +1,12 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Main.Master" AutoEventWireup="true" CodeBehind="Home.aspx.cs" Inherits="TPCuatrimestral_equipo_16A.Pages.Home" Debug=true Async="true" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Main.Master" AutoEventWireup="true" CodeBehind="MenuUsuario.aspx.cs" Inherits="TPCuatrimestral_equipo_16A.Pages.MenuUsuario" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-
-    <link href="/Stylesheets/Home.css" rel="stylesheet" type="text/css" />
-
 </asp:Content>
+
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+    <p>
+        <asp:Button ID="Button1" runat="server" OnClick="Button1_Click" Text="Button" />
+    </p>
 
     <section>
         <div class="section">

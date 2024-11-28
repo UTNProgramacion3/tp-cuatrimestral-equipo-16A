@@ -1,5 +1,6 @@
 ﻿using Business.Managers;
 using Domain.Entities;
+using Domain.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,6 @@ namespace Business.Interfaces
 {
     public interface IDireccionManager : ICrudRepository<Direccion>
     {
+        Response<Direccion> Actualizar(Direccion entity);
     }
 }

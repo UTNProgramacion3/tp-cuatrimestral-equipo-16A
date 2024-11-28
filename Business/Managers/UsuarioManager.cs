@@ -157,7 +157,7 @@ namespace Business.Managers
                 if (true)
                 {
                     var res = VerificarPassword(usuario.Passwordhash, _response.Data.Passwordhash);
-                    if (res == true)
+                    if (res)
                     {
                         _sessionManager.SetSessionValue("UserLogueado", _response.Data);
                         response.Ok(_response.Data, "Usuario logeado correctamente.");
@@ -414,7 +414,9 @@ namespace Business.Managers
         }
         public Usuario GenerarUsuario(Persona persona, int tipoUsuario)
         {
-            var email = tipoUsuario == (int)RolesEnum.Empleado ? persona.CrearEmailCorporativo() : persona.EmailPersonal; //Añadir validación mail existente.
+            var email = (tipoUsuario == (int)RolesEnum.Empleado ||
+                tipoUsuario == (int)RolesEnum.Medico ||
+                tipoUsuario == (int)RolesEnum.Recepcionista) ? persona.CrearEmailCorporativo() : persona.EmailPersonal;
 
             Usuario usuario = new Usuario
             {
@@ -609,6 +611,33 @@ namespace Business.Managers
             }
 
             return IdPaciente;
+        }
+
+        public UsuarioBasicoDto ObtenerUsuarioDataBasicaById(int userId)
+        {
+            //    string query = @"
+            //SELECT Usuarios.*, 
+            //       PER.Nombre + ' ' + PER.Apellido AS NombreCompleto, 
+            //       R.Nombre AS Rol, 
+            //       R.Id AS RolId
+            //FROM Usuarios
+            //LEFT JOIN Personas PER ON PER.UsuarioId = Usuarios.Id
+            //LEFT JOIN Roles R ON R.Id = Usuarios.RolId
+            //WHERE Usuarios.Id = @UserId";
+
+            //    SqlParameter[] parameters = new SqlParameter[]
+            //    {
+            //        { "@UserId", userId }
+            //    };
+
+            //    var res = _dbManager.ExecuteQuery(query, parameters);
+
+            //    if (res.Rows.Count == 0)
+            //        return null;
+
+            //    var userMapper = new Mapper<UsuarioBasicoDto>();
+            //    return userMapper.MapFromRow(res.Rows[0]);
+            throw new NotImplementedException();
         }
 
 

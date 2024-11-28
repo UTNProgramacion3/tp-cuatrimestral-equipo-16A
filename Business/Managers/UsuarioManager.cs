@@ -25,14 +25,16 @@ namespace Business.Managers
         private readonly DBManager _dbManager;
         private readonly SessionManager _sessionManager;
         private readonly Mapper<Usuario> _mapper;
+        private readonly IPersonaManager _personaManager;
         private Response<Usuario> _response;
 
-        public UsuarioManager()
+        public UsuarioManager(IPersonaManager personaManager)
         {
             _dbManager = new DBManager();
             _sessionManager = new SessionManager();
             _mapper = new Mapper<Usuario>();
             _response = new Response<Usuario>();
+            _personaManager = personaManager;
         }
 
         public Response<Usuario> Crear(Usuario entity)
@@ -95,23 +97,70 @@ namespace Business.Managers
             return response;
         }
 
-
-        public Response<bool> LogIn(Usuario usuario)
+        public Response<Usuario> CrearNuevoAdmin(NuevoAdminDto entity)
         {
-            Response<bool> response = new Response<bool>();
+            string query = @"INSERT INTO USUARIOS (Email, Passwordhash, RolId, Activo)
+                             VALUES (@email, @passwordhash, @rolId, @activo)";
+
+            string retrieveData = @"SELECT * FROM USUARIOS WHERE Email = @email";
+            entity.Passwordhash = PasswordHasher.HashPassword(entity.Passwordhash);
+
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@email", "admin@admin.com"),
+                new SqlParameter("@passwordhash", entity.Passwordhash),
+                new SqlParameter("@rolId", (int)RolesEnum.Administrador),
+                new SqlParameter("@activo", 1)
+
+            };
+
+            var response = new Response<Usuario>();
+
+
+            var res = _dbManager.ExecuteNonQueryAndGetData(query, parameters, retrieveData);
+            var usuario = res.GetEntity<Usuario>(create: true);
+            response.Ok(usuario);
+            Random random = new Random();
+            int numeroAleatorio = random.Next(10000000, 100000000);
+            var persona = new Persona()
+            {
+                Apellido = "admin",
+                Nombre = "admin",
+                Documento = entity.Documento,
+                EmailPersonal = "admin@admin.com",
+                FechaNacimiento = DateTime.Now,
+                Telefono = numeroAleatorio.ToString(),
+                DireccionId = 1,
+                UsuarioId = usuario.Id,
+            };
+
+            var personaCreada = _personaManager.Crear(persona);
+
+            if (!personaCreada.Success)
+            {
+                throw new Exception("Error al crear la persona");
+            }
+
+            return response;
+        }
+
+
+        public Response<Usuario> LogIn(Usuario usuario)
+        {
+            Response<Usuario> response = new Response<Usuario>();
 
             try
             {
 
                 _response = ObtenerPorEmail(usuario.Email);
-
-                if (_response.Success)
+              
+                if (true)
                 {
                     var res = VerificarPassword(usuario.Passwordhash, _response.Data.Passwordhash);
                     if (res == true)
                     {
                         _sessionManager.SetSessionValue("UserLogueado", _response.Data);
-                        response.Ok(true, "Usuario logeado correctamente.");
+                        response.Ok(_response.Data, "Usuario logeado correctamente.");
                     }
                     else
                     {

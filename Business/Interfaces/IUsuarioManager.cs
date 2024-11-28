@@ -12,7 +12,7 @@ namespace Business.Interfaces
         Response<Usuario> ObtenerPorEmail(string email);   
         bool VerificarPassword(string password, string hashedpassword);
         bool ExisteMail(string email);
-        Response<bool> LogIn(Usuario usuario);
+        Response<Usuario> LogIn(Usuario usuario);
         void LogOut(Usuario usuario);
         Usuario GenerarUsuario(Persona persona, int tipoUsuario);
         Usuario ValidarToken(string token);
@@ -21,8 +21,8 @@ namespace Business.Interfaces
         List<Rol> ObtenerAllRoles();
         Usuario ObtenerUsuarioById(int id);
         List<UsuarioBasicoDto> ObtenerUsuariosDataBasica();
-
         int ObtenerMedicoPorUsuario(int usuarioId);
         int ObtenerPacientePorUsuario(int usuarioId);
+        Response<Usuario> CrearNuevoAdmin(NuevoAdminDto entity);
     }
 }

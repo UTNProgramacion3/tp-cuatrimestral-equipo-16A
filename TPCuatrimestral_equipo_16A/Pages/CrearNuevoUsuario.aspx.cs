@@ -36,11 +36,11 @@ namespace TPCuatrimestral_equipo_16A.Pages
         protected void Page_Load(object sender, EventArgs e)
         {
             InitDependencies();
-            
+
 
             if (!IsPostBack)
             {
-                ddlRol.Items.Clear(); 
+                ddlRol.Items.Clear();
 
                 ddlRol.Items.Add(new ListItem("Administrador", "1"));
                 ddlRol.Items.Add(new ListItem("Empleado", "2"));
@@ -48,7 +48,8 @@ namespace TPCuatrimestral_equipo_16A.Pages
                 CargarEspecialidades();
                 CargarRoles();
             }
-            else if(_isEditModeEnabled)
+
+            if (_isEditModeEnabled)
             {
                 var user = _usuarioManager.ObtenerUsuarioById(int.Parse(Request.QueryString["id"]));
                 btnCrear.Text = "Editar";
@@ -63,7 +64,6 @@ namespace TPCuatrimestral_equipo_16A.Pages
                         var paciente = _pacienteManager.ObtenerPacienteByUserId(user.Id);
                         cargarPacienteAEditar(paciente);
                         break;
-
                 }
             }
 
@@ -115,7 +115,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
         private void cargarDatosEmpleadoFormularioEditar(Empleado empleado)
         {
             txtLegajo.Text = empleado.Legajo.ToString();
-            posicionEmpleado.SelectedValue = empleado.Posicion.ToString();
+            //posicionEmpleado.SelectedValue = empleado.Posicion.ToString();
         }
 
         private void cargarDatosMedicoFormularioEditar(Medico medico)
@@ -133,7 +133,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
             string especialidad = ddlEspecialidad.SelectedValue;
             int rol = int.Parse(ddlRol.SelectedValue);
             //string legajo = txtLegajo.Text.Trim();
-            int posicion = int.Parse(posicionEmpleado.SelectedValue);
+            int posicion = int.Parse(ddlRol.SelectedValue);
 
             Direccion direccion = new Direccion
             {
@@ -149,8 +149,24 @@ namespace TPCuatrimestral_equipo_16A.Pages
             switch (rol)
             {
                 case (int)RolesEnum.Administrador:
+
+                    NuevoAdminDto nuevoAdmin = new NuevoAdminDto()
+                    {
+                        Apellido = apellido,
+                        Nombre = nombre,
+                        Documento = int.Parse(documento),
+                        EmailPersonal = txtEmailPersonal.Text.Trim(),
+                        Telefono = txtTelefono.Text.Trim(),
+                        FechaNacimiento = DateTime.Parse(txtFechaNacimiento.Text),
+                        Passwordhash = documento,
+                        RolId = (int)RolesEnum.Administrador
+
+                    };
+
+                    _usuarioManager.CrearNuevoAdmin(nuevoAdmin);
                     break;
                 case (int)RolesEnum.Empleado:
+                case (int)RolesEnum.Medico:
                     NuevoEmpleadoDto nuevoEmpleado = new NuevoEmpleadoDto
                     {
                         Apellido = apellido,
@@ -206,8 +222,8 @@ namespace TPCuatrimestral_equipo_16A.Pages
                     break;
             }
 
-            string titulo = "Éxito";
-            string texto = "El registro se creó correctamente.";
+            string titulo = $"Éxito creando {rol}";
+            string texto = $"El registro de {nombre} {apellido} se creó correctamente.";
 
             string script = $"mostrarMensaje('{titulo}', '{texto}');";
             ScriptManager.RegisterStartupScript(this, GetType(), "MostrarMensaje", script, true);

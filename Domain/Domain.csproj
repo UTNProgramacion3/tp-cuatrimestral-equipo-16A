@@ -60,6 +60,7 @@
     <Compile Include="Entities\Rol.cs" />
     <Compile Include="Entities\Turno.cs" />
     <Compile Include="Enums\EstadosEnum.cs" />
+    <Compile Include="Enums\ModulosEnum.cs" />
     <Compile Include="Enums\PosicionEnum.cs" />
     <Compile Include="Enums\RolesEnum.cs" />
     <Compile Include="Enums\SedeEnum.cs" />

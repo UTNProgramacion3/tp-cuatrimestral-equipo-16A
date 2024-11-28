@@ -76,6 +76,7 @@ namespace TPCuatrimestral_equipo_16A
             Container.RegisterType<IEmailManager, EmailManager>();
             Container.RegisterType<ISeguridadService, SeguridadService>();
             Container.RegisterType<ITurnoManager, TurnoManager>();
+            Container.RegisterType<ISedeManager, SedeManager>();
         }
 
         protected void Application_End(object sender, EventArgs e)

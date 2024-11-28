@@ -60,6 +60,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
             
             if(Session["ReprogramarTurno"] != null)
             {
+                btnAtras.Visible = false;
 
                 try
                 {
@@ -86,6 +87,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
                     Session["IdMedico"] = medicoReprogramar.Data.Id;
                     Session["IdSede"] = sedeReprogramar.Data.Id;
                     Session["IdEstadoTurno"] = (int)EstadosEnum.Confirmado;
+                    Session["IdTurnoAreprogramar"] = turnoReprogramar.Turno.Id;
 
                 }
                 catch (Exception ex)
@@ -94,10 +96,6 @@ namespace TPCuatrimestral_equipo_16A.Pages
                     throw ex;
                 }
                 
-
-
-
-
             }
             else
             {
@@ -126,6 +124,10 @@ namespace TPCuatrimestral_equipo_16A.Pages
             turno.Turno.Observaciones = (string)Session["Observaciones"];
 
             turnoManager.Crear(turno);
+
+            int idReprogramar = (int)EstadosEnum.Reprogramado;
+            int idTurnoAreprogramar = (int)Session["IdTurnoAreprogramar"];
+            turnoManager.ReprogramarTurno(idReprogramar, idTurnoAreprogramar);
 
         }
 
@@ -190,6 +192,11 @@ namespace TPCuatrimestral_equipo_16A.Pages
             Session["IdSede"] = null;
             Session["IdEstadoTurno"] = null;
             Session["Observaciones"] = null;
+            Session["IdPaciente"] = null;
+            Session["IdMedico"] = null;
+            Session["IdSede"] = null;
+            Session["IdEstadoTurno"] = null;
+            Session["IdTurnoAreprogramar"] = null;
         }
 
 

@@ -254,37 +254,36 @@ namespace Business.Managers
             
         }
 
-        //public bool ReprogramarTurno(int IdEstado)
-        //{
-        //    string query = @"Update Turnos 
-        //                    Set IdEsta,
-        //                    Where Id = @Id";
+        public bool ReprogramarTurno(int IdEstado, int IdTurno)
+        {
+            string query = @"Update Turnos 
+                            Set IdEstadoTurno = @IdEstado
+                            Where Id = @IdTurno";
 
-        //    SqlParameter[] parametros = new SqlParameter[]
-        //        {
-        //            new SqlParameter("@IdMedico", turno.IdMedico),
-        //            new SqlParameter("@IdPaciente", turno.IdPaciente),
-        //            new SqlParameter("@Fecha", turno.Fecha)
-        //        };
+            SqlParameter[] parametros = new SqlParameter[]
+                {
+                    new SqlParameter("@IdEstado",IdEstado),
+                    new SqlParameter("@IdTurno", IdTurno)
+                };
 
-        //    try
-        //    {
+            try
+            {
 
-        //        var res = _dbManager.ExecuteNonQuery(query, parametros);
+                var res = _dbManager.ExecuteNonQuery(query, parametros);
 
-        //        if (res == 0)
-        //        {
-        //            return false;
-        //        }
+                if (res == 0)
+                {
+                    return false;
+                }
 
-        //        return true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
 
-        //}
+        }
 
         /*public bool Update(Turno turno)
         {

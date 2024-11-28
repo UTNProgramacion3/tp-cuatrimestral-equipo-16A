@@ -19,7 +19,12 @@ namespace Domain.Entities
 
         public Empleado()
         {
-            RolId = (int)RolesEnum.Empleado;
+
+        }
+
+        public Empleado(int rolId)
+        {
+            RolId = rolId;
         }
     }
 }

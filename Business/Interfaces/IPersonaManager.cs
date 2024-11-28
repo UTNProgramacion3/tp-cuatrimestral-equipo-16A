@@ -12,6 +12,7 @@ namespace Business.Interfaces
 {
     public interface IPersonaManager : ICrudRepository<Persona>
     {
-        Response<PersonaDto> ObtenerPorUsuario(int id); 
+        Response<PersonaDto> ObtenerPorUsuario(int id);
+        Response<Persona> Actualizar(Persona entity);
     }
 }

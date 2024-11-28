@@ -49,6 +49,56 @@ namespace Business.Managers
             return _response;
         }
 
+        public Response<Direccion> Actualizar(Direccion entity)
+        {
+            try
+            {
+                string queryDireccion = @"
+                UPDATE Direcciones
+                SET Calle = @Calle,
+                Numero = @Numero,
+                Piso = @Piso,
+                Depto = @Departamento,
+                Localidad = @Localidad,
+                Provincia = @Provincia,
+                CodigoPostal = @CodigoPostal
+                WHERE Id = @Id;
+                ";
+
+                string retrieveData = "SELECT * FROM Direcciones WHERE Id = @Id";
+
+                SqlParameter[] parameters = new SqlParameter[]
+                {
+            new SqlParameter("@Calle", entity.Calle),
+            new SqlParameter("@Numero", entity.Numero),
+            new SqlParameter("@Piso", entity.Piso ?? ""),
+            new SqlParameter("@Departamento", entity.Depto ?? ""),
+            new SqlParameter("@Localidad", entity.Localidad),
+            new SqlParameter("@Provincia", entity.Provincia),
+            new SqlParameter("@CodigoPostal", entity.CodigoPostal),
+            new SqlParameter("@Id", entity.Id)
+                };
+
+                var res = _DBManager.ExecuteNonQueryAndGetData(queryDireccion, parameters, retrieveData);
+
+                if (res == null)
+                {
+                    throw new Exception("Error al actualizar la dirección.");
+                }
+
+                var direccionActualizada = res.GetEntity<Direccion>();
+                _response.Ok(direccionActualizada);
+
+                return _response;
+            }
+            catch (Exception ex)
+            {
+                _response.NotOk($"Error al actualizar la dirección: {ex.Message}");
+                return _response;
+            }
+        }
+
+
         public Response<bool> Eliminar(int id)
         {
             throw new NotImplementedException();

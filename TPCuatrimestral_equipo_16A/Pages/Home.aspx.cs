@@ -39,7 +39,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
             new { Titulo = "Perfil", Descripcion = "Gestiona tu perfil.", Url = "/Pages/Perfil.aspx" },
             new { Titulo = "Sedes", Descripcion = "Administrar las Sedes.", Url = "/Pages/ListarSedes.aspx" },
             new { Titulo = "Especialidades", Descripcion = "Administrar las Especialidades.", Url = "/Pages/Especialidades.aspx" },
-            new { Titulo = "Pacientes", Descripcion = "Administrar los datos de pacientes.", Url = "#" },
+            new { Titulo = "Pacientes", Descripcion = "Administrar los datos de pacientes.", Url = "/Pages/ListadoPacientes.aspx" },
             new { Titulo = "Medicos", Descripcion = "Administrar los datos de medicos.", Url = "/Pages/ListadoMedicos.aspx" },
             new { Titulo = "Usuarios", Descripcion = "Administrar los datos de usuarios.", Url = "#" },
             new { Titulo = "Permisos y Modulos", Descripcion = "Administrar Permisos de modulos.", Url = "/Pages/AdmPermisos.aspx"},

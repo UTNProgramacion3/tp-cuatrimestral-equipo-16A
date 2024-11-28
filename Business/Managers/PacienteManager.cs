@@ -93,17 +93,17 @@ namespace Business.Managers
         public Response<Paciente> ObtenerPorId(int pacienteId)
         {
             string query = @"
-            SELECT 
-                p.PacienteId AS PacienteId, p.ObraSocial, p.NroAfiliado, p.PersonaId,
-                per.Id AS PersonaId, per.Nombre, per.Apellido, per.Documento, 
-                per.Telefono, per.FechaNacimiento, per.EmailPersonal, per.DireccionId, per.UsuarioId
-            FROM Pacientes p
-            INNER JOIN Personas per ON p.PersonaId = per.Id
-            WHERE p.Id = @Id";
+                            SELECT 
+                                p.PacienteId AS PacienteId, p.ObraSocial, p.NroAfiliado, p.PersonaId,
+                                per.Id AS PersonaId, per.Nombre, per.Apellido, per.Documento, 
+                                per.Telefono, per.FechaNacimiento, per.EmailPersonal, per.DireccionId, per.UsuarioId
+                            FROM Pacientes p
+                            INNER JOIN Personas per ON p.PersonaId = per.Id
+                            WHERE p.Id = @Id";
 
             SqlParameter[] parameters = new SqlParameter[]
             {
-        new SqlParameter("@Id", pacienteId)
+                 new SqlParameter("@Id", pacienteId)
             };
 
             var res = _DBManager.ExecuteQuery(query, parameters);
@@ -182,7 +182,7 @@ namespace Business.Managers
 
         public Response<List<PacienteSimpleDto>> ObtenerPacientesFiltrados(string nombre, string apellido, string documento, string obraSocial, string nroAfiliado)
         {
-            string query = "SELECT p.Id, p.Nombre, p.Apellido, p.Documento, p.Telefono, p.EmailPersonal, ps.ObraSocial, ps.NroAfiliado " +
+            string query = "SELECT p.Id as PersonaId, p.Nombre, p.Apellido, p.Documento, p.Telefono, p.EmailPersonal, ps.ObraSocial, ps.NroAfiliado " +
                            "FROM Personas p " +
                            "LEFT JOIN Pacientes ps ON p.Id = ps.PersonaId " +
                            "WHERE (@Nombre = '' OR p.Nombre LIKE @Nombre) " +
@@ -198,7 +198,7 @@ namespace Business.Managers
                     new SqlParameter("@ObraSocial", obraSocial ?? ""),
                     new SqlParameter("@NroAfiliado", "%" + nroAfiliado + "%")
 
-        };
+                };
 
             Mapper<PacienteSimpleDto> mapper = new Mapper<PacienteSimpleDto>();
             Response<List<PacienteSimpleDto>> response = new Response<List<PacienteSimpleDto>>();
@@ -229,7 +229,34 @@ namespace Business.Managers
             }
 
             return response;
-        }   
+        }
+
+        public bool EditarPaciente(string obraSocial, string nroAfiliado, int personaId)
+        {
+            string query = @"UPDATE Pacientes
+                            SET
+                                ObraSocial = @ObraSocial,
+                                NroAfiliado = @NroAfiliado
+                            WHERE PersonaId = @PersonaId";
+
+            SqlParameter[] parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@ObraSocial", obraSocial),
+                    new SqlParameter("@NroAfiliado", nroAfiliado),
+                    new SqlParameter("@PersonaId", personaId)
+                };
+
+            try
+            {
+                var res = _DBManager.ExecuteNonQuery(query, parameters);
+
+                return res > 0;
+            }catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
         #endregion
 
         #region Private methods

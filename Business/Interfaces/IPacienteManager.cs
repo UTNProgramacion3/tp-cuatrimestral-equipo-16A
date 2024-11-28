@@ -16,5 +16,6 @@ namespace Business.Interfaces
 
         Response<List<PacienteSimpleDto>> ObtenerPacientesFiltrados(string nombre, string apellido, string documento, string obraSocial, string nroAfiliado);
 
+        bool EditarPaciente(string obraSocial, string nroAfiliado, int personaId);
     }
 }

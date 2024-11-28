@@ -7,7 +7,6 @@
     <div class="container mt-5">
         <h2 class="mb-4">Lista de Médicos</h2>
 
-        <!-- Filtros -->
         <div class="row mb-4">
             <div class="col-md-3">
                 <label for="txtNombre" class="form-label">Nombre:</label>

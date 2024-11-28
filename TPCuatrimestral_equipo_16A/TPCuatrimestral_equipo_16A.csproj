@@ -85,6 +85,7 @@
     <Content Include="Pages\CambioPassword.aspx" />
     <Content Include="Pages\ConfirmarTurno.aspx" />
     <Content Include="Pages\CrearNuevoUsuario.aspx" />
+    <Content Include="Pages\EdicionPaciente.aspx" />
     <Content Include="Pages\Especialidades.aspx" />
     <Content Include="Pages\Home.aspx" />
     <Content Include="Pages\ListadoMedicos.aspx" />
@@ -141,6 +142,13 @@
     </Compile>
     <Compile Include="Pages\CrearNuevoUsuario.aspx.designer.cs">
       <DependentUpon>CrearNuevoUsuario.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\EdicionPaciente.aspx.cs">
+      <DependentUpon>EdicionPaciente.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\EdicionPaciente.aspx.designer.cs">
+      <DependentUpon>EdicionPaciente.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\Especialidades.aspx.cs">
       <DependentUpon>Especialidades.aspx</DependentUpon>
@@ -281,7 +289,6 @@
     <None Include="packages.config" />
     <Content Include="Pages\Main.Master" />
     <Content Include="Web.config" />
-    <Content Include="Web.config.sample" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

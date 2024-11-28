@@ -87,9 +87,8 @@ namespace TPCuatrimestral_equipo_16A.Pages
             ddlRol.SelectedIndex = medico.RolId;
             cargarDatosPersonaFormularioEditar((Persona)medico);
             cargarDireccionFormularioEditar(medico.Direccion);
-           
+            cargarDatosEmpleadoFormularioEditar((Empleado)medico);
 
-           
             txtMatricula.Text = medico.Matricula.ToString();
             ddlEspecialidad.SelectedValue = medico.EspecialidadId.ToString();
         }
@@ -127,6 +126,7 @@ namespace TPCuatrimestral_equipo_16A.Pages
         private void cargarDatosEmpleadoFormularioEditar(Empleado empleado)
         {
             txtLegajo.Text = empleado.Legajo.ToString();
+            ddlRol.SelectedValue = empleado.RolId.ToString();
             //posicionEmpleado.SelectedValue = empleado.Posicion.ToString();
         }
 

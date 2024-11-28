@@ -58,15 +58,15 @@ namespace Business.Managers
         public Response<Medico> ObtenerMedicoById(int id)
         {
             string query = @"
-                SELECT 
-                    m.Id AS MedicoId, m.Matricula, m.EspecialidadId,
-                    e.Id AS EmpleadoId, e.Legajo, e.EmailCorporativo, e.Posicion, e.JornadaTrabajoId,
-                    p.Id AS PersonaId, p.Nombre, p.Apellido, p.Documento, p.Telefono, 
-                    p.FechaNacimiento, p.EmailPersonal, p.DireccionId, p.UsuarioId
-                FROM Medico m
-                INNER JOIN Empleados e ON m.EmpleadoId = e.Id
-                INNER JOIN Personas p ON e.PersonaId = p.Id
-                WHERE m.Id = @Id";
+                            SELECT 
+                                m.Id AS Id, m.Matricula, m.EspecialidadId,
+                                e.Id AS EmpleadoId, e.Legajo, e.EmailCorporativo, e.JornadaTrabajoId,
+                                p.Id AS PersonaId, p.Nombre, p.Apellido, p.Documento, p.Telefono, 
+                                p.FechaNacimiento, p.EmailPersonal, p.DireccionId, p.UsuarioId
+                            FROM Medicos m
+                            INNER JOIN Empleados e ON m.EmpleadoId = e.Id
+                            INNER JOIN Personas p ON e.PersonaId = p.Id
+                            WHERE m.Id = @Id";
 
             SqlParameter[] parameters = new SqlParameter[]
             {
